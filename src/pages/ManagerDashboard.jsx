@@ -285,28 +285,65 @@ export default function ManagerDashboard() {
 
         {/* Add Production Modal */}
         <Dialog open={showProductionModal} onOpenChange={setShowProductionModal}>
-          <DialogContent>
+          <DialogContent className="max-w-md bg-[#212121] border border-[#00c600]">
             <DialogHeader>
-              <DialogTitle>Add Production Entry</DialogTitle>
+              <DialogTitle className="text-white">Add Production Entry</DialogTitle>
             </DialogHeader>
-            <div className="space-y-4">
-              <Input type="date" value={newProduction.order_date} onChange={(e) => setNewProduction({ ...newProduction, order_date: e.target.value })} />
-              <select value={newProduction.client_org_id} onChange={(e) => setNewProduction({ ...newProduction, client_org_id: e.target.value })} style={{ width: '100%', padding: '8px', borderRadius: '4px', border: '1px solid #00c600' }}>
-                <option value="">Select Client</option>
-                {Object.entries(clients).map(([id, name]) => <option key={id} value={id}>{name}</option>)}
-              </select>
-              <Input placeholder="Product" value={newProduction.product} onChange={(e) => setNewProduction({ ...newProduction, product: e.target.value })} />
-              <Input type="number" placeholder="Cost" value={newProduction.total_cost} onChange={(e) => setNewProduction({ ...newProduction, total_cost: e.target.value })} />
-              <select value={newProduction.status} onChange={(e) => setNewProduction({ ...newProduction, status: e.target.value })} style={{ width: '100%', padding: '8px', borderRadius: '4px', border: '1px solid #00c600' }}>
-                <option value="ordered">Ordered</option>
-                <option value="in_production">In Production</option>
-                <option value="dispatched">Dispatched</option>
-                <option value="in_transit">In Transit</option>
-                <option value="delayed">Delayed</option>
-                <option value="delivered">Delivered</option>
-              </select>
-              <Input placeholder="Tracking Number" value={newProduction.tracking_number_inbound} onChange={(e) => setNewProduction({ ...newProduction, tracking_number_inbound: e.target.value })} />
-              <Button onClick={saveProduction} className="w-full bg-[#00c600] text-white">Save</Button>
+            <div className="space-y-3 max-h-96 overflow-y-auto">
+              <div>
+                <label className="text-white text-sm">Date</label>
+                <Input className="mt-1" type="date" placeholder="dd/mm/yyyy" value={newProduction.order_date} onChange={(e) => setNewProduction({ ...newProduction, order_date: e.target.value })} />
+              </div>
+
+              <div>
+                <label className="text-white text-sm">Client</label>
+                <select value={newProduction.client_org_id} onChange={(e) => setNewProduction({ ...newProduction, client_org_id: e.target.value })} className="mt-1 w-full p-2 bg-[#2a2a2a] text-white border border-[#00c600] rounded text-sm">
+                  <option value="">Select Client</option>
+                  {Object.entries(clients).map(([id, name]) => <option key={id} value={id}>{name}</option>)}
+                </select>
+              </div>
+
+              <div>
+                <label className="text-white text-sm">Product</label>
+                <Input className="mt-1" type="text" placeholder="Product name or description" value={newProduction.product} onChange={(e) => setNewProduction({ ...newProduction, product: e.target.value })} />
+              </div>
+
+              <div>
+                <label className="text-white text-sm">Cost</label>
+                <Input className="mt-1" type="number" placeholder="Total cost" value={newProduction.total_cost} onChange={(e) => setNewProduction({ ...newProduction, total_cost: e.target.value })} />
+              </div>
+
+              <div>
+                <label className="text-white text-sm">Status</label>
+                <select value={newProduction.status} onChange={(e) => setNewProduction({ ...newProduction, status: e.target.value })} className="mt-1 w-full p-2 bg-[#2a2a2a] text-white border border-[#00c600] rounded text-sm">
+                  <option value="ordered">Ordered</option>
+                  <option value="in_production">In Production</option>
+                  <option value="dispatched">Dispatched</option>
+                  <option value="in_transit">In Transit</option>
+                  <option value="delayed">Delayed</option>
+                  <option value="delivered">Delivered</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="text-white text-sm">Tracking Number</label>
+                <Input className="mt-1" type="text" placeholder="FedEx or DHL tracking" value={newProduction.tracking_number_inbound} onChange={(e) => setNewProduction({ ...newProduction, tracking_number_inbound: e.target.value })} />
+              </div>
+
+              <div>
+                <label className="text-white text-sm">Expected Delivery Date</label>
+                <Input className="mt-1" type="date" placeholder="dd/mm/yyyy" value={newProduction.eta} onChange={(e) => setNewProduction({ ...newProduction, eta: e.target.value })} />
+              </div>
+
+              <div>
+                <label className="text-white text-sm">Notes</label>
+                <textarea className="mt-1 w-full p-2 bg-[#2a2a2a] text-white border border-[#00c600] rounded text-sm" placeholder="Any additional info" value={newProduction.notes} onChange={(e) => setNewProduction({ ...newProduction, notes: e.target.value })} />
+              </div>
+
+              <div className="flex gap-2 pt-2 border-t border-[#00c600]">
+                <Button onClick={() => setShowProductionModal(false)} variant="outline" className="flex-1">Cancel</Button>
+                <Button onClick={saveProduction} className="flex-1 bg-[#00c600] text-white">Save Production</Button>
+              </div>
             </div>
           </DialogContent>
         </Dialog>
