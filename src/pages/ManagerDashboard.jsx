@@ -97,35 +97,39 @@ export default function ManagerDashboard() {
   ];
 
   return (
-    <div className="p-8">
-      <div className="flex items-center justify-between mb-8">
-        <div className="flex items-center gap-4">
-          <div className="w-12 h-12 bg-blue-600 rounded-lg flex items-center justify-center text-2xl">
-            📊
-          </div>
-          <div>
-            <h1 className="text-2xl">Manager Dashboard</h1>
-            <p className="text-sm opacity-70">Overview of all clients, companies, and fleets.</p>
-          </div>
+    <div className="p-6 bg-[#212121] min-h-screen">
+      <h1 className="text-2xl mb-6">Production Control</h1>
+      {loading && <div>Loading...</div>}
+      {!loading && (
+        <div className="border border-[#00c600] rounded p-6">
+          <table>
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Client</th>
+                <th>Product</th>
+                <th>Cost</th>
+                <th>Status</th>
+                <th>Tracking</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {pos.map(po => (
+                <tr key={po.id}>
+                  <td>{po.order_date}</td>
+                  <td>{clients[po.client_org_id]}</td>
+                  <td>{po.items?.[0]?.description || '-'}</td>
+                  <td>${po.total_cost}</td>
+                  <td>{po.status}</td>
+                  <td>{po.tracking_number_inbound || '-'}</td>
+                  <td><button>Edit</button></td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
-        <button className="bg-[#00c600] px-4 py-2 rounded-lg flex items-center gap-2">
-          <span>👤</span> Invite User
-        </button>
-      </div>
-
-      <div className="grid grid-cols-4 gap-4">
-        {menuCards.map((card, index) => (
-          <div
-            key={card.page}
-            onClick={() => navigate(createPageUrl(card.page))}
-            className={`bg-gray-100 dark:bg-[#1a1a1a] rounded-lg p-6 cursor-pointer hover:shadow-lg transition-all border-2 ${card.color} flex flex-col items-center text-center`}
-          >
-            <div className="text-4xl mb-3">{card.icon}</div>
-            <div className="text-base mb-1">{card.name}</div>
-            <div className="text-xs opacity-70">{card.desc}</div>
-          </div>
-        ))}
-      </div>
+      )}
     </div>
   );
 }
