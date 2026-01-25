@@ -4,31 +4,31 @@ import { Sun, Moon } from 'lucide-react';
 export default function Layout({ children }) {
   const [theme, setTheme] = useState(() => {
     if (typeof window !== 'undefined') {
-      return localStorage.getItem('kg-theme') || 'dark';
+      return localStorage.getItem('theme') || 'dark';
     }
     return 'dark';
   });
 
   useEffect(() => {
-    const saved = localStorage.getItem('kg-theme') || 'dark';
+    const saved = localStorage.getItem('theme') || 'dark';
     setTheme(saved);
     
-    if (saved === 'light') {
-      document.body.classList.add('light');
+    if (saved === 'dark') {
+      document.documentElement.classList.add('dark');
     } else {
-      document.body.classList.remove('light');
+      document.documentElement.classList.remove('dark');
     }
   }, []);
 
   const toggleTheme = () => {
     const newTheme = theme === 'dark' ? 'light' : 'dark';
     setTheme(newTheme);
-    localStorage.setItem('kg-theme', newTheme);
+    localStorage.setItem('theme', newTheme);
     
-    if (newTheme === 'light') {
-      document.body.classList.add('light');
+    if (newTheme === 'dark') {
+      document.documentElement.classList.add('dark');
     } else {
-      document.body.classList.remove('light');
+      document.documentElement.classList.remove('dark');
     }
   };
 

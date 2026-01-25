@@ -4,16 +4,20 @@ css
 @tailwind utilities;
 
 @layer base {
+  html {
+    @apply transition-colors duration-300;
+  }
+
   * {
     @apply font-normal;
   }
 
   body {
-    @apply bg-[#212121] text-white;
+    @apply bg-white text-gray-900 transition-colors duration-300;
   }
 
-  body.light {
-    @apply bg-white text-gray-900;
+  .dark body {
+    @apply bg-[#212121] text-white;
   }
 }
 
@@ -32,11 +36,11 @@ table {
 }
 
 thead {
-  @apply sticky top-0 bg-[#212121] z-10;
+  @apply sticky top-0 bg-white z-10;
 }
 
-body.light thead {
-  @apply bg-white;
+.dark thead {
+  @apply bg-[#212121];
 }
 
 th {
@@ -48,11 +52,11 @@ td {
 }
 
 tbody tr:nth-child(even) {
-  @apply bg-[#2a2a2a];
+  @apply bg-gray-50;
 }
 
-body.light tbody tr:nth-child(even) {
-  @apply bg-gray-50;
+.dark tbody tr:nth-child(even) {
+  @apply bg-[#2a2a2a];
 }
 
 tbody tr {
@@ -72,19 +76,23 @@ select:focus {
 input,
 textarea,
 select {
-  @apply bg-[#2a2a2a] text-white border border-[#00c600] px-3 py-2 rounded;
+  @apply bg-white text-gray-900 border border-[#00c600] px-3 py-2 rounded transition-colors duration-300;
 }
 
-body.light input,
-body.light textarea,
-body.light select {
-  @apply bg-white text-gray-900;
+.dark input,
+.dark textarea,
+.dark select {
+  @apply bg-[#2a2a2a] text-white;
 }
 
 button {
-  @apply border border-[#00c600] px-4 py-2 rounded transition-all duration-200;
+  @apply border border-[#00c600] px-4 py-2 rounded transition-all duration-200 bg-transparent text-gray-900;
 }
 
 button:hover {
-  @apply shadow-[0_0_8px_rgba(0,198,0,0.6)];
+  @apply shadow-[0_0_8px_rgba(0,198,0,0.6)] border-green-500;
+}
+
+.dark button {
+  @apply text-white;
 }
