@@ -17,6 +17,9 @@ import SupplierDashboard from './pages/SupplierDashboard';
 import Client from './pages/Client';
 import Manager from './pages/Manager';
 import Supplier from './pages/Supplier';
+import ClientLogin from './pages/ClientLogin';
+import ManagerLogin from './pages/ManagerLogin';
+import SupplierLogin from './pages/SupplierLogin';
 import __Layout from './Layout.jsx';
 
 
@@ -40,6 +43,9 @@ export const PAGES = {
     "Client": Client,
     "Manager": Manager,
     "Supplier": Supplier,
+    "ClientLogin": ClientLogin,
+    "ManagerLogin": ManagerLogin,
+    "SupplierLogin": SupplierLogin,
 }
 
 export const pagesConfig = {
