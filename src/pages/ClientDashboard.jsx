@@ -3,13 +3,37 @@ import { base44 } from '@/api/base44Client';
 import { createPageUrl } from '@/utils';
 import { useNavigate } from 'react-router-dom';
 import TableExport from '../components/TableExport';
-import { FileText, TruckIcon, Car, Users, Building2, Phone, Mail, Calendar, Edit } from 'lucide-react';
+import { toast } from 'sonner';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { FileText, TruckIcon, Car, Users, Building2, Phone, Mail, Calendar, Edit, Plus } from 'lucide-react';
 
 export default function ClientDashboard() {
   const [loading, setLoading] = useState(true);
   const [org, setOrg] = useState(null);
+  const [profile, setProfile] = useState(null);
   const [vehicles, setVehicles] = useState([]);
   const [purchases, setPurchases] = useState([]);
+  const [showAddVehicleModal, setShowAddVehicleModal] = useState(false);
+  const [showAddPurchaseModal, setShowAddPurchaseModal] = useState(false);
+  const [newVehicle, setNewVehicle] = useState({
+    brand: '',
+    model: '',
+    year: '',
+    vin: '',
+    fuel: '',
+    engine_size: '',
+    engine_power: '',
+    engine_code: '',
+    transmission: '',
+    gears: ''
+  });
+  const [newPurchase, setNewPurchase] = useState({
+    po_id: '',
+    supplier_org_id: '',
+    order_date: '',
+    eta: '',
+    status: 'ordered'
+  });
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -18,23 +42,113 @@ export default function ClientDashboard() {
 
   const loadData = async () => {
     const user = await base44.auth.me();
-    const profile = (await base44.entities.UserProfile.filter({ user_email: user.email }))[0];
+    const profileData = (await base44.entities.UserProfile.filter({ user_email: user.email }))[0];
     
-    if (!profile) {
+    if (!profileData) {
       navigate(createPageUrl('ClientLogin'));
       return;
     }
 
-    const orgData = (await base44.entities.Organisation.filter({ org_id: profile.org_id }))[0];
+    setProfile(profileData);
+
+    const orgData = (await base44.entities.Organisation.filter({ org_id: profileData.org_id }))[0];
     setOrg(orgData);
 
-    const vehiclesData = await base44.entities.Vehicle.filter({ org_id: profile.org_id });
+    const vehiclesData = await base44.entities.Vehicle.filter({ org_id: profileData.org_id });
     setVehicles(vehiclesData);
 
-    const purchasesData = await base44.entities.PurchaseOrder.filter({ client_org_id: profile.org_id });
+    const purchasesData = await base44.entities.PurchaseOrder.filter({ client_org_id: profileData.org_id });
     setPurchases(purchasesData);
 
     setLoading(false);
+  };
+
+  const decodeVIN = async () => {
+    if (newVehicle.vin.length < 17) {
+      toast.error('VIN must be 17 characters');
+      return;
+    }
+
+    try {
+      const response = await fetch(`https://vpic.nhtsa.dot.gov/api/vehicles/DecodeVin/${newVehicle.vin}?format=json`);
+      const data = await response.json();
+      
+      if (data.Results && data.Results.length > 0) {
+        const result = data.Results;
+        const make = result.find(r => r.Variable === 'Make')?.Value || '';
+        const model = result.find(r => r.Variable === 'Model')?.Value || '';
+        const year = result.find(r => r.Variable === 'Model Year')?.Value || '';
+        
+        setNewVehicle({ ...newVehicle, brand: make, model, year });
+        toast.success('VIN decoded');
+      }
+    } catch (err) {
+      toast.error('Error decoding VIN');
+    }
+  };
+
+  const saveVehicle = async () => {
+    try {
+      const vehicleId = `V-${Date.now()}`;
+      await base44.entities.Vehicle.create({
+        vehicle_id: vehicleId,
+        org_id: profile.org_id,
+        vin: newVehicle.vin || '',
+        make: newVehicle.brand || '',
+        model: newVehicle.model || '',
+        year: newVehicle.year ? parseInt(newVehicle.year) : null,
+        trim: '',
+        engine: newVehicle.engine_code || '',
+        transmission: newVehicle.transmission || '',
+        color: '',
+        notes: ''
+      });
+      toast.success('Vehicle added');
+      setShowAddVehicleModal(false);
+      setNewVehicle({
+        brand: '',
+        model: '',
+        year: '',
+        vin: '',
+        fuel: '',
+        engine_size: '',
+        engine_power: '',
+        engine_code: '',
+        transmission: '',
+        gears: ''
+      });
+      loadData();
+    } catch (err) {
+      toast.error('Error adding vehicle');
+    }
+  };
+
+  const savePurchase = async () => {
+    try {
+      const poId = `PO-${Date.now()}`;
+      await base44.entities.PurchaseOrder.create({
+        po_id: newPurchase.po_id || poId,
+        supplier_org_id: newPurchase.supplier_org_id || '',
+        client_org_id: profile.org_id,
+        order_date: newPurchase.order_date,
+        eta: newPurchase.eta,
+        status: newPurchase.status,
+        items: [],
+        total_cost: 0
+      });
+      toast.success('Purchase added');
+      setShowAddPurchaseModal(false);
+      setNewPurchase({
+        po_id: '',
+        supplier_org_id: '',
+        order_date: '',
+        eta: '',
+        status: 'ordered'
+      });
+      loadData();
+    } catch (err) {
+      toast.error('Error adding purchase');
+    }
   };
 
   if (loading) return <div className="flex items-center justify-center h-screen">Loading...</div>;
@@ -53,12 +167,12 @@ export default function ClientDashboard() {
       </div>
 
       <div className="bg-[#2a2a2a] rounded-lg p-6 mb-6 border border-[#00c600] relative">
-        <button 
-          onClick={() => navigate(createPageUrl('ClientDashboard'))}
-          className="absolute top-4 right-4 p-2 hover:bg-[#00c600] hover:bg-opacity-20 rounded transition-all"
-        >
-          <Edit size={16} color="#00c600" />
-        </button>
+              <button 
+                onClick={() => navigate(createPageUrl(`ClientOrganisationDetail?org_id=${org?.id}`))}
+                className="absolute top-4 right-4 p-2 hover:bg-[#00c600] hover:bg-opacity-20 rounded transition-all"
+              >
+                <Edit size={16} color="#00c600" />
+              </button>
 
         <div className="flex items-center gap-2 mb-4">
           <Building2 size={16} color="#00c600" />
@@ -95,11 +209,16 @@ export default function ClientDashboard() {
 
       <div className="bg-[#2a2a2a] rounded-lg p-6 mb-6 border border-[#00c600]">
         <div className="border-t border-[#00c600] pt-4 mb-4">
-          <div className="flex justify-between items-center mb-2">
-            <div>Your Vehicles</div>
-            <button onClick={() => navigate(createPageUrl('ClientVehicleAdd'))}>Add Vehicle</button>
-          </div>
-          <table>
+            <div className="flex justify-between items-center mb-2">
+              <div>Your Vehicles</div>
+              <button 
+                onClick={() => setShowAddVehicleModal(true)}
+                className="bg-[#00c600] text-black px-3 py-1 rounded text-sm hover:opacity-80"
+              >
+                + Add Vehicle
+              </button>
+            </div>
+            <table>
             <thead>
               <tr>
                 <th>Make</th>
@@ -124,7 +243,15 @@ export default function ClientDashboard() {
         </div>
 
         <div className="border-t border-[#00c600] pt-4">
-          <div className="mb-2">What You Bought</div>
+          <div className="flex justify-between items-center mb-2">
+            <div>What You Bought</div>
+            <button 
+              onClick={() => setShowAddPurchaseModal(true)}
+              className="bg-[#00c600] text-black px-3 py-1 rounded text-sm hover:opacity-80"
+            >
+              + Add Purchase
+            </button>
+          </div>
           <table>
             <thead>
               <tr>
