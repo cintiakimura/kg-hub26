@@ -42,8 +42,7 @@ export default function ClientDashboard() {
   const menuCards = [
     { icon: FileText, name: 'Quotes', desc: 'Review quote requests', page: 'ClientQuotes' },
     { icon: TruckIcon, name: 'Shipments', desc: 'Track deliveries', page: 'ClientShipments' },
-    { icon: Car, name: 'Vehicles', desc: 'Manage fleet details', page: 'ClientVehicleAdd' },
-    { icon: Users, name: 'Organisation', desc: 'Company settings', page: 'ClientDashboard' }
+    { icon: Car, name: 'Vehicles', desc: 'Manage fleet details', page: 'ClientVehicleAdd' }
   ];
 
   return (
