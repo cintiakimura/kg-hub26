@@ -5,8 +5,8 @@ css
 
 @layer base {
   * {
-    font-family: 'akkurat', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    font-weight: 400;
+    font-family: 'akkurat', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
+    font-weight: 400 !important;
     font-size: 14px;
   }
 
@@ -58,8 +58,8 @@ css
     color: white !important;
   }
 
-  h1, h2, h3, h4, h5, h6 {
-    font-weight: 400;
+  h1, h2, h3, h4, h5, h6, strong, b {
+    font-weight: 400 !important;
   }
 
   div, section, main, aside, header, footer {
