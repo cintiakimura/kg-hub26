@@ -1,21 +1,6 @@
-import React, { useEffect } from 'react';
-import { base44 } from '@/api/base44Client';
-import { createPageUrl } from '@/utils';
-import { useNavigate } from 'react-router-dom';
+import React from 'react';
 
-export default function ClientLogin() {
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    const checkAuth = async () => {
-      const isAuth = await base44.auth.isAuthenticated();
-      if (isAuth) {
-        navigate(createPageUrl('ClientDashboard'));
-      }
-    };
-    checkAuth();
-  }, [navigate]);
-
+export default function Supplier() {
   return (
     <div style={{
       background: '#212121',
@@ -33,9 +18,9 @@ export default function ClientLogin() {
           alt="KG Logo"
           style={{ width: '100px', marginBottom: '40px' }}
         />
-        <h1 style={{ fontSize: '32px', marginBottom: '20px', color: '#00c600' }}>KG Hub</h1>
+        <h1 style={{ fontSize: '32px', marginBottom: '20px', color: '#00c600' }}>Supplier Portal</h1>
         <p style={{ fontSize: '16px', marginBottom: '40px', opacity: 0.8 }}>
-          Track your vehicles, quotes, deliveries – all in one place.
+          Your POs, deliveries, payments – on time.
         </p>
         <div style={{ display: 'flex', gap: '10px', justifyContent: 'center' }}>
           <button 

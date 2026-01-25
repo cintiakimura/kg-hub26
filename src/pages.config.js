@@ -1,5 +1,4 @@
 import ClientDashboard from './pages/ClientDashboard';
-import ClientLogin from './pages/ClientLogin';
 import ClientQuotes from './pages/ClientQuotes';
 import ClientShipments from './pages/ClientShipments';
 import ClientVehicleAdd from './pages/ClientVehicleAdd';
@@ -9,20 +8,20 @@ import ManagerCalendar from './pages/ManagerCalendar';
 import ManagerClients from './pages/ManagerClients';
 import ManagerDashboard from './pages/ManagerDashboard';
 import ManagerFinancials from './pages/ManagerFinancials';
-import ManagerLogin from './pages/ManagerLogin';
 import ManagerLogistics from './pages/ManagerLogistics';
 import ManagerProfile from './pages/ManagerProfile';
 import ManagerPurchases from './pages/ManagerPurchases';
 import ManagerSalesQuotes from './pages/ManagerSalesQuotes';
 import ManagerSupplierQuotes from './pages/ManagerSupplierQuotes';
 import SupplierDashboard from './pages/SupplierDashboard';
-import SupplierLogin from './pages/SupplierLogin';
+import Client from './pages/Client';
+import Manager from './pages/Manager';
+import Supplier from './pages/Supplier';
 import __Layout from './Layout.jsx';
 
 
 export const PAGES = {
     "ClientDashboard": ClientDashboard,
-    "ClientLogin": ClientLogin,
     "ClientQuotes": ClientQuotes,
     "ClientShipments": ClientShipments,
     "ClientVehicleAdd": ClientVehicleAdd,
@@ -32,18 +31,19 @@ export const PAGES = {
     "ManagerClients": ManagerClients,
     "ManagerDashboard": ManagerDashboard,
     "ManagerFinancials": ManagerFinancials,
-    "ManagerLogin": ManagerLogin,
     "ManagerLogistics": ManagerLogistics,
     "ManagerProfile": ManagerProfile,
     "ManagerPurchases": ManagerPurchases,
     "ManagerSalesQuotes": ManagerSalesQuotes,
     "ManagerSupplierQuotes": ManagerSupplierQuotes,
     "SupplierDashboard": SupplierDashboard,
-    "SupplierLogin": SupplierLogin,
+    "Client": Client,
+    "Manager": Manager,
+    "Supplier": Supplier,
 }
 
 export const pagesConfig = {
-    mainPage: "ManagerLogin",
+    mainPage: "ClientDashboard",
     Pages: PAGES,
     Layout: __Layout,
 };

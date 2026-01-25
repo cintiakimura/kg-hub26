@@ -1,21 +1,6 @@
-import React, { useEffect } from 'react';
-import { base44 } from '@/api/base44Client';
-import { createPageUrl } from '@/utils';
-import { useNavigate } from 'react-router-dom';
+import React from 'react';
 
-export default function ManagerLogin() {
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    const checkAuth = async () => {
-      const isAuth = await base44.auth.isAuthenticated();
-      if (isAuth) {
-        navigate(createPageUrl('ManagerDashboard'));
-      }
-    };
-    checkAuth();
-  }, [navigate]);
-
+export default function Manager() {
   return (
     <div style={{
       background: '#212121',
