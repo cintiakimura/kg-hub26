@@ -6,12 +6,7 @@ import { base44 } from '@/api/base44Client';
 import Hub from '@/components/Hub';
 
 export default function Layout({ children, currentPageName }) {
-  const [theme, setTheme] = useState(() => {
-    if (typeof window !== 'undefined') {
-      return localStorage.getItem('theme') || 'dark';
-    }
-    return 'dark';
-  });
+  const [theme, setTheme] = useState('dark');
   
   const [userRole, setUserRole] = useState(null);
   const [hubOpen, setHubOpen] = useState(false);
@@ -19,14 +14,8 @@ export default function Layout({ children, currentPageName }) {
   const location = useLocation();
 
   useEffect(() => {
-    const saved = localStorage.getItem('theme') || 'dark';
-    setTheme(saved);
-    
-    if (saved === 'dark') {
-      document.body.classList.add('dark');
-    } else {
-      document.body.classList.remove('dark');
-    }
+    document.body.classList.add('dark');
+    localStorage.setItem('theme', 'dark');
   }, []);
 
   useEffect(() => {
