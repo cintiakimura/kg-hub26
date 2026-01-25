@@ -92,6 +92,12 @@ export default function Layout({ children, currentPageName }) {
     return [];
   };
 
+  const handleProfileClick = () => {
+    if (userRole === 'manager') {
+      navigate(createPageUrl('ManagerProfile'));
+    }
+  };
+
   const navItems = getNavItems();
   const showSidebar = navItems.length > 0 && !location.pathname.includes('Login');
 
@@ -102,7 +108,8 @@ export default function Layout({ children, currentPageName }) {
           <img 
             src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/697651f65fc49ec896171492/e2c435b98_KG_primary_logo_green.png"
             alt="KG"
-            className="w-10 h-10 object-contain"
+            className="w-10 h-10 object-contain cursor-pointer"
+            onClick={handleProfileClick}
           />
           
           {navItems.map((item) => {

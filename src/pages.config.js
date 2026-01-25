@@ -15,6 +15,8 @@ import ManagerSalesQuotes from './pages/ManagerSalesQuotes';
 import ManagerSupplierQuotes from './pages/ManagerSupplierQuotes';
 import SupplierDashboard from './pages/SupplierDashboard';
 import SupplierLogin from './pages/SupplierLogin';
+import ManagerCalendar from './pages/ManagerCalendar';
+import ManagerProfile from './pages/ManagerProfile';
 import __Layout from './Layout.jsx';
 
 
@@ -36,6 +38,8 @@ export const PAGES = {
     "ManagerSupplierQuotes": ManagerSupplierQuotes,
     "SupplierDashboard": SupplierDashboard,
     "SupplierLogin": SupplierLogin,
+    "ManagerCalendar": ManagerCalendar,
+    "ManagerProfile": ManagerProfile,
 }
 
 export const pagesConfig = {
