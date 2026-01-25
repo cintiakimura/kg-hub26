@@ -2,8 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { base44 } from '@/api/base44Client';
 import { useNavigate } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
-import AppHeader from '@/components/layout/AppHeader';
-import SideNav from '@/components/layout/SideNav';
 import KGCard from '@/components/ui/KGCard';
 import KGButton from '@/components/ui/KGButton';
 import KGBadge from '@/components/ui/KGBadge';
@@ -18,11 +16,7 @@ export default function ClientQuotes() {
   const [quotes, setQuotes] = useState([]);
   const [selectedQuote, setSelectedQuote] = useState(null);
 
-  const navItems = [
-    { page: 'ClientDashboard', label: 'My Vehicles', icon: Car },
-    { page: 'ClientQuotes', label: 'My Quotes', icon: FileText },
-    { page: 'ClientShipments', label: 'Shipments', icon: Package }
-  ];
+
 
   useEffect(() => {
     loadData();
@@ -51,7 +45,7 @@ export default function ClientQuotes() {
     setLoading(false);
   };
 
-  const handleLogout = () => base44.auth.logout(createPageUrl('ClientLogin'));
+
 
   const approveQuote = async (quote) => {
     await base44.entities.SalesQuote.update(quote.id, { status: 'approved' });
@@ -67,20 +61,14 @@ export default function ClientQuotes() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="flex items-center justify-center h-screen">
         <Loader2 className="animate-spin text-[#00C600]" size={32} />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <AppHeader user={user} orgId={profile?.org_id} onLogout={handleLogout} title="KG Hub – Client" />
-      
-      <div className="flex">
-        <SideNav items={navItems} currentPage="ClientQuotes" />
-        
-        <main className="flex-1 p-6">
+    <div className="p-6">
           <div className="flex items-center gap-2 mb-6">
             <FileText size={24} className="text-[#00C600]" />
             <h1 className="text-xl text-gray-800">My Quotes</h1>
@@ -120,8 +108,7 @@ export default function ClientQuotes() {
               ))}
             </div>
           )}
-        </main>
-      </div>
+
 
       {/* Quote Detail Modal */}
       <Dialog open={!!selectedQuote} onOpenChange={() => setSelectedQuote(null)}>
