@@ -140,10 +140,10 @@ export default function Layout({ children, currentPageName }) {
 
         <button
           onClick={() => setHubOpen(true)}
-          className="fixed bottom-6 right-6 z-50 w-12 h-12 rounded-full bg-white dark:bg-[#212121] border-2 border-[#00c600] flex items-center justify-center hub-pulse overflow-hidden"
+          className="fixed bottom-6 right-6 z-50 w-10 h-10 rounded-full flex items-center justify-center hub-pulse overflow-hidden shadow-lg hover:scale-110 transition-all duration-300"
         >
           <img 
-            src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/697651f65fc49ec896171492/978101b2a_Gemini_Generated_Image_6erfwv6erfwv6erf.png"
+            src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/697651f65fc49ec896171492/d4f926ee2_Gemini_Generated_Image_hft3tmhft3tmhft3.png"
             alt="Hub"
             className="w-full h-full object-cover"
           />
