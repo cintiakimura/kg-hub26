@@ -39,7 +39,7 @@ export default function SupplierLogin() {
         </p>
         <div style={{ display: 'flex', gap: '10px', justifyContent: 'center' }}>
           <button 
-            onClick={() => base44.auth.redirectToLogin(createPageUrl('SupplierDashboard'))}
+            onClick={() => window.location.href = '/login'}
             style={{
               background: '#00c600',
               color: '#000',
@@ -53,7 +53,7 @@ export default function SupplierLogin() {
             Log in
           </button>
           <button 
-            onClick={() => base44.auth.redirectToLogin(createPageUrl('SupplierDashboard'))}
+            onClick={() => window.location.href = '/login'}
             style={{
               background: '#000',
               color: '#00c600',
