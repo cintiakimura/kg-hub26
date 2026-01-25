@@ -2,8 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { base44 } from '@/api/base44Client';
 import { useNavigate } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
-import AppHeader from '@/components/layout/AppHeader';
-import SideNav from '@/components/layout/SideNav';
 import KGCard from '@/components/ui/KGCard';
 import KGButton from '@/components/ui/KGButton';
 import KGInput, { KGTextarea, KGSelect } from '@/components/ui/KGInput';
@@ -33,15 +31,7 @@ export default function ManagerPurchases() {
     notes: ''
   });
 
-  const navItems = [
-    { page: 'ManagerDashboard', label: 'Production Control', icon: LayoutDashboard },
-    { page: 'ManagerClients', label: 'Clients', icon: Users },
-    { page: 'ManagerSalesQuotes', label: 'Sales Quotes', icon: FileText },
-    { page: 'ManagerSupplierQuotes', label: 'Supplier Quotes', icon: Scale },
-    { page: 'ManagerLogistics', label: 'Logistics', icon: Truck },
-    { page: 'ManagerPurchases', label: 'Purchases', icon: ShoppingCart },
-    { page: 'ManagerFinancials', label: 'Financials', icon: DollarSign }
-  ];
+
 
   const categories = [
     { value: 'office', label: 'Office Supplies' },
@@ -79,7 +69,7 @@ export default function ManagerPurchases() {
     setLoading(false);
   };
 
-  const handleLogout = () => base44.auth.logout(createPageUrl('ManagerLogin'));
+
 
   const openModal = (purchase = null) => {
     if (purchase) {
@@ -167,20 +157,14 @@ export default function ManagerPurchases() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="flex items-center justify-center h-screen">
         <Loader2 className="animate-spin text-[#00C600]" size={32} />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <AppHeader user={user} orgId={profile?.org_id} onLogout={handleLogout} title="KG Hub – Manager" />
-      
-      <div className="flex">
-        <SideNav items={navItems} currentPage="ManagerPurchases" />
-        
-        <main className="flex-1 p-6">
+    <div className="p-6">
           <div className="flex items-center justify-between mb-6">
             <div className="flex items-center gap-2">
               <ShoppingCart size={24} className="text-[#00C600]" />
@@ -250,8 +234,7 @@ export default function ManagerPurchases() {
               ))}
             </div>
           )}
-        </main>
-      </div>
+
 
       {/* Add/Edit Modal */}
       <Dialog open={showModal} onOpenChange={setShowModal}>
