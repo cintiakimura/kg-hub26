@@ -24,6 +24,7 @@ import SupplierDashboard from './pages/SupplierDashboard';
 import SupplierLogin from './pages/SupplierLogin';
 import SupplierLoginLanding from './pages/SupplierLoginLanding';
 import VehicleConnectorAdd from './pages/VehicleConnectorAdd';
+import ClientVehicleAddForm from './pages/ClientVehicleAddForm';
 import __Layout from './Layout.jsx';
 
 
@@ -54,6 +55,7 @@ export const PAGES = {
     "SupplierLogin": SupplierLogin,
     "SupplierLoginLanding": SupplierLoginLanding,
     "VehicleConnectorAdd": VehicleConnectorAdd,
+    "ClientVehicleAddForm": ClientVehicleAddForm,
 }
 
 export const pagesConfig = {
