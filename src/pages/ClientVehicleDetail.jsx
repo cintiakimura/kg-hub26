@@ -165,7 +165,7 @@ export default function ClientVehicleDetail() {
 
   return (
     <div className="max-w-4xl mx-auto p-6">
-        <div className="flex items-center gap-4 mb-6">
+      <div className="flex items-center gap-4 mb-6">
           <KGButton variant="ghost" onClick={() => navigate(createPageUrl('ClientDashboard'))}>
             <ArrowLeft size={20} />
           </KGButton>
@@ -175,8 +175,8 @@ export default function ClientVehicleDetail() {
           </div>
         </div>
 
-        {/* Vehicle Info Card */}
-        <KGCard className="mb-6">
+      {/* Vehicle Info Card */}
+      <KGCard className="mb-6">
           <div className="flex flex-col md:flex-row gap-6">
             {vehicle.photos?.length > 0 && (
               <div className="w-full md:w-48 h-36 rounded-lg overflow-hidden border border-gray-200">
@@ -196,10 +196,10 @@ export default function ClientVehicleDetail() {
               {vehicle.notes && <p className="text-sm text-gray-600 mt-4">{vehicle.notes}</p>}
             </div>
           </div>
-        </KGCard>
+      </KGCard>
 
-        {/* Connectors Section */}
-        <div className="flex items-center justify-between mb-4">
+      {/* Connectors Section */}
+      <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-2">
             <Plug size={20} className="text-[#00C600]" />
             <h2 className="text-lg text-gray-800">Connectors</h2>
@@ -216,15 +216,15 @@ export default function ClientVehicleDetail() {
               Add Connector
             </KGButton>
           </div>
-        </div>
+      </div>
 
-        {connectors.length === 0 ? (
-          <KGCard className="text-center py-8">
+      {connectors.length === 0 ? (
+        <KGCard className="text-center py-8">
             <Plug size={36} className="mx-auto text-gray-300 mb-3" />
             <p className="text-gray-500">No connectors added yet</p>
-          </KGCard>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        </KGCard>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {connectors.map((conn) => {
               const isSelected = selectedItems.find(i => i.id === conn.id);
               return (
@@ -261,9 +261,8 @@ export default function ClientVehicleDetail() {
                 </KGCard>
               );
             })}
-          </div>
-        )}
-      </div>
+        </div>
+      )}
 
       {/* Add Connector Modal */}
       <Dialog open={showConnectorModal} onOpenChange={setShowConnectorModal}>
