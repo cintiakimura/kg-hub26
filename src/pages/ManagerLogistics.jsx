@@ -31,7 +31,10 @@ export default function ManagerLogistics() {
     carrier: 'FedEx',
     origin_address: '',
     destination_address: '',
-    eta: ''
+    eta: '',
+    manual_po: false,
+    manual_po_id: '',
+    manual_client_id: ''
   });
 
 
@@ -90,11 +93,12 @@ export default function ManagerLogistics() {
 
   const createShipment = async () => {
     const shipmentId = await generateShipmentId();
-    const po = purchaseOrders.find(p => p.po_id === newShipment.po_id);
+    const poId = newShipment.manual_po ? newShipment.manual_po_id : newShipment.po_id;
+    const po = purchaseOrders.find(p => p.po_id === poId);
     
     await base44.entities.Shipment.create({
       shipment_id: shipmentId,
-      po_id: newShipment.po_id,
+      po_id: poId || null,
       type: newShipment.type,
       tracking_number: newShipment.tracking_number,
       carrier: newShipment.carrier,
@@ -103,10 +107,10 @@ export default function ManagerLogistics() {
       destination_address: newShipment.destination_address,
       eta: newShipment.eta,
       client_visible: newShipment.type === 'outbound',
-      org_id: newShipment.type === 'outbound' ? po?.client_org_id : null
+      org_id: newShipment.type === 'outbound' ? (po?.client_org_id || newShipment.manual_client_id) : null
     });
 
-    // Update PO with tracking
+    // Update PO with tracking if exists
     if (po) {
       if (newShipment.type === 'inbound') {
         await base44.entities.PurchaseOrder.update(po.id, { 
@@ -127,7 +131,10 @@ export default function ManagerLogistics() {
       carrier: 'FedEx',
       origin_address: '',
       destination_address: '',
-      eta: ''
+      eta: '',
+      manual_po: false,
+      manual_po_id: '',
+      manual_client_id: ''
     });
     loadData();
   };
@@ -287,13 +294,45 @@ export default function ManagerLogistics() {
             <DialogTitle>Add Shipment</DialogTitle>
           </DialogHeader>
           <div className="space-y-4">
-            <KGSelect
-              label="Purchase Order"
-              value={newShipment.po_id}
-              onChange={(e) => setNewShipment({ ...newShipment, po_id: e.target.value })}
-              options={purchaseOrders.map(po => ({ value: po.po_id, label: po.po_id }))}
-              placeholder="Select PO..."
-            />
+            <div className="flex items-center gap-2">
+              <label className="flex items-center gap-2 cursor-pointer">
+                <input 
+                  type="checkbox" 
+                  checked={newShipment.manual_po} 
+                  onChange={(e) => setNewShipment({ ...newShipment, manual_po: e.target.checked, po_id: '', manual_po_id: '' })}
+                  className="w-4 h-4"
+                />
+                <span className="text-sm text-gray-600">Add manually (no PO)</span>
+              </label>
+            </div>
+
+            {!newShipment.manual_po ? (
+              <KGSelect
+                label="Purchase Order"
+                value={newShipment.po_id}
+                onChange={(e) => setNewShipment({ ...newShipment, po_id: e.target.value })}
+                options={purchaseOrders.map(po => ({ value: po.po_id, label: po.po_id }))}
+                placeholder="Select PO..."
+              />
+            ) : (
+              <>
+                <KGInput
+                  label="PO ID (optional)"
+                  value={newShipment.manual_po_id}
+                  onChange={(e) => setNewShipment({ ...newShipment, manual_po_id: e.target.value })}
+                  placeholder="e.g. Q-1001-S-042"
+                />
+                {newShipment.type === 'outbound' && (
+                  <KGSelect
+                    label="Client"
+                    value={newShipment.manual_client_id}
+                    onChange={(e) => setNewShipment({ ...newShipment, manual_client_id: e.target.value })}
+                    options={Object.entries(clients).map(([orgId, org]) => ({ value: orgId, label: org.name }))}
+                    placeholder="Select client..."
+                  />
+                )}
+              </>
+            )}
 
             <KGSelect
               label="Shipment Type"
