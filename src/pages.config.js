@@ -7,6 +7,10 @@ import ClientVehicleDetail from './pages/ClientVehicleDetail';
 import ClientQuotes from './pages/ClientQuotes';
 import ClientShipments from './pages/ClientShipments';
 import SupplierDashboard from './pages/SupplierDashboard';
+import ManagerDashboard from './pages/ManagerDashboard';
+import ManagerClients from './pages/ManagerClients';
+import ManagerSalesQuotes from './pages/ManagerSalesQuotes';
+import ManagerSupplierQuotes from './pages/ManagerSupplierQuotes';
 
 
 export const PAGES = {
@@ -19,6 +23,10 @@ export const PAGES = {
     "ClientQuotes": ClientQuotes,
     "ClientShipments": ClientShipments,
     "SupplierDashboard": SupplierDashboard,
+    "ManagerDashboard": ManagerDashboard,
+    "ManagerClients": ManagerClients,
+    "ManagerSalesQuotes": ManagerSalesQuotes,
+    "ManagerSupplierQuotes": ManagerSupplierQuotes,
 }
 
 export const pagesConfig = {
