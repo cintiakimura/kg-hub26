@@ -15,6 +15,16 @@ export default function ClientDashboard() {
   const [purchases, setPurchases] = useState([]);
   const [showAddVehicleModal, setShowAddVehicleModal] = useState(false);
   const [showAddPurchaseModal, setShowAddPurchaseModal] = useState(false);
+  const [showEditOrgModal, setShowEditOrgModal] = useState(false);
+  const [editOrgForm, setEditOrgForm] = useState({
+    name: '',
+    contact_name: '',
+    contact_email: '',
+    contact_phone: '',
+    billing_address: '',
+    delivery_address: '',
+    vat_number: ''
+  });
   const [newVehicle, setNewVehicle] = useState({
     brand: '',
     model: '',
@@ -53,6 +63,17 @@ export default function ClientDashboard() {
 
     const orgData = (await base44.entities.Organisation.filter({ org_id: profileData.org_id }))[0];
     setOrg(orgData);
+    if (orgData) {
+      setEditOrgForm({
+        name: orgData.name || '',
+        contact_name: orgData.contact_name || '',
+        contact_email: orgData.contact_email || '',
+        contact_phone: orgData.contact_phone || '',
+        billing_address: orgData.billing_address || '',
+        delivery_address: orgData.delivery_address || '',
+        vat_number: orgData.vat_number || ''
+      });
+    }
 
     const vehiclesData = await base44.entities.Vehicle.filter({ org_id: profileData.org_id });
     setVehicles(vehiclesData);
@@ -151,6 +172,25 @@ export default function ClientDashboard() {
     }
   };
 
+  const saveOrganisation = async () => {
+    try {
+      await base44.entities.Organisation.update(org.id, {
+        name: editOrgForm.name,
+        contact_name: editOrgForm.contact_name,
+        contact_email: editOrgForm.contact_email,
+        contact_phone: editOrgForm.contact_phone,
+        billing_address: editOrgForm.billing_address,
+        delivery_address: editOrgForm.delivery_address,
+        vat_number: editOrgForm.vat_number
+      });
+      toast.success('Organisation updated');
+      setShowEditOrgModal(false);
+      loadData();
+    } catch (err) {
+      toast.error('Error updating organisation');
+    }
+  };
+
   if (loading) return <div className="flex items-center justify-center h-screen">Loading...</div>;
 
   const menuCards = [
@@ -168,7 +208,7 @@ export default function ClientDashboard() {
 
       <div className="bg-[#2a2a2a] rounded-lg p-6 mb-6 border border-[#00c600] relative">
               <button 
-                onClick={() => navigate(createPageUrl(`ClientOrganisationDetail?org_id=${org?.id}`))}
+                onClick={() => setShowEditOrgModal(true)}
                 className="absolute top-4 right-4 p-2 hover:bg-[#00c600] hover:bg-opacity-20 rounded transition-all"
               >
                 <Edit size={16} color="#00c600" />
@@ -402,6 +442,80 @@ export default function ClientDashboard() {
               </button>
               <button 
                 onClick={savePurchase}
+                className="flex-1 bg-[#00c600] text-black p-2 rounded text-sm hover:opacity-80"
+              >
+                Save
+              </button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Edit Organisation Modal */}
+      <Dialog open={showEditOrgModal} onOpenChange={setShowEditOrgModal}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle>Edit Organisation</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4">
+            <input 
+              type="text" 
+              placeholder="Organisation Name"
+              value={editOrgForm.name}
+              onChange={(e) => setEditOrgForm({ ...editOrgForm, name: e.target.value })}
+              className="w-full p-2 bg-[#2a2a2a] border border-[#00c600] rounded text-white text-sm"
+            />
+            <input 
+              type="text" 
+              placeholder="Contact Name"
+              value={editOrgForm.contact_name}
+              onChange={(e) => setEditOrgForm({ ...editOrgForm, contact_name: e.target.value })}
+              className="w-full p-2 bg-[#2a2a2a] border border-[#00c600] rounded text-white text-sm"
+            />
+            <input 
+              type="email" 
+              placeholder="Contact Email"
+              value={editOrgForm.contact_email}
+              onChange={(e) => setEditOrgForm({ ...editOrgForm, contact_email: e.target.value })}
+              className="w-full p-2 bg-[#2a2a2a] border border-[#00c600] rounded text-white text-sm"
+            />
+            <input 
+              type="tel" 
+              placeholder="Contact Phone"
+              value={editOrgForm.contact_phone}
+              onChange={(e) => setEditOrgForm({ ...editOrgForm, contact_phone: e.target.value })}
+              className="w-full p-2 bg-[#2a2a2a] border border-[#00c600] rounded text-white text-sm"
+            />
+            <input 
+              type="text" 
+              placeholder="Billing Address"
+              value={editOrgForm.billing_address}
+              onChange={(e) => setEditOrgForm({ ...editOrgForm, billing_address: e.target.value })}
+              className="w-full p-2 bg-[#2a2a2a] border border-[#00c600] rounded text-white text-sm"
+            />
+            <input 
+              type="text" 
+              placeholder="Delivery Address"
+              value={editOrgForm.delivery_address}
+              onChange={(e) => setEditOrgForm({ ...editOrgForm, delivery_address: e.target.value })}
+              className="w-full p-2 bg-[#2a2a2a] border border-[#00c600] rounded text-white text-sm"
+            />
+            <input 
+              type="text" 
+              placeholder="VAT Number"
+              value={editOrgForm.vat_number}
+              onChange={(e) => setEditOrgForm({ ...editOrgForm, vat_number: e.target.value })}
+              className="w-full p-2 bg-[#2a2a2a] border border-[#00c600] rounded text-white text-sm"
+            />
+            <div className="flex gap-3">
+              <button 
+                onClick={() => setShowEditOrgModal(false)}
+                className="flex-1 p-2 border border-[#00c600] text-[#00c600] rounded text-sm hover:opacity-80"
+              >
+                Cancel
+              </button>
+              <button 
+                onClick={saveOrganisation}
                 className="flex-1 bg-[#00c600] text-black p-2 rounded text-sm hover:opacity-80"
               >
                 Save
