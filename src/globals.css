@@ -10,14 +10,18 @@
   }
 
   html {
-    @apply transition-colors duration-300;
+    @apply transition-colors duration-300 bg-white;
+  }
+
+  html.dark {
+    @apply bg-[#212121];
   }
 
   body {
     @apply bg-white text-black transition-colors duration-300;
   }
 
-  .dark body {
+  html.dark body {
     @apply bg-[#212121] text-white;
   }
 

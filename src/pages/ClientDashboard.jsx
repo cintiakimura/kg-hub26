@@ -3,6 +3,7 @@ import { base44 } from '@/api/base44Client';
 import { createPageUrl } from '@/utils';
 import { useNavigate } from 'react-router-dom';
 import TableExport from '../components/TableExport';
+import { FileText, TruckIcon, Car, Users } from 'lucide-react';
 
 export default function ClientDashboard() {
   const [loading, setLoading] = useState(true);
@@ -38,8 +39,32 @@ export default function ClientDashboard() {
 
   if (loading) return <div className="flex items-center justify-center h-screen">Loading...</div>;
 
+  const menuCards = [
+    { icon: FileText, name: 'Quotes', desc: 'Review quote requests', page: 'ClientQuotes' },
+    { icon: TruckIcon, name: 'Shipments', desc: 'Track deliveries', page: 'ClientShipments' },
+    { icon: Car, name: 'Vehicles', desc: 'Manage fleet details', page: 'ClientVehicleAdd' },
+    { icon: Users, name: 'Organisation', desc: 'Company settings', page: 'ClientDashboard' }
+  ];
+
   return (
     <div className="p-6">
+      <div className="grid grid-cols-4 gap-4 mb-6">
+        {menuCards.map((card) => {
+          const Icon = card.icon;
+          return (
+            <div
+              key={card.page}
+              onClick={() => navigate(createPageUrl(card.page))}
+              className="bg-gray-100 dark:bg-[#1a1a1a] rounded-lg p-4 cursor-pointer hover:shadow-lg transition-all border border-[#00c600]"
+            >
+              <Icon size={24} color="#00c600" className="mb-2" />
+              <div className="text-sm mb-1">{card.name}</div>
+              <div className="text-xs opacity-70">{card.desc}</div>
+            </div>
+          );
+        })}
+      </div>
+
       <div className="bg-gray-100 dark:bg-[#1a1a1a] rounded-lg p-6 shadow-md">
         <div className="flex items-center gap-3 mb-6">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#00c600" strokeWidth="2">
