@@ -3,6 +3,7 @@ import { Sun, Moon, Home, Users, Package, TruckIcon, DollarSign, FileText } from
 import { useNavigate, useLocation } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { base44 } from '@/api/base44Client';
+import Hub from '@/components/Hub';
 
 export default function Layout({ children, currentPageName }) {
   const [theme, setTheme] = useState(() => {
@@ -13,6 +14,7 @@ export default function Layout({ children, currentPageName }) {
   });
   
   const [userRole, setUserRole] = useState(null);
+  const [hubOpen, setHubOpen] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -128,6 +130,19 @@ export default function Layout({ children, currentPageName }) {
         >
           {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
         </button>
+
+        <button
+          onClick={() => setHubOpen(true)}
+          className="fixed bottom-6 right-6 z-50 w-12 h-12 rounded-full bg-white dark:bg-[#212121] border-2 border-[#00c600] flex items-center justify-center hub-pulse"
+        >
+          <img 
+            src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/697651f65fc49ec896171492/e2c435b98_KG_primary_logo_green.png"
+            alt="Hub"
+            className="w-6 h-6"
+          />
+        </button>
+
+        <Hub isOpen={hubOpen} onClose={() => setHubOpen(false)} />
         
         {children}
       </div>

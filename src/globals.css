@@ -133,3 +133,12 @@ svg {
   height: 20px;
   color: #00c600;
 }
+
+@keyframes hub-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(0, 198, 0, 0.4); }
+  50% { box-shadow: 0 0 0 8px rgba(0, 198, 0, 0); }
+}
+
+.hub-pulse {
+  animation: hub-pulse 10s infinite;
+}

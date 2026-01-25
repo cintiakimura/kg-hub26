@@ -1,41 +1,41 @@
-import ClientLogin from './pages/ClientLogin';
-import SupplierLogin from './pages/SupplierLogin';
-import ManagerLogin from './pages/ManagerLogin';
 import ClientDashboard from './pages/ClientDashboard';
-import ClientVehicleAdd from './pages/ClientVehicleAdd';
-import ClientVehicleDetail from './pages/ClientVehicleDetail';
+import ClientLogin from './pages/ClientLogin';
 import ClientQuotes from './pages/ClientQuotes';
 import ClientShipments from './pages/ClientShipments';
-import SupplierDashboard from './pages/SupplierDashboard';
-import ManagerDashboard from './pages/ManagerDashboard';
+import ClientVehicleAdd from './pages/ClientVehicleAdd';
+import ClientVehicleDetail from './pages/ClientVehicleDetail';
+import Home from './pages/Home';
 import ManagerClients from './pages/ManagerClients';
-import ManagerSalesQuotes from './pages/ManagerSalesQuotes';
-import ManagerSupplierQuotes from './pages/ManagerSupplierQuotes';
+import ManagerDashboard from './pages/ManagerDashboard';
+import ManagerFinancials from './pages/ManagerFinancials';
+import ManagerLogin from './pages/ManagerLogin';
 import ManagerLogistics from './pages/ManagerLogistics';
 import ManagerPurchases from './pages/ManagerPurchases';
-import ManagerFinancials from './pages/ManagerFinancials';
-import Home from './pages/Home';
+import ManagerSalesQuotes from './pages/ManagerSalesQuotes';
+import ManagerSupplierQuotes from './pages/ManagerSupplierQuotes';
+import SupplierDashboard from './pages/SupplierDashboard';
+import SupplierLogin from './pages/SupplierLogin';
 import __Layout from './Layout.jsx';
 
 
 export const PAGES = {
-    "ClientLogin": ClientLogin,
-    "SupplierLogin": SupplierLogin,
-    "ManagerLogin": ManagerLogin,
     "ClientDashboard": ClientDashboard,
-    "ClientVehicleAdd": ClientVehicleAdd,
-    "ClientVehicleDetail": ClientVehicleDetail,
+    "ClientLogin": ClientLogin,
     "ClientQuotes": ClientQuotes,
     "ClientShipments": ClientShipments,
-    "SupplierDashboard": SupplierDashboard,
-    "ManagerDashboard": ManagerDashboard,
+    "ClientVehicleAdd": ClientVehicleAdd,
+    "ClientVehicleDetail": ClientVehicleDetail,
+    "Home": Home,
     "ManagerClients": ManagerClients,
-    "ManagerSalesQuotes": ManagerSalesQuotes,
-    "ManagerSupplierQuotes": ManagerSupplierQuotes,
+    "ManagerDashboard": ManagerDashboard,
+    "ManagerFinancials": ManagerFinancials,
+    "ManagerLogin": ManagerLogin,
     "ManagerLogistics": ManagerLogistics,
     "ManagerPurchases": ManagerPurchases,
-    "ManagerFinancials": ManagerFinancials,
-    "Home": Home,
+    "ManagerSalesQuotes": ManagerSalesQuotes,
+    "ManagerSupplierQuotes": ManagerSupplierQuotes,
+    "SupplierDashboard": SupplierDashboard,
+    "SupplierLogin": SupplierLogin,
 }
 
 export const pagesConfig = {
