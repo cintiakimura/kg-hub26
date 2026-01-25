@@ -28,6 +28,12 @@ export default function SupplierLogin() {
     }
 
     const user = await base44.auth.me();
+    
+    if (user.email.endsWith('@kgprotech.com')) {
+      navigate(createPageUrl('ManagerLogin'));
+      return;
+    }
+
     const profiles = await base44.entities.UserProfile.filter({ user_email: user.email });
 
     if (profiles.length > 0) {
