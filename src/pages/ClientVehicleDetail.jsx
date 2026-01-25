@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { base44 } from '@/api/base44Client';
 import { useNavigate } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
-import AppHeader from '@/components/layout/AppHeader';
 import KGCard, { KGCardTitle } from '@/components/ui/KGCard';
 import KGButton from '@/components/ui/KGButton';
 import KGInput, { KGTextarea, KGSelect } from '@/components/ui/KGInput';
@@ -70,7 +69,7 @@ export default function ClientVehicleDetail() {
     setLoading(false);
   };
 
-  const handleLogout = () => base44.auth.logout(createPageUrl('ClientLogin'));
+
 
   const handlePhotoUpload = async (e, isScheme = false) => {
     const files = Array.from(e.target.files);
@@ -158,17 +157,14 @@ export default function ClientVehicleDetail() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="flex items-center justify-center h-screen">
         <Loader2 className="animate-spin text-[#00C600]" size={32} />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <AppHeader user={user} orgId={profile?.org_id} onLogout={handleLogout} title="KG Hub – Client" />
-
-      <div className="max-w-4xl mx-auto p-6">
+    <div className="max-w-4xl mx-auto p-6">
         <div className="flex items-center gap-4 mb-6">
           <KGButton variant="ghost" onClick={() => navigate(createPageUrl('ClientDashboard'))}>
             <ArrowLeft size={20} />

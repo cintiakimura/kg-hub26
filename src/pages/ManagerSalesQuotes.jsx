@@ -2,8 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { base44 } from '@/api/base44Client';
 import { useNavigate } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
-import AppHeader from '@/components/layout/AppHeader';
-import SideNav from '@/components/layout/SideNav';
 import KGCard from '@/components/ui/KGCard';
 import KGButton from '@/components/ui/KGButton';
 import KGBadge from '@/components/ui/KGBadge';
@@ -25,15 +23,7 @@ export default function ManagerSalesQuotes() {
   const [suppliers, setSuppliers] = useState([]);
   const [editItems, setEditItems] = useState([]);
 
-  const navItems = [
-    { page: 'ManagerDashboard', label: 'Production Control', icon: LayoutDashboard },
-    { page: 'ManagerClients', label: 'Clients', icon: Users },
-    { page: 'ManagerSalesQuotes', label: 'Sales Quotes', icon: FileText },
-    { page: 'ManagerSupplierQuotes', label: 'Supplier Quotes', icon: Scale },
-    { page: 'ManagerLogistics', label: 'Logistics', icon: Truck },
-    { page: 'ManagerPurchases', label: 'Purchases', icon: ShoppingCart },
-    { page: 'ManagerFinancials', label: 'Financials', icon: DollarSign }
-  ];
+
 
   useEffect(() => {
     loadData();
@@ -72,7 +62,7 @@ export default function ManagerSalesQuotes() {
     setLoading(false);
   };
 
-  const handleLogout = () => base44.auth.logout(createPageUrl('ManagerLogin'));
+
 
   const openQuote = (quote) => {
     setSelectedQuote(quote);
@@ -150,20 +140,14 @@ export default function ManagerSalesQuotes() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="flex items-center justify-center h-screen">
         <Loader2 className="animate-spin text-[#00C600]" size={32} />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <AppHeader user={user} orgId={profile?.org_id} onLogout={handleLogout} title="KG Hub – Manager" />
-      
-      <div className="flex">
-        <SideNav items={navItems} currentPage="ManagerSalesQuotes" />
-        
-        <main className="flex-1 p-6">
+    <div className="p-6">
           <div className="flex items-center gap-2 mb-6">
             <FileText size={24} className="text-[#00C600]" />
             <h1 className="text-xl text-gray-800">Sales Quotes</h1>
@@ -204,8 +188,7 @@ export default function ManagerSalesQuotes() {
               ))}
             </div>
           )}
-        </main>
-      </div>
+
 
       {/* Quote Edit Modal */}
       <Dialog open={!!selectedQuote} onOpenChange={() => setSelectedQuote(null)}>
