@@ -7,7 +7,9 @@ export default function Hub({ isOpen, onClose }) {
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
   const [listening, setListening] = useState(false);
+  const [audioUrl, setAudioUrl] = useState(null);
   const chatRef = useRef(null);
+  const audioRef = useRef(null);
   const recognitionRef = useRef(null);
 
   useEffect(() => {
@@ -24,18 +26,20 @@ export default function Hub({ isOpen, onClose }) {
     }
   }, [messages]);
 
-  const speak = (text) => {
-    const utterance = new SpeechSynthesisUtterance(text);
-    const voices = speechSynthesis.getVoices();
-    const maleVoice = voices.find(v => 
-      v.name.includes('Male') || 
-      v.name.includes('Daniel') || 
-      v.lang.includes('en-GB')
-    );
-    if (maleVoice) utterance.voice = maleVoice;
-    utterance.rate = 0.85;
-    utterance.pitch = 0.8;
-    speechSynthesis.speak(utterance);
+  const speak = async (text) => {
+    try {
+      const response = await base44.functions.invoke('elevenlabsTTS', { text });
+      const blob = new Blob([response.data], { type: 'audio/mpeg' });
+      const url = URL.createObjectURL(blob);
+      setAudioUrl(url);
+      
+      if (audioRef.current) {
+        audioRef.current.src = url;
+        audioRef.current.play();
+      }
+    } catch (error) {
+      console.error('TTS error:', error);
+    }
   };
 
   const sendMessage = async (text) => {
@@ -206,6 +210,21 @@ No "um". No filler. Always please`
             <Send size={20} />
           </button>
         </div>
+
+        {audioUrl && (
+          <div className="fixed bottom-4 right-4 z-50">
+            <audio 
+              ref={audioRef}
+              controls
+              autoPlay
+              className="h-12 rounded-lg"
+              style={{
+                backgroundColor: '#1a1a1a',
+                border: '1px solid #00c600'
+              }}
+            />
+          </div>
+        )}
       </div>
     </div>
   );
