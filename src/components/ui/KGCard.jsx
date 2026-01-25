@@ -6,8 +6,8 @@ export default function KGCard({ children, className, onClick, printSafe = true 
     <div
       onClick={onClick}
       className={cn(
-        "border-2 border-[#00C600] rounded-lg p-4",
-        printSafe && "bg-white print:bg-white",
+        "border-2 border-[#00C600] rounded-lg p-4 bg-white dark:bg-[#2a2a2a]",
+        printSafe && "print:bg-white",
         onClick && "cursor-pointer hover:shadow-md transition-shadow",
         className
       )}
