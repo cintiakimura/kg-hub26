@@ -144,7 +144,7 @@ export default function ClientVehicleAdd() {
 
   return (
     <div className="max-w-2xl mx-auto p-6">
-        <div className="flex items-center gap-4 mb-6">
+      <div className="flex items-center gap-4 mb-6">
           <KGButton variant="ghost" onClick={() => navigate(createPageUrl('ClientDashboard'))}>
             <ArrowLeft size={20} />
           </KGButton>
@@ -154,7 +154,7 @@ export default function ClientVehicleAdd() {
           </div>
         </div>
 
-        <KGCard>
+      <KGCard>
           <form onSubmit={handleSubmit} className="space-y-4">
             {/* VIN Decode Section */}
             <div className="flex gap-2">
@@ -281,8 +281,7 @@ export default function ClientVehicleAdd() {
               </KGButton>
             </div>
           </form>
-        </KGCard>
-      </div>
+      </KGCard>
     </div>
   );
 }
