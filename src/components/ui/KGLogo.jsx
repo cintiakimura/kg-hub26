@@ -2,13 +2,11 @@ import React from 'react';
 
 export default function KGLogo({ size = 40 }) {
   return (
-    <div 
-      className="flex items-center justify-center border-2 border-[#00C600] rounded-lg bg-white"
-      style={{ width: size, height: size }}
-    >
-      <span className="text-[#00C600] font-normal" style={{ fontSize: size * 0.4 }}>
-        KG
-      </span>
-    </div>
+    <img 
+      src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/697651f65fc49ec896171492/e2c435b98_KG_primary_logo_green.png"
+      alt="KG Logo"
+      style={{ height: size }}
+      className="object-contain"
+    />
   );
 }
