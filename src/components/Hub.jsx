@@ -27,10 +27,14 @@ export default function Hub({ isOpen, onClose }) {
   const speak = (text) => {
     const utterance = new SpeechSynthesisUtterance(text);
     const voices = speechSynthesis.getVoices();
-    const femaleVoice = voices.find(v => v.name.includes('Female') || v.name.includes('Samantha'));
-    if (femaleVoice) utterance.voice = femaleVoice;
-    utterance.rate = 0.9;
-    utterance.pitch = 1.0;
+    const maleVoice = voices.find(v => 
+      v.name.includes('Male') || 
+      v.name.includes('Daniel') || 
+      v.lang.includes('en-GB')
+    );
+    if (maleVoice) utterance.voice = maleVoice;
+    utterance.rate = 0.85;
+    utterance.pitch = 0.8;
     speechSynthesis.speak(utterance);
   };
 
@@ -120,9 +124,9 @@ export default function Hub({ isOpen, onClose }) {
         <div className="p-4 border-b border-[#00c600] flex items-center justify-between">
           <div className="flex items-center gap-3">
             <img 
-              src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/697651f65fc49ec896171492/e2c435b98_KG_primary_logo_green.png"
+              src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/697651f65fc49ec896171492/978101b2a_Gemini_Generated_Image_6erfwv6erfwv6erf.png"
               alt="Hub"
-              className="w-8 h-8"
+              className="w-10 h-10 object-contain"
             />
             <div>
               <div className="text-lg">Hub</div>

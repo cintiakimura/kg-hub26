@@ -133,12 +133,12 @@ export default function Layout({ children, currentPageName }) {
 
         <button
           onClick={() => setHubOpen(true)}
-          className="fixed bottom-6 right-6 z-50 w-12 h-12 rounded-full bg-white dark:bg-[#212121] border-2 border-[#00c600] flex items-center justify-center hub-pulse"
+          className="fixed bottom-6 right-6 z-50 w-12 h-12 rounded-full bg-white dark:bg-[#212121] border-2 border-[#00c600] flex items-center justify-center hub-pulse overflow-hidden"
         >
           <img 
-            src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/697651f65fc49ec896171492/e2c435b98_KG_primary_logo_green.png"
+            src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/697651f65fc49ec896171492/978101b2a_Gemini_Generated_Image_6erfwv6erfwv6erf.png"
             alt="Hub"
-            className="w-6 h-6"
+            className="w-full h-full object-cover"
           />
         </button>
 
