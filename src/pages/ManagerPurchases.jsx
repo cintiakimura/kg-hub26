@@ -168,7 +168,7 @@ export default function ManagerPurchases() {
           <div className="flex items-center justify-between mb-6">
             <div className="flex items-center gap-2">
               <ShoppingCart size={24} className="text-[#00C600]" />
-              <h1 className="text-xl text-gray-800">Non-Production Purchases</h1>
+              <h1 className="text-xl text-[#00c600]">Non-Production Purchases</h1>
             </div>
             <KGButton onClick={() => openModal()}>
               <Plus size={16} className="mr-2" />

@@ -158,7 +158,7 @@ export default function ManagerLogistics() {
           <div className="flex items-center justify-between mb-6">
             <div className="flex items-center gap-2">
               <Truck size={24} className="text-[#00C600]" />
-              <h1 className="text-xl text-gray-800">Logistics</h1>
+              <h1 className="text-xl text-[#00c600]">Logistics</h1>
             </div>
             <KGButton onClick={() => setShowAddModal(true)}>
               <Plus size={16} className="mr-2" />

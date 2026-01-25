@@ -97,7 +97,7 @@ export default function ManagerSupplierQuotes() {
     <div className="p-6">
           <div className="flex items-center gap-2 mb-6">
             <Scale size={24} className="text-[#00C600]" />
-            <h1 className="text-xl text-gray-800">Supplier Quotes Comparison</h1>
+            <h1 className="text-xl text-[#00c600]">Supplier Quotes Comparison</h1>
           </div>
 
           {Object.keys(groupedQuotes).length === 0 ? (
