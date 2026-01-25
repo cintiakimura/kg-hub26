@@ -169,10 +169,10 @@ export default function ManagerLogistics() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {/* Inbound - Supplier to KG */}
             <div>
-              <h2 className="text-lg text-gray-700 mb-4 flex items-center gap-2">
-                <Package size={18} />
-                Inbound (Supplier → KG)
-              </h2>
+             <h2 className="text-lg text-[#00c600] mb-4 flex items-center gap-2">
+               <Package size={18} />
+               Inbound (Supplier → KG)
+             </h2>
               <div className="space-y-3">
                 {inboundShipments.length === 0 ? (
                   <KGCard className="text-center py-8 text-gray-500">
@@ -221,10 +221,10 @@ export default function ManagerLogistics() {
 
             {/* Outbound - KG to Client */}
             <div>
-              <h2 className="text-lg text-gray-700 mb-4 flex items-center gap-2">
-                <Truck size={18} />
-                Outbound (KG → Client)
-              </h2>
+             <h2 className="text-lg text-[#00c600] mb-4 flex items-center gap-2">
+               <Truck size={18} />
+               Outbound (KG → Client)
+             </h2>
               <div className="space-y-3">
                 {outboundShipments.length === 0 ? (
                   <KGCard className="text-center py-8 text-gray-500">
