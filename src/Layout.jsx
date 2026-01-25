@@ -3,7 +3,6 @@ import { Sun, Moon, Home, Users, Package, TruckIcon, DollarSign, FileText } from
 import { useNavigate, useLocation } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { base44 } from '@/api/base44Client';
-import Hub from '@/components/Hub';
 
 export default function Layout({ children, currentPageName }) {
   const [theme, setTheme] = useState(() => {
@@ -14,7 +13,6 @@ export default function Layout({ children, currentPageName }) {
   });
   
   const [userRole, setUserRole] = useState(null);
-  const [hubOpen, setHubOpen] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -95,6 +93,33 @@ export default function Layout({ children, currentPageName }) {
   const navItems = getNavItems();
   const showSidebar = navItems.length > 0 && !location.pathname.includes('Login');
 
+  const openHub = async () => {
+    try {
+      const response = await base44.functions.invoke('hubAsk', { 
+        message: 'Hello Hub, give me a quick status update' 
+      });
+      
+      const text = response.data;
+      
+      const synth = window.speechSynthesis;
+      const utter = new SpeechSynthesisUtterance(text);
+      const voices = synth.getVoices();
+      const maleVoice = voices.find(v => 
+        v.name.includes('Male') || 
+        v.name.includes('Daniel') || 
+        v.lang.includes('en-GB')
+      );
+      if (maleVoice) utter.voice = maleVoice;
+      utter.rate = 0.85;
+      utter.pitch = 0.8;
+      synth.speak(utter);
+      
+      alert(text);
+    } catch (error) {
+      console.error('Hub error:', error);
+    }
+  };
+
   return (
     <div className="flex min-h-screen">
       {showSidebar && (
@@ -132,8 +157,8 @@ export default function Layout({ children, currentPageName }) {
         </button>
 
         <button
-          onClick={() => setHubOpen(true)}
-          className="fixed bottom-6 right-6 z-50 w-12 h-12 rounded-full bg-white dark:bg-[#212121] border-2 border-[#00c600] flex items-center justify-center hub-pulse overflow-hidden"
+          onClick={openHub}
+          className="fixed bottom-6 right-6 z-50 w-16 h-16 rounded-full bg-white dark:bg-[#212121] border-2 border-[#00c600] flex items-center justify-center hub-pulse overflow-hidden shadow-lg hover:scale-110 transition-all duration-300"
         >
           <img 
             src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/697651f65fc49ec896171492/978101b2a_Gemini_Generated_Image_6erfwv6erfwv6erf.png"
@@ -141,8 +166,6 @@ export default function Layout({ children, currentPageName }) {
             className="w-full h-full object-cover"
           />
         </button>
-
-        <Hub isOpen={hubOpen} onClose={() => setHubOpen(false)} />
         
         {children}
       </div>
