@@ -1,7 +1,21 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { base44 } from '@/api/base44Client';
+import { createPageUrl } from '@/utils';
+import { useNavigate } from 'react-router-dom';
 
 export default function ClientLogin() {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      const isAuth = await base44.auth.isAuthenticated();
+      if (isAuth) {
+        navigate(createPageUrl('ClientDashboard'));
+      }
+    };
+    checkAuth();
+  }, [navigate]);
+
   return (
     <div style={{
       background: '#212121',
@@ -25,7 +39,7 @@ export default function ClientLogin() {
         </p>
         <div style={{ display: 'flex', gap: '10px', justifyContent: 'center' }}>
           <button 
-            onClick={() => base44.auth.redirectToLogin('/ClientLogin')}
+            onClick={() => base44.auth.redirectToLogin(createPageUrl('ClientDashboard'))}
             style={{
               background: '#00c600',
               color: '#000',
@@ -39,7 +53,7 @@ export default function ClientLogin() {
             Log in
           </button>
           <button 
-            onClick={() => base44.auth.redirectToLogin('/ClientLogin')}
+            onClick={() => base44.auth.redirectToLogin(createPageUrl('ClientDashboard'))}
             style={{
               background: '#000',
               color: '#00c600',
