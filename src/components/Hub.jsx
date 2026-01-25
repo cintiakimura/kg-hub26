@@ -29,14 +29,15 @@ export default function Hub({ isOpen, onClose }) {
   const speak = async (text) => {
     try {
       const response = await base44.functions.invoke('elevenlabsTTS', { text });
-      const blob = new Blob([response.data], { type: 'audio/mpeg' });
+      const arrayBuffer = response.data;
+      const blob = new Blob([arrayBuffer], { type: 'audio/mpeg' });
       const url = URL.createObjectURL(blob);
-      setAudioUrl(url);
       
-      if (audioRef.current) {
-        audioRef.current.src = url;
-        audioRef.current.play();
+      if (audioUrl) {
+        URL.revokeObjectURL(audioUrl);
       }
+      
+      setAudioUrl(url);
     } catch (error) {
       console.error('TTS error:', error);
     }
@@ -211,20 +212,17 @@ No "um". No filler. Always please`
           </button>
         </div>
 
-        {audioUrl && (
-          <div className="fixed bottom-4 right-4 z-50">
-            <audio 
-              ref={audioRef}
-              controls
-              autoPlay
-              className="h-12 rounded-lg"
-              style={{
-                backgroundColor: '#1a1a1a',
-                border: '1px solid #00c600'
-              }}
-            />
-          </div>
-        )}
+        <audio 
+          key={audioUrl}
+          src={audioUrl}
+          autoPlay
+          controls
+          className="fixed bottom-4 right-4 z-50 h-12 rounded-lg"
+          style={{
+            backgroundColor: '#1a1a1a',
+            border: '1px solid #00c600'
+          }}
+        />
       </div>
     </div>
   );
