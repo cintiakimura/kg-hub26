@@ -3,6 +3,7 @@ import { base44 } from '@/api/base44Client';
 import { createPageUrl } from '@/utils';
 import { useNavigate } from 'react-router-dom';
 import TableExport from '../components/TableExport';
+import QuickActionButtons from '../components/QuickActionButtons';
 import { Users, FileText, Package, TruckIcon } from 'lucide-react';
 
 export default function ManagerDashboard() {
@@ -98,7 +99,10 @@ export default function ManagerDashboard() {
 
   return (
     <div className="p-6 bg-[#212121] min-h-screen">
-      <h1 className="text-2xl mb-6 text-[#00c600]">Production Control</h1>
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-2xl text-[#00c600]">Production Control</h1>
+        <QuickActionButtons />
+      </div>
       {loading && <div>Loading...</div>}
       {!loading && (
         <div className="border border-[#00c600] rounded p-6">

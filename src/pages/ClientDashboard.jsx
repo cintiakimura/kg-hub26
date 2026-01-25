@@ -3,6 +3,7 @@ import { base44 } from '@/api/base44Client';
 import { createPageUrl } from '@/utils';
 import { useNavigate } from 'react-router-dom';
 import TableExport from '../components/TableExport';
+import QuickActionButtons from '../components/QuickActionButtons';
 import { FileText, TruckIcon, Car, Users, Building2, Phone, Mail, Calendar, Edit } from 'lucide-react';
 
 export default function ClientDashboard() {
@@ -48,9 +49,12 @@ export default function ClientDashboard() {
 
   return (
     <div className="p-6 max-w-7xl mx-auto">
-      <div className="mb-6">
-        <div className="text-2xl mb-1 text-[#00c600]">DASHBOARD</div>
-        <div className="text-sm opacity-70">Welcome back, {org?.contact_name}</div>
+      <div className="mb-6 flex justify-between items-center">
+        <div>
+          <div className="text-2xl mb-1 text-[#00c600]">DASHBOARD</div>
+          <div className="text-sm opacity-70">Welcome back, {org?.contact_name}</div>
+        </div>
+        <QuickActionButtons />
       </div>
 
       <div className="bg-[#2a2a2a] rounded-lg p-6 mb-6 border border-[#00c600] relative">

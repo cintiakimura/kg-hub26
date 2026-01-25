@@ -3,6 +3,7 @@ import { base44 } from '@/api/base44Client';
 import { createPageUrl } from '@/utils';
 import { useNavigate } from 'react-router-dom';
 import TableExport from '../components/TableExport';
+import QuickActionButtons from '../components/QuickActionButtons';
 import { FileText, Package, Settings, TruckIcon } from 'lucide-react';
 
 export default function SupplierDashboard() {
@@ -82,6 +83,9 @@ export default function SupplierDashboard() {
 
   return (
     <div className="p-6 bg-[#212121] min-h-screen">
+      <div className="mb-6">
+        <QuickActionButtons />
+      </div>
       {loading && <div>Loading...</div>}
 
       {!loading && (
