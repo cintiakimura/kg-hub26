@@ -14,6 +14,7 @@ import ManagerSupplierQuotes from './pages/ManagerSupplierQuotes';
 import ManagerLogistics from './pages/ManagerLogistics';
 import ManagerPurchases from './pages/ManagerPurchases';
 import ManagerFinancials from './pages/ManagerFinancials';
+import Home from './pages/Home';
 
 
 export const PAGES = {
@@ -33,6 +34,7 @@ export const PAGES = {
     "ManagerLogistics": ManagerLogistics,
     "ManagerPurchases": ManagerPurchases,
     "ManagerFinancials": ManagerFinancials,
+    "Home": Home,
 }
 
 export const pagesConfig = {
