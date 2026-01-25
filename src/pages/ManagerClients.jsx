@@ -7,6 +7,7 @@ import KGButton from '@/components/ui/KGButton';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
+import { toast } from 'sonner';
 import { 
   LayoutDashboard, Users, FileText, Scale, Truck, ShoppingCart, 
   DollarSign, Loader2, Building2, RefreshCw, Plus 
@@ -22,7 +23,21 @@ export default function ManagerClients() {
   const [vehicles, setVehicles] = useState([]);
   const [quotes, setQuotes] = useState([]);
   const [addClientModal, setAddClientModal] = useState(false);
-  const [newClient, setNewClient] = useState({ name: '', email: '', phone: '' });
+  const [newClient, setNewClient] = useState({
+    name: '',
+    vat_number: '',
+    contact_email: '',
+    contact_phone: '',
+    contact_name: '',
+    billing_address: '',
+    billing_contact_name: '',
+    billing_contact_email: '',
+    billing_contact_phone: '',
+    delivery_address: '',
+    delivery_contact_name: '',
+    delivery_contact_email: '',
+    delivery_contact_phone: ''
+  });
 
 
 
@@ -93,10 +108,29 @@ export default function ManagerClients() {
       org_id: `C-${String(clients.length + 1).padStart(3, '0')}`,
       org_type: 'client',
       name: newClient.name,
-      contact_email: newClient.email,
-      contact_phone: newClient.phone
+      vat_number: newClient.vat_number,
+      contact_email: newClient.contact_email,
+      contact_phone: newClient.contact_phone,
+      contact_name: newClient.contact_name,
+      billing_address: newClient.billing_address,
+      delivery_address: newClient.delivery_address
     });
-    setNewClient({ name: '', email: '', phone: '' });
+    toast.success('Client added successfully');
+    setNewClient({
+      name: '',
+      vat_number: '',
+      contact_email: '',
+      contact_phone: '',
+      contact_name: '',
+      billing_address: '',
+      billing_contact_name: '',
+      billing_contact_email: '',
+      billing_contact_phone: '',
+      delivery_address: '',
+      delivery_contact_name: '',
+      delivery_contact_email: '',
+      delivery_contact_phone: ''
+    });
     setAddClientModal(false);
     loadData();
   };
@@ -169,15 +203,92 @@ export default function ManagerClients() {
 
       {/* Add Client Modal */}
       <Dialog open={addClientModal} onOpenChange={setAddClientModal}>
-       <DialogContent>
+       <DialogContent className="max-w-md bg-[#212121] border border-[#00c600]">
          <DialogHeader>
-           <DialogTitle>Add Client</DialogTitle>
+           <DialogTitle className="text-white">Add Client</DialogTitle>
          </DialogHeader>
-         <div className="space-y-4">
-           <Input placeholder="Name" value={newClient.name} onChange={(e) => setNewClient({ ...newClient, name: e.target.value })} />
-           <Input placeholder="Email" value={newClient.email} onChange={(e) => setNewClient({ ...newClient, email: e.target.value })} />
-           <Input placeholder="Phone" value={newClient.phone} onChange={(e) => setNewClient({ ...newClient, phone: e.target.value })} />
-           <Button onClick={saveNewClient} className="w-full bg-[#00c600] text-white">Save Client</Button>
+         <div className="space-y-2 max-h-96 overflow-y-auto">
+           {/* General Info */}
+           <div>
+             <label className="text-white text-sm">Name</label>
+             <Input className="mt-1" type="text" placeholder="Client name" value={newClient.name} onChange={(e) => setNewClient({ ...newClient, name: e.target.value })} />
+           </div>
+
+           <div>
+             <label className="text-white text-sm">VAT / Tax ID</label>
+             <Input className="mt-1" type="text" placeholder="VAT/CNPJ" value={newClient.vat_number} onChange={(e) => setNewClient({ ...newClient, vat_number: e.target.value })} />
+             <p className="text-gray-500 text-xs mt-1">Auto-fill if EU/Brazil VAT/CNPJ</p>
+           </div>
+
+           {/* Main Contact */}
+           <div className="border-t border-[#00c600] pt-2 mt-2">
+             <p className="text-[#00c600] text-xs font-normal">Main Contact</p>
+           </div>
+
+           <div>
+             <label className="text-white text-sm">Email</label>
+             <Input className="mt-1" type="email" placeholder="Email" value={newClient.contact_email} onChange={(e) => setNewClient({ ...newClient, contact_email: e.target.value })} />
+           </div>
+
+           <div>
+             <label className="text-white text-sm">Phone</label>
+             <Input className="mt-1" type="tel" placeholder="Phone" value={newClient.contact_phone} onChange={(e) => setNewClient({ ...newClient, contact_phone: e.target.value })} />
+           </div>
+
+           {/* Billing Contact */}
+           <div className="border-t border-[#00c600] pt-2 mt-2">
+             <p className="text-[#00c600] text-xs font-normal">Billing Contact</p>
+           </div>
+
+           <div>
+             <label className="text-white text-sm">Billing Contact Name</label>
+             <Input className="mt-1" type="text" placeholder="Name" value={newClient.billing_contact_name} onChange={(e) => setNewClient({ ...newClient, billing_contact_name: e.target.value })} />
+           </div>
+
+           <div>
+             <label className="text-white text-sm">Billing Contact Email</label>
+             <Input className="mt-1" type="email" placeholder="Email" value={newClient.billing_contact_email} onChange={(e) => setNewClient({ ...newClient, billing_contact_email: e.target.value })} />
+           </div>
+
+           <div>
+             <label className="text-white text-sm">Billing Contact Phone</label>
+             <Input className="mt-1" type="tel" placeholder="Phone" value={newClient.billing_contact_phone} onChange={(e) => setNewClient({ ...newClient, billing_contact_phone: e.target.value })} />
+           </div>
+
+           <div>
+             <label className="text-white text-sm">Billing Address</label>
+             <textarea className="mt-1 w-full p-2 bg-white dark:bg-[#2a2a2a] text-white border border-[#00c600] rounded text-sm" placeholder="Billing address" value={newClient.billing_address} onChange={(e) => setNewClient({ ...newClient, billing_address: e.target.value })} />
+           </div>
+
+           {/* Delivery Contact */}
+           <div className="border-t border-[#00c600] pt-2 mt-2">
+             <p className="text-[#00c600] text-xs font-normal">Delivery Contact</p>
+           </div>
+
+           <div>
+             <label className="text-white text-sm">Delivery Contact Name</label>
+             <Input className="mt-1" type="text" placeholder="Name" value={newClient.delivery_contact_name} onChange={(e) => setNewClient({ ...newClient, delivery_contact_name: e.target.value })} />
+           </div>
+
+           <div>
+             <label className="text-white text-sm">Delivery Contact Email</label>
+             <Input className="mt-1" type="email" placeholder="Email" value={newClient.delivery_contact_email} onChange={(e) => setNewClient({ ...newClient, delivery_contact_email: e.target.value })} />
+           </div>
+
+           <div>
+             <label className="text-white text-sm">Delivery Contact Phone</label>
+             <Input className="mt-1" type="tel" placeholder="Phone" value={newClient.delivery_contact_phone} onChange={(e) => setNewClient({ ...newClient, delivery_contact_phone: e.target.value })} />
+           </div>
+
+           <div>
+             <label className="text-white text-sm">Delivery Address</label>
+             <textarea className="mt-1 w-full p-2 bg-white dark:bg-[#2a2a2a] text-white border border-[#00c600] rounded text-sm" placeholder="Delivery address" value={newClient.delivery_address} onChange={(e) => setNewClient({ ...newClient, delivery_address: e.target.value })} />
+           </div>
+
+           <div className="flex gap-2 pt-4 border-t border-[#00c600]">
+             <Button onClick={() => setAddClientModal(false)} variant="outline" className="flex-1">Cancel</Button>
+             <Button onClick={saveNewClient} className="flex-1 bg-[#00c600] text-white">Save Client</Button>
+           </div>
          </div>
        </DialogContent>
       </Dialog>
