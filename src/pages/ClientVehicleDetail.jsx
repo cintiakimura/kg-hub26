@@ -171,7 +171,7 @@ export default function ClientVehicleDetail() {
           </KGButton>
           <div className="flex items-center gap-2">
             <Car size={24} className="text-[#00C600]" />
-            <h1 className="text-xl text-gray-800">{vehicle.vehicle_id}</h1>
+            <h1 className="text-xl text-[#00c600]">{vehicle.vehicle_id}</h1>
           </div>
         </div>
 

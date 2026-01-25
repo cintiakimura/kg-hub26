@@ -150,7 +150,7 @@ export default function ClientVehicleAdd() {
           </KGButton>
           <div className="flex items-center gap-2">
             <Car size={24} className="text-[#00C600]" />
-            <h1 className="text-xl text-gray-800">Add Vehicle</h1>
+            <h1 className="text-xl text-[#00c600]">Add Vehicle</h1>
           </div>
         </div>
 

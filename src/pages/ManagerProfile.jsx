@@ -23,7 +23,7 @@ export default function ManagerProfile() {
 
   return (
     <div className="p-6">
-      <h1 className="text-2xl mb-6">Manager Profile</h1>
+      <h1 className="text-2xl mb-6 text-[#00c600]">Manager Profile</h1>
 
       <div className="border border-[#00c600] rounded-lg p-6 mb-6">
         <div className="mb-4">

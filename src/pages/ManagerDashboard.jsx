@@ -98,7 +98,7 @@ export default function ManagerDashboard() {
 
   return (
     <div className="p-6 bg-[#212121] min-h-screen">
-      <h1 className="text-2xl mb-6">Production Control</h1>
+      <h1 className="text-2xl mb-6 text-[#00c600]">Production Control</h1>
       {loading && <div>Loading...</div>}
       {!loading && (
         <div className="border border-[#00c600] rounded p-6">

@@ -49,7 +49,7 @@ export default function ClientDashboard() {
   return (
     <div className="p-6 max-w-7xl mx-auto">
       <div className="mb-6">
-        <div className="text-2xl mb-1">DASHBOARD</div>
+        <div className="text-2xl mb-1 text-[#00c600]">DASHBOARD</div>
         <div className="text-sm opacity-70">Welcome back, {org?.contact_name}</div>
       </div>
 

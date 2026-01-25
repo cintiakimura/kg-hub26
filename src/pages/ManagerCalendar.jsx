@@ -145,7 +145,7 @@ export default function ManagerCalendar() {
   return (
     <div className="p-6">
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl">Calendar</h1>
+        <h1 className="text-2xl text-[#00c600]">Calendar</h1>
         <div className="flex gap-2">
           <button onClick={() => setView(view === 'week' ? 'day' : 'week')}>
             {view === 'week' ? 'Day View' : 'Week View'}

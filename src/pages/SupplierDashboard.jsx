@@ -86,7 +86,7 @@ export default function SupplierDashboard() {
 
       {!loading && (
         <div className="border border-[#00c600] rounded p-6">
-          <h2 className="text-lg mb-4">Incoming POs</h2>
+          <h2 className="text-lg mb-4 text-[#00c600]">Incoming POs</h2>
           <table>
             <thead>
               <tr>
