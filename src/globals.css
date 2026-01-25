@@ -1,38 +1,53 @@
-css
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
+  * {
+    font-family: 'akkurat', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-weight: 400;
+    font-size: 14px;
+  }
+
   html {
     @apply transition-colors duration-300;
   }
 
-  * {
-    @apply font-normal;
-  }
-
   body {
-    @apply bg-white text-gray-900 transition-colors duration-300;
+    @apply bg-white text-black transition-colors duration-300;
   }
 
   .dark body {
     @apply bg-[#212121] text-white;
   }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-weight: 400;
+  }
 }
 
 @media print {
-  body,
-  body.light,
-  body * {
+  * {
     background: white !important;
     color: black !important;
-    border-color: #00c600 !important;
+  }
+  
+  .dark * {
+    background: white !important;
+    color: black !important;
+  }
+
+  button,
+  input,
+  textarea,
+  select {
+    box-shadow: none !important;
   }
 }
 
 table {
   @apply w-full border-collapse;
+  font-size: 14px;
 }
 
 thead {
@@ -44,11 +59,17 @@ thead {
 }
 
 th {
-  @apply border border-[#00c600] px-3 py-2 text-left text-sm;
+  @apply border border-[#00c600] px-2 py-1.5 text-left;
+  font-size: 14px;
+  font-weight: 400;
 }
 
 td {
-  @apply border border-[#00c600] px-3 py-2 text-sm;
+  @apply border border-[#00c600] px-2 py-1.5;
+  font-size: 14px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 tbody tr:nth-child(even) {
@@ -61,22 +82,20 @@ tbody tr:nth-child(even) {
 
 tbody tr {
   @apply transition-all duration-200;
+  height: 32px;
 }
 
 tbody tr:hover {
   @apply shadow-[0_0_8px_rgba(0,198,0,0.6)] cursor-pointer;
 }
 
-input:focus,
-textarea:focus,
-select:focus {
-  @apply outline-none shadow-[0_0_8px_rgba(0,198,0,0.6)];
-}
-
 input,
 textarea,
 select {
-  @apply bg-white text-gray-900 border border-[#00c600] px-3 py-2 rounded transition-colors duration-300;
+  @apply bg-white text-black border border-[#00c600] px-3 py-2 transition-all duration-200;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 400;
 }
 
 .dark input,
@@ -85,14 +104,32 @@ select {
   @apply bg-[#2a2a2a] text-white;
 }
 
+input:focus,
+textarea:focus,
+select:focus {
+  @apply outline-none shadow-[0_0_8px_rgba(0,198,0,0.6)];
+}
+
 button {
-  @apply border border-[#00c600] px-4 py-2 rounded transition-all duration-200 bg-transparent text-gray-900;
+  @apply bg-[#00c600] text-white border border-[#00c600] px-4 py-2 transition-all duration-200;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 400;
 }
 
 button:hover {
-  @apply shadow-[0_0_8px_rgba(0,198,0,0.6)] border-green-500;
+  @apply shadow-[0_0_8px_rgba(0,198,0,0.6)];
 }
 
-.dark button {
-  @apply text-white;
+.card,
+.container,
+[class*="border"] {
+  border: 1px solid #00c600;
+  border-radius: 8px;
+}
+
+svg {
+  width: 20px;
+  height: 20px;
+  color: #00c600;
 }
