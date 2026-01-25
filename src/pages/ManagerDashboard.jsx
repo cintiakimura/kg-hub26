@@ -6,6 +6,7 @@ import TableExport from '../components/TableExport';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
+import { toast } from 'sonner';
 import { Users, FileText, Package, TruckIcon, Plus, Upload } from 'lucide-react';
 
 const tableStyles = `
@@ -91,7 +92,17 @@ export default function ManagerDashboard() {
   const [quotes, setQuotes] = useState([]);
   const [showProductionModal, setShowProductionModal] = useState(false);
   const [showImportModal, setShowImportModal] = useState(false);
-  const [newProduction, setNewProduction] = useState({ order_date: '', client_org_id: '', product: '', total_cost: '', status: 'ordered', tracking_number_inbound: '' });
+  const [userProfile, setUserProfile] = useState(null);
+  const [newProduction, setNewProduction] = useState({
+    order_date: '',
+    client_org_id: '',
+    product: '',
+    total_cost: '',
+    status: 'ordered',
+    tracking_number_inbound: '',
+    eta: '',
+    notes: ''
+  });
   const [selectedQuote, setSelectedQuote] = useState(null);
   const navigate = useNavigate();
 
@@ -107,6 +118,8 @@ export default function ManagerDashboard() {
       navigate(createPageUrl('ManagerLogin'));
       return;
     }
+    
+    setUserProfile(profile);
 
     const posData = await base44.entities.PurchaseOrder.list();
     setPos(posData);
@@ -139,9 +152,12 @@ export default function ManagerDashboard() {
       status: newProduction.status,
       items: [{ description: newProduction.product, quantity: 1, unit_price: newProduction.total_cost }],
       total_cost: parseFloat(newProduction.total_cost) || 0,
-      tracking_number_inbound: newProduction.tracking_number_inbound
+      tracking_number_inbound: newProduction.tracking_number_inbound,
+      eta: newProduction.eta,
+      notes: newProduction.notes
     });
-    setNewProduction({ order_date: '', client_org_id: '', product: '', total_cost: '', status: 'ordered', tracking_number_inbound: '' });
+    toast.success('Production entry added');
+    setNewProduction({ order_date: '', client_org_id: '', product: '', total_cost: '', status: 'ordered', tracking_number_inbound: '', eta: '', notes: '' });
     setShowProductionModal(false);
     loadData();
   };
