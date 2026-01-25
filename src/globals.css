@@ -11,14 +11,51 @@ css
   }
 
   body {
-    background: white;
-    color: #333;
+    background: white !important;
+    color: #333 !important;
     transition: all 0.3s;
   }
 
   body.dark {
-    background: #212121;
+    background: #212121 !important;
+    color: white !important;
+  }
+
+  body.dark * {
     color: white;
+  }
+
+  body.dark input,
+  body.dark textarea,
+  body.dark select {
+    background: #2a2a2a !important;
+    color: white !important;
+  }
+
+  body.dark button {
+    background: #00c600 !important;
+    color: white !important;
+  }
+
+  body.dark table,
+  body.dark thead,
+  body.dark tbody,
+  body.dark tr,
+  body.dark td,
+  body.dark th {
+    background: #212121 !important;
+    color: white !important;
+  }
+
+  body.dark tbody tr:nth-child(even) {
+    background: #2a2a2a !important;
+  }
+
+  body.dark .card,
+  body.dark [class*="bg-white"],
+  body.dark [class*="bg-gray"] {
+    background: #2a2a2a !important;
+    color: white !important;
   }
 
   h1, h2, h3, h4, h5, h6 {

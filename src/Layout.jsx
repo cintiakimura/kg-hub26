@@ -103,6 +103,14 @@ export default function Layout({ children, currentPageName }) {
 
   return (
     <div className="flex min-h-screen">
+      <button
+        onClick={toggleTheme}
+        className="fixed top-4 right-4 z-50 bg-[#00c600] text-white p-2 transition-all hover:shadow-[0_0_8px_rgba(0,198,0,0.6)]"
+        style={{ borderRadius: '8px' }}
+      >
+        {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
+      </button>
+
       {showSidebar && (
         <div className="fixed left-0 top-0 h-full w-16 bg-white dark:bg-[#212121] border-r border-[#00c600] z-40 flex flex-col items-center py-4 gap-4">
           <img 
@@ -111,7 +119,7 @@ export default function Layout({ children, currentPageName }) {
             className="w-10 h-10 object-contain cursor-pointer"
             onClick={handleProfileClick}
           />
-          
+
           {navItems.map((item) => {
             const Icon = item.icon;
             const isActive = currentPageName === item.page;
@@ -128,15 +136,8 @@ export default function Layout({ children, currentPageName }) {
           })}
         </div>
       )}
-      
+
       <div className={`flex-1 ${showSidebar ? 'ml-16' : ''}`}>
-        <button
-          onClick={toggleTheme}
-          className="fixed top-4 right-4 z-50 bg-[#00c600] text-white p-2 transition-all hover:shadow-[0_0_8px_rgba(0,198,0,0.6)]"
-          style={{ borderRadius: '8px' }}
-        >
-          {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
-        </button>
 
         <button
           onClick={() => setHubOpen(true)}
@@ -149,10 +150,10 @@ export default function Layout({ children, currentPageName }) {
           />
         </button>
 
-        <Hub isOpen={hubOpen} onClose={() => setHubOpen(false)} />
-        
-        {children}
-      </div>
+          <Hub isOpen={hubOpen} onClose={() => setHubOpen(false)} />
+
+          {children}
+        </div>
     </div>
   );
 }
