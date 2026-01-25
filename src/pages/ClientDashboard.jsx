@@ -3,7 +3,7 @@ import { base44 } from '@/api/base44Client';
 import { createPageUrl } from '@/utils';
 import { useNavigate } from 'react-router-dom';
 import TableExport from '../components/TableExport';
-import { FileText, TruckIcon, Car, Users } from 'lucide-react';
+import { FileText, TruckIcon, Car, Users, Building2, Phone, Mail, Calendar, Edit } from 'lucide-react';
 
 export default function ClientDashboard() {
   const [loading, setLoading] = useState(true);
@@ -47,63 +47,52 @@ export default function ClientDashboard() {
   ];
 
   return (
-    <div className="p-6">
-      <div className="grid grid-cols-4 gap-4 mb-6">
-        {menuCards.map((card) => {
-          const Icon = card.icon;
-          return (
-            <div
-              key={card.page}
-              onClick={() => navigate(createPageUrl(card.page))}
-              className="bg-gray-100 dark:bg-[#1a1a1a] rounded-lg p-4 cursor-pointer hover:shadow-lg transition-all border border-[#00c600]"
-            >
-              <Icon size={24} color="#00c600" className="mb-2" />
-              <div className="text-sm mb-1">{card.name}</div>
-              <div className="text-xs opacity-70">{card.desc}</div>
-            </div>
-          );
-        })}
+    <div className="p-6 max-w-7xl mx-auto">
+      <div className="mb-6">
+        <div className="text-2xl mb-1">DASHBOARD</div>
+        <div className="text-sm opacity-70">Welcome back, {org?.contact_name}</div>
       </div>
 
-      <div className="bg-gray-100 dark:bg-[#1a1a1a] rounded-lg p-6 shadow-md">
-        <div className="flex items-center gap-3 mb-6">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#00c600" strokeWidth="2">
-            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-          </svg>
-          <div>
-            <div className="text-lg">Client Portal</div>
-            <div className="text-xs opacity-70">Manage your fleet and orders</div>
-          </div>
-          <div className="ml-auto">
-            <TableExport data={[org, ...vehicles, ...purchases]} filename="client-data" />
-          </div>
+      <div className="bg-[#2a2a2a] rounded-lg p-6 mb-6 border border-[#00c600] relative">
+        <button 
+          onClick={() => navigate(createPageUrl('ClientDashboard'))}
+          className="absolute top-4 right-4 p-2 hover:bg-[#00c600] hover:bg-opacity-20 rounded transition-all"
+        >
+          <Edit size={16} color="#00c600" />
+        </button>
+
+        <div className="flex items-center gap-2 mb-4">
+          <Building2 size={16} color="#00c600" />
+          <div className="text-xs opacity-70">COMPANY PROFILE</div>
         </div>
 
-        <div className="border-t border-[#00c600] pt-4 mb-4">
-          <div className="mb-2">Organisation</div>
-          <table>
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>ID</th>
-                <th>VAT</th>
-                <th>Billing</th>
-                <th>Delivery</th>
-                <th>Contact</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>{org?.name}</td>
-                <td>{org?.org_id}</td>
-                <td>{org?.vat_number}</td>
-                <td>{org?.billing_address}</td>
-                <td>{org?.delivery_address}</td>
-                <td>{org?.contact_billing}</td>
-              </tr>
-            </tbody>
-          </table>
+        <div className="flex items-start gap-6">
+          <div className="flex items-center gap-4">
+            <div className="w-16 h-16 bg-[#1a1a1a] rounded flex items-center justify-center border border-[#00c600]">
+              <Building2 size={32} color="#00c600" />
+            </div>
+            <div>
+              <div className="text-xl mb-1">{org?.name}</div>
+              <div className="text-sm opacity-70">{org?.org_id}</div>
+            </div>
+          </div>
+
+          <div className="flex-1 grid grid-cols-2 gap-4 ml-8">
+            <div className="flex items-center gap-2">
+              <Phone size={14} color="#00c600" />
+              <div className="text-sm">{org?.contact_phone || '-'}</div>
+            </div>
+            <div className="flex items-center gap-2">
+              <Calendar size={14} color="#00c600" />
+              <div className="text-sm">Member since {org?.created_date?.split('T')[0] || 'Jan 2026'}</div>
+            </div>
+            <div className="flex items-center gap-2">
+              <Mail size={14} color="#00c600" />
+              <div className="text-sm">{org?.contact_email}</div>
+            </div>
+          </div>
         </div>
+      </div>
 
         <div className="border-t border-[#00c600] pt-4 mb-4">
           <div className="flex justify-between items-center mb-2">
