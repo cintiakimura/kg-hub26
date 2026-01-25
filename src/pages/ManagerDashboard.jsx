@@ -43,44 +43,122 @@ export default function ManagerDashboard() {
 
   const columns = ['ordered', 'in_production', 'dispatched', 'in_transit', 'delayed', 'delivered'];
 
-  return (
-    <div className="p-8">
-      <img 
-        src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/697651f65fc49ec896171492/e2c435b98_KG_primary_logo_green.png"
-        alt="KG Logo"
-        style={{ height: 38 }}
-        className="mb-8"
-      />
-      
-      <TableExport data={pos} filename="production-control" />
+  const todayOrders = pos.filter(p => p.status === 'ordered');
+  const inProduction = pos.filter(p => p.status === 'in_production');
+  const ready = pos.filter(p => p.status === 'dispatched');
 
-      <h2 className="text-lg mb-4">Production Control</h2>
-      
-      <div className="grid grid-cols-6 gap-4">
-        {columns.map(col => (
-          <div key={col} className="border border-[#00c600] p-2">
-            <h3 className="text-sm mb-2 capitalize">{col.replace('_', ' ')}</h3>
-            {pos.filter(p => p.status === col).map(p => (
-              <div key={p.id} className="border border-[#00c600] p-2 mb-2 text-xs">
-                <div>{p.order_date}</div>
-                <div>ETA: {p.eta}</div>
-                <div>{clients[p.client_org_id]}</div>
-                <div>{p.items?.length || 0} items</div>
-                <div>${p.total_cost}</div>
-                <div>{p.tracking_number_outbound}</div>
-                <select
-                  value={p.status}
-                  onChange={(e) => updateStatus(p.id, e.target.value)}
-                  className="w-full mt-1"
-                >
-                  {columns.map(c => (
-                    <option key={c} value={c}>{c.replace('_', ' ')}</option>
-                  ))}
-                </select>
-              </div>
-            ))}
+  return (
+    <div className="p-6">
+      <div className="bg-gray-100 dark:bg-[#1a1a1a] rounded-lg p-6 shadow-md">
+        <div className="flex items-center gap-3 mb-6">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#00c600" strokeWidth="2">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+            <polyline points="14 2 14 8 20 8"></polyline>
+          </svg>
+          <div>
+            <div className="text-lg">Production Control</div>
+            <div className="text-xs opacity-70">Keep the line moving</div>
           </div>
-        ))}
+          <div className="ml-auto">
+            <TableExport data={pos} filename="production-control" />
+          </div>
+        </div>
+
+        <div className="border-t border-[#00c600] pt-4 mb-4">
+          <div className="mb-2">Today's Orders</div>
+          <table>
+            <thead>
+              <tr>
+                <th>PO ID</th>
+                <th>Client</th>
+                <th>Items</th>
+                <th>Cost</th>
+                <th>ETA</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              {todayOrders.map(p => (
+                <tr key={p.id}>
+                  <td>{p.po_id}</td>
+                  <td>{clients[p.client_org_id]}</td>
+                  <td>{p.items?.length || 0}</td>
+                  <td>${p.total_cost}</td>
+                  <td>{p.eta}</td>
+                  <td>
+                    <select value={p.status} onChange={(e) => updateStatus(p.id, e.target.value)}>
+                      {columns.map(c => <option key={c} value={c}>{c.replace('_', ' ')}</option>)}
+                    </select>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        <div className="border-t border-[#00c600] pt-4 mb-4">
+          <div className="mb-2">In Production</div>
+          <table>
+            <thead>
+              <tr>
+                <th>PO ID</th>
+                <th>Client</th>
+                <th>Items</th>
+                <th>Cost</th>
+                <th>ETA</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              {inProduction.map(p => (
+                <tr key={p.id}>
+                  <td>{p.po_id}</td>
+                  <td>{clients[p.client_org_id]}</td>
+                  <td>{p.items?.length || 0}</td>
+                  <td>${p.total_cost}</td>
+                  <td>{p.eta}</td>
+                  <td>
+                    <select value={p.status} onChange={(e) => updateStatus(p.id, e.target.value)}>
+                      {columns.map(c => <option key={c} value={c}>{c.replace('_', ' ')}</option>)}
+                    </select>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        <div className="border-t border-[#00c600] pt-4">
+          <div className="mb-2">Shipments Ready</div>
+          <table>
+            <thead>
+              <tr>
+                <th>PO ID</th>
+                <th>Client</th>
+                <th>Items</th>
+                <th>Cost</th>
+                <th>Tracking</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              {ready.map(p => (
+                <tr key={p.id}>
+                  <td>{p.po_id}</td>
+                  <td>{clients[p.client_org_id]}</td>
+                  <td>{p.items?.length || 0}</td>
+                  <td>${p.total_cost}</td>
+                  <td>{p.tracking_number_outbound}</td>
+                  <td>
+                    <select value={p.status} onChange={(e) => updateStatus(p.id, e.target.value)}>
+                      {columns.map(c => <option key={c} value={c}>{c.replace('_', ' ')}</option>)}
+                    </select>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   );
