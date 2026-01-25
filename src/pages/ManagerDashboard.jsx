@@ -92,6 +92,9 @@ export default function ManagerDashboard() {
   const [quotes, setQuotes] = useState([]);
   const [showProductionModal, setShowProductionModal] = useState(false);
   const [showImportModal, setShowImportModal] = useState(false);
+  const [showAddClientModal, setShowAddClientModal] = useState(false);
+  const [showAddSupplierModal, setShowAddSupplierModal] = useState(false);
+  const [showAddQuotationModal, setShowAddQuotationModal] = useState(false);
   const [userProfile, setUserProfile] = useState(null);
   const [newProduction, setNewProduction] = useState({
     order_date: '',
@@ -102,6 +105,33 @@ export default function ManagerDashboard() {
     tracking_number_inbound: '',
     eta: '',
     notes: ''
+  });
+  const [newClient, setNewClient] = useState({
+    name: '',
+    vat_number: '',
+    billing_contact: '',
+    delivery_contact: '',
+    billing_address: '',
+    delivery_address: '',
+    contact_email: '',
+    contact_phone: ''
+  });
+  const [newSupplier, setNewSupplier] = useState({
+    name: '',
+    vat_number: '',
+    billing_contact: '',
+    delivery_contact: '',
+    billing_address: '',
+    delivery_address: '',
+    contact_email: '',
+    contact_phone: ''
+  });
+  const [newQuotation, setNewQuotation] = useState({
+    client_org_id: '',
+    vehicle_id: '',
+    price: '',
+    date: '',
+    status: 'pending'
   });
   const [selectedQuote, setSelectedQuote] = useState(null);
   const navigate = useNavigate();
@@ -181,6 +211,62 @@ export default function ManagerDashboard() {
     }
   };
 
+  const saveClient = async () => {
+    const orgId = `C-${Date.now()}`;
+    await base44.entities.Organisation.create({
+      org_id: orgId,
+      org_type: 'client',
+      name: newClient.name,
+      vat_number: newClient.vat_number,
+      billing_address: newClient.billing_address,
+      delivery_address: newClient.delivery_address,
+      contact_name: newClient.billing_contact,
+      contact_email: newClient.contact_email,
+      contact_phone: newClient.contact_phone
+    });
+    toast.success('Client added');
+    setShowAddClientModal(false);
+    setNewClient({ name: '', vat_number: '', billing_contact: '', delivery_contact: '', billing_address: '', delivery_address: '', contact_email: '', contact_phone: '' });
+    loadData();
+  };
+
+  const saveSupplier = async () => {
+    const orgId = `SUP-${Date.now()}`;
+    await base44.entities.Organisation.create({
+      org_id: orgId,
+      org_type: 'supplier',
+      name: newSupplier.name,
+      vat_number: newSupplier.vat_number,
+      billing_address: newSupplier.billing_address,
+      delivery_address: newSupplier.delivery_address,
+      contact_name: newSupplier.billing_contact,
+      contact_email: newSupplier.contact_email,
+      contact_phone: newSupplier.contact_phone
+    });
+    toast.success('Supplier added');
+    setShowAddSupplierModal(false);
+    setNewSupplier({ name: '', vat_number: '', billing_contact: '', delivery_contact: '', billing_address: '', delivery_address: '', contact_email: '', contact_phone: '' });
+    loadData();
+  };
+
+  const saveQuotation = async () => {
+    const quoteId = `Q-${Date.now()}`;
+    await base44.entities.SalesQuote.create({
+      quote_id: quoteId,
+      client_org_id: newQuotation.client_org_id,
+      vehicle_id: newQuotation.vehicle_id,
+      status: newQuotation.status,
+      items: [],
+      subtotal: parseFloat(newQuotation.price) || 0,
+      shipping_cost: 0,
+      total: parseFloat(newQuotation.price) || 0
+    });
+    toast.success('Quotation added');
+    setShowAddQuotationModal(false);
+    setNewQuotation({ client_org_id: '', vehicle_id: '', price: '', date: '', status: 'pending' });
+    loadData();
+  };
+
   if (loading) return <div className="flex items-center justify-center h-screen">Loading...</div>;
 
   const columns = ['ordered', 'in_production', 'dispatched', 'in_transit', 'delayed', 'delivered'];
@@ -244,6 +330,15 @@ export default function ManagerDashboard() {
          <div className="flex justify-between items-center mb-6">
           <h1 className="text-2xl text-[#00c600]">Production Control</h1>
           <div className="flex gap-2">
+            <Button onClick={() => setShowAddClientModal(true)} className="bg-[#00c600] text-white border border-[#00c600]">
+              <Plus size={16} className="mr-1" /> Client
+            </Button>
+            <Button onClick={() => setShowAddSupplierModal(true)} className="bg-[#00c600] text-white border border-[#00c600]">
+              <Plus size={16} className="mr-1" /> Supplier
+            </Button>
+            <Button onClick={() => setShowAddQuotationModal(true)} className="bg-[#00c600] text-white border border-[#00c600]">
+              <Plus size={16} className="mr-1" /> Quotation
+            </Button>
             <Button onClick={() => setShowProductionModal(true)} className="bg-[#00c600] text-white border border-[#00c600]">
               <Plus size={16} className="mr-1" /> Production
             </Button>
@@ -350,16 +445,92 @@ export default function ManagerDashboard() {
 
         {/* Import Supplier Quote Modal */}
         <Dialog open={showImportModal} onOpenChange={setShowImportModal}>
-          <DialogContent>
+          <DialogContent className="max-w-md bg-[#212121] border border-[#00c600]">
             <DialogHeader>
-              <DialogTitle>Import from Supplier</DialogTitle>
+              <DialogTitle className="text-white">Import from Supplier</DialogTitle>
             </DialogHeader>
             <div className="space-y-4">
-              <select value={selectedQuote || ''} onChange={(e) => setSelectedQuote(e.target.value)} style={{ width: '100%', padding: '8px', borderRadius: '4px', border: '1px solid #00c600' }}>
+              <select value={selectedQuote || ''} onChange={(e) => setSelectedQuote(e.target.value)} style={{ width: '100%', padding: '8px', borderRadius: '4px', border: '1px solid #00c600', background: '#2a2a2a', color: 'white' }}>
                 <option value="">Select Supplier Quote</option>
                 {quotes.map(q => <option key={q.id} value={q.supplier_quote_id}>{q.supplier_quote_id} - ${q.price}</option>)}
               </select>
-              <Button onClick={importQuote} className="w-full bg-[#00c600] text-white">Import Quote</Button>
+              <div className="flex gap-2">
+                <Button onClick={() => setShowImportModal(false)} variant="outline" className="flex-1">Cancel</Button>
+                <Button onClick={importQuote} className="flex-1 bg-[#00c600] text-white">Import Quote</Button>
+              </div>
+            </div>
+          </DialogContent>
+        </Dialog>
+
+        {/* Add Client Modal */}
+        <Dialog open={showAddClientModal} onOpenChange={setShowAddClientModal}>
+          <DialogContent className="max-w-md bg-[#212121] border border-[#00c600]">
+            <DialogHeader>
+              <DialogTitle className="text-white">Add Client</DialogTitle>
+            </DialogHeader>
+            <div className="space-y-3 max-h-96 overflow-y-auto">
+              <Input placeholder="Name" value={newClient.name} onChange={(e) => setNewClient({ ...newClient, name: e.target.value })} />
+              <Input placeholder="VAT Number" value={newClient.vat_number} onChange={(e) => setNewClient({ ...newClient, vat_number: e.target.value })} />
+              <Input placeholder="Billing Contact" value={newClient.billing_contact} onChange={(e) => setNewClient({ ...newClient, billing_contact: e.target.value })} />
+              <Input placeholder="Delivery Contact" value={newClient.delivery_contact} onChange={(e) => setNewClient({ ...newClient, delivery_contact: e.target.value })} />
+              <Input placeholder="Billing Address" value={newClient.billing_address} onChange={(e) => setNewClient({ ...newClient, billing_address: e.target.value })} />
+              <Input placeholder="Delivery Address" value={newClient.delivery_address} onChange={(e) => setNewClient({ ...newClient, delivery_address: e.target.value })} />
+              <Input placeholder="Email" value={newClient.contact_email} onChange={(e) => setNewClient({ ...newClient, contact_email: e.target.value })} />
+              <Input placeholder="Phone" value={newClient.contact_phone} onChange={(e) => setNewClient({ ...newClient, contact_phone: e.target.value })} />
+              <div className="flex gap-2 pt-2 border-t border-[#00c600]">
+                <Button onClick={() => setShowAddClientModal(false)} variant="outline" className="flex-1">Cancel</Button>
+                <Button onClick={saveClient} className="flex-1 bg-[#00c600] text-white">Save</Button>
+              </div>
+            </div>
+          </DialogContent>
+        </Dialog>
+
+        {/* Add Supplier Modal */}
+        <Dialog open={showAddSupplierModal} onOpenChange={setShowAddSupplierModal}>
+          <DialogContent className="max-w-md bg-[#212121] border border-[#00c600]">
+            <DialogHeader>
+              <DialogTitle className="text-white">Add Supplier</DialogTitle>
+            </DialogHeader>
+            <div className="space-y-3 max-h-96 overflow-y-auto">
+              <Input placeholder="Name" value={newSupplier.name} onChange={(e) => setNewSupplier({ ...newSupplier, name: e.target.value })} />
+              <Input placeholder="VAT Number" value={newSupplier.vat_number} onChange={(e) => setNewSupplier({ ...newSupplier, vat_number: e.target.value })} />
+              <Input placeholder="Billing Contact" value={newSupplier.billing_contact} onChange={(e) => setNewSupplier({ ...newSupplier, billing_contact: e.target.value })} />
+              <Input placeholder="Delivery Contact" value={newSupplier.delivery_contact} onChange={(e) => setNewSupplier({ ...newSupplier, delivery_contact: e.target.value })} />
+              <Input placeholder="Billing Address" value={newSupplier.billing_address} onChange={(e) => setNewSupplier({ ...newSupplier, billing_address: e.target.value })} />
+              <Input placeholder="Delivery Address" value={newSupplier.delivery_address} onChange={(e) => setNewSupplier({ ...newSupplier, delivery_address: e.target.value })} />
+              <Input placeholder="Email" value={newSupplier.contact_email} onChange={(e) => setNewSupplier({ ...newSupplier, contact_email: e.target.value })} />
+              <Input placeholder="Phone" value={newSupplier.contact_phone} onChange={(e) => setNewSupplier({ ...newSupplier, contact_phone: e.target.value })} />
+              <div className="flex gap-2 pt-2 border-t border-[#00c600]">
+                <Button onClick={() => setShowAddSupplierModal(false)} variant="outline" className="flex-1">Cancel</Button>
+                <Button onClick={saveSupplier} className="flex-1 bg-[#00c600] text-white">Save</Button>
+              </div>
+            </div>
+          </DialogContent>
+        </Dialog>
+
+        {/* Add Quotation Modal */}
+        <Dialog open={showAddQuotationModal} onOpenChange={setShowAddQuotationModal}>
+          <DialogContent className="max-w-md bg-[#212121] border border-[#00c600]">
+            <DialogHeader>
+              <DialogTitle className="text-white">Add Quotation</DialogTitle>
+            </DialogHeader>
+            <div className="space-y-3">
+              <select value={newQuotation.client_org_id} onChange={(e) => setNewQuotation({ ...newQuotation, client_org_id: e.target.value })} className="w-full p-2 bg-[#2a2a2a] text-white border border-[#00c600] rounded text-sm">
+                <option value="">Select Client</option>
+                {Object.entries(clients).map(([id, name]) => <option key={id} value={id}>{name}</option>)}
+              </select>
+              <Input placeholder="Vehicle ID" value={newQuotation.vehicle_id} onChange={(e) => setNewQuotation({ ...newQuotation, vehicle_id: e.target.value })} />
+              <Input placeholder="Price" type="number" value={newQuotation.price} onChange={(e) => setNewQuotation({ ...newQuotation, price: e.target.value })} />
+              <Input placeholder="Date" type="date" value={newQuotation.date} onChange={(e) => setNewQuotation({ ...newQuotation, date: e.target.value })} />
+              <select value={newQuotation.status} onChange={(e) => setNewQuotation({ ...newQuotation, status: e.target.value })} className="w-full p-2 bg-[#2a2a2a] text-white border border-[#00c600] rounded text-sm">
+                <option value="pending">Pending</option>
+                <option value="quoted">Quoted</option>
+                <option value="approved">Approved</option>
+              </select>
+              <div className="flex gap-2 pt-2 border-t border-[#00c600]">
+                <Button onClick={() => setShowAddQuotationModal(false)} variant="outline" className="flex-1">Cancel</Button>
+                <Button onClick={saveQuotation} className="flex-1 bg-[#00c600] text-white">Save</Button>
+              </div>
             </div>
           </DialogContent>
         </Dialog>
