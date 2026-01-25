@@ -20,6 +20,9 @@ import Supplier from './pages/Supplier';
 import ClientLogin from './pages/ClientLogin';
 import ManagerLogin from './pages/ManagerLogin';
 import SupplierLogin from './pages/SupplierLogin';
+import ClientLoginLanding from './pages/ClientLoginLanding';
+import ManagerLoginLanding from './pages/ManagerLoginLanding';
+import SupplierLoginLanding from './pages/SupplierLoginLanding';
 import __Layout from './Layout.jsx';
 
 
@@ -46,6 +49,9 @@ export const PAGES = {
     "ClientLogin": ClientLogin,
     "ManagerLogin": ManagerLogin,
     "SupplierLogin": SupplierLogin,
+    "ClientLoginLanding": ClientLoginLanding,
+    "ManagerLoginLanding": ManagerLoginLanding,
+    "SupplierLoginLanding": SupplierLoginLanding,
 }
 
 export const pagesConfig = {
