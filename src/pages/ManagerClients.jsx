@@ -5,9 +5,11 @@ import { createPageUrl } from '@/utils';
 import KGCard from '@/components/ui/KGCard';
 import KGButton from '@/components/ui/KGButton';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
 import { 
   LayoutDashboard, Users, FileText, Scale, Truck, ShoppingCart, 
-  DollarSign, Loader2, Building2, RefreshCw 
+  DollarSign, Loader2, Building2, RefreshCw, Plus 
 } from 'lucide-react';
 
 export default function ManagerClients() {
@@ -19,6 +21,8 @@ export default function ManagerClients() {
   const [selectedClient, setSelectedClient] = useState(null);
   const [vehicles, setVehicles] = useState([]);
   const [quotes, setQuotes] = useState([]);
+  const [addClientModal, setAddClientModal] = useState(false);
+  const [newClient, setNewClient] = useState({ name: '', email: '', phone: '' });
 
 
 
@@ -84,6 +88,19 @@ export default function ManagerClients() {
     navigate(createPageUrl('ManagerSalesQuotes'));
   };
 
+  const saveNewClient = async () => {
+    await base44.entities.Organisation.create({
+      org_id: `C-${String(clients.length + 1).padStart(3, '0')}`,
+      org_type: 'client',
+      name: newClient.name,
+      contact_email: newClient.email,
+      contact_phone: newClient.phone
+    });
+    setNewClient({ name: '', email: '', phone: '' });
+    setAddClientModal(false);
+    loadData();
+  };
+
   if (loading) {
     return (
       <div className="flex items-center justify-center h-screen">
@@ -94,10 +111,15 @@ export default function ManagerClients() {
 
   return (
     <div className="p-6">
-          <div className="flex items-center gap-2 mb-6">
-            <Users size={24} className="text-[#00C600]" />
-            <h1 className="text-xl text-[#00c600]">Clients</h1>
-            <span className="text-sm text-gray-500 ml-2">({clients.length})</span>
+          <div className="flex items-center justify-between gap-2 mb-6">
+            <div className="flex items-center gap-2">
+              <Users size={24} className="text-[#00C600]" />
+              <h1 className="text-xl text-[#00c600]">Clients</h1>
+              <span className="text-sm text-gray-500 ml-2">({clients.length})</span>
+            </div>
+            <Button onClick={() => setAddClientModal(true)} className="bg-[#00c600] text-white border border-[#00c600]">
+              <Plus size={16} className="mr-1" /> Add Client
+            </Button>
           </div>
 
           {clients.length === 0 ? (
@@ -144,6 +166,21 @@ export default function ManagerClients() {
             </div>
           )}
 
+
+      {/* Add Client Modal */}
+      <Dialog open={addClientModal} onOpenChange={setAddClientModal}>
+       <DialogContent>
+         <DialogHeader>
+           <DialogTitle>Add Client</DialogTitle>
+         </DialogHeader>
+         <div className="space-y-4">
+           <Input placeholder="Name" value={newClient.name} onChange={(e) => setNewClient({ ...newClient, name: e.target.value })} />
+           <Input placeholder="Email" value={newClient.email} onChange={(e) => setNewClient({ ...newClient, email: e.target.value })} />
+           <Input placeholder="Phone" value={newClient.phone} onChange={(e) => setNewClient({ ...newClient, phone: e.target.value })} />
+           <Button onClick={saveNewClient} className="w-full bg-[#00c600] text-white">Save Client</Button>
+         </div>
+       </DialogContent>
+      </Dialog>
 
       {/* Client Detail Modal */}
       <Dialog open={!!selectedClient} onOpenChange={() => setSelectedClient(null)}>
