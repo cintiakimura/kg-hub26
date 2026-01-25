@@ -104,8 +104,9 @@ export default function ManagerClients() {
   };
 
   const saveNewClient = async () => {
+    const newOrgId = `C-${String(clients.length + 1).padStart(3, '0')}`;
     await base44.entities.Organisation.create({
-      org_id: `C-${String(clients.length + 1).padStart(3, '0')}`,
+      org_id: newOrgId,
       org_type: 'client',
       name: newClient.name,
       vat_number: newClient.vat_number,
@@ -132,7 +133,7 @@ export default function ManagerClients() {
       delivery_contact_phone: ''
     });
     setAddClientModal(false);
-    loadData();
+    navigate(createPageUrl('ClientVehicleAdd'));
   };
 
   if (loading) {
