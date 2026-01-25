@@ -3,13 +3,23 @@ import { base44 } from '@/api/base44Client';
 import { createPageUrl } from '@/utils';
 import { useNavigate } from 'react-router-dom';
 import TableExport from '../components/TableExport';
-import { FileText, Package, Settings, TruckIcon } from 'lucide-react';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { toast } from 'sonner';
+import { FileText, Package, Settings, TruckIcon, Plus } from 'lucide-react';
 
 export default function SupplierDashboard() {
   const [loading, setLoading] = useState(true);
   const [org, setOrg] = useState(null);
   const [quotes, setQuotes] = useState([]);
   const [uploading, setUploading] = useState(null);
+  const [showAddProductModal, setShowAddProductModal] = useState(false);
+  const [newProduct, setNewProduct] = useState({
+    name: '',
+    cost: '',
+    stock: ''
+  });
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -67,6 +77,18 @@ export default function SupplierDashboard() {
     loadData();
   };
 
+  const saveProduct = async () => {
+    await base44.entities.Organisation.create({
+      name: newProduct.name,
+      cost: parseFloat(newProduct.cost) || 0,
+      stock: parseInt(newProduct.stock) || 0
+    });
+    toast.success('Product added');
+    setShowAddProductModal(false);
+    setNewProduct({ name: '', cost: '', stock: '' });
+    loadData();
+  };
+
   if (loading) return <div className="flex items-center justify-center h-screen">Loading...</div>;
 
   const openPOs = quotes.filter(q => q.status === 'requested');
@@ -85,7 +107,14 @@ export default function SupplierDashboard() {
       {loading && <div>Loading...</div>}
 
       {!loading && (
-        <div className="border border-[#00c600] rounded p-6">
+        <div>
+          <div className="flex justify-between items-center mb-6">
+            <h2 className="text-lg text-[#00c600]">Products & Quotes</h2>
+            <Button onClick={() => setShowAddProductModal(true)} className="bg-[#00c600] text-white border border-[#00c600]">
+              <Plus size={16} className="mr-1" /> Product
+            </Button>
+          </div>
+          <div className="border border-[#00c600] rounded p-6">
           <h2 className="text-lg mb-4 text-[#00c600]">Incoming POs</h2>
           <table>
             <thead>
@@ -128,8 +157,27 @@ export default function SupplierDashboard() {
               ))}
             </tbody>
           </table>
-        </div>
-      )}
-    </div>
-  );
-}
+          </div>
+          </div>
+
+          {/* Add Product Modal */}
+          <Dialog open={showAddProductModal} onOpenChange={setShowAddProductModal}>
+           <DialogContent className="max-w-md bg-[#212121] border border-[#00c600]">
+             <DialogHeader>
+               <DialogTitle className="text-white">Add Product</DialogTitle>
+             </DialogHeader>
+             <div className="space-y-3">
+               <Input placeholder="Product Name" value={newProduct.name} onChange={(e) => setNewProduct({ ...newProduct, name: e.target.value })} />
+               <Input placeholder="Cost" type="number" value={newProduct.cost} onChange={(e) => setNewProduct({ ...newProduct, cost: e.target.value })} />
+               <Input placeholder="Stock" type="number" value={newProduct.stock} onChange={(e) => setNewProduct({ ...newProduct, stock: e.target.value })} />
+               <div className="flex gap-2 pt-2 border-t border-[#00c600]">
+                 <Button onClick={() => setShowAddProductModal(false)} variant="outline" className="flex-1">Cancel</Button>
+                 <Button onClick={saveProduct} className="flex-1 bg-[#00c600] text-white">Save</Button>
+               </div>
+             </div>
+           </DialogContent>
+          </Dialog>
+          )}
+          </div>
+          );
+          }
