@@ -53,7 +53,7 @@ export default function SupplierLogin() {
             Log in
           </button>
           <button 
-            onClick={() => window.location.href = '/login'}
+            onClick={() => window.location.href = '/signup'}
             style={{
               background: '#000',
               color: '#00c600',
