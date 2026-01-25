@@ -94,6 +94,7 @@ export default function ClientDashboard() {
         </div>
       </div>
 
+      <div className="bg-[#2a2a2a] rounded-lg p-6 mb-6 border border-[#00c600]">
         <div className="border-t border-[#00c600] pt-4 mb-4">
           <div className="flex justify-between items-center mb-2">
             <div>Your Vehicles</div>
