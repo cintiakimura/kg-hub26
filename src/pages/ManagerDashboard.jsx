@@ -5,6 +5,81 @@ import { useNavigate } from 'react-router-dom';
 import TableExport from '../components/TableExport';
 import { Users, FileText, Package, TruckIcon } from 'lucide-react';
 
+const tableStyles = `
+  .excel-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: akkurat, sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+  }
+  
+  .excel-table thead {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: #1e1e1e;
+  }
+  
+  .excel-table th {
+    border: 1px solid #00c600;
+    padding: 12px;
+    text-align: left;
+    color: #00c600;
+    font-weight: 400;
+    background: #1e1e1e;
+  }
+  
+  .excel-table td {
+    border: 1px solid #00c600;
+    padding: 12px;
+    color: white;
+  }
+  
+  .excel-table tbody tr:nth-child(odd) {
+    background: #1e1e1e;
+  }
+  
+  .excel-table tbody tr:nth-child(even) {
+    background: #2a2a2a;
+  }
+  
+  .excel-table tbody tr:hover {
+    background: #004d00;
+  }
+  
+  .excel-table button {
+    background: #00c600;
+    color: white;
+    border: 1px solid #00c600;
+    padding: 6px 12px;
+    font-size: 12px;
+    cursor: pointer;
+    font-weight: 400;
+  }
+  
+  .excel-table button:hover {
+    opacity: 0.8;
+  }
+  
+  @media print {
+    .excel-table {
+      color: black;
+    }
+    .excel-table th,
+    .excel-table td {
+      background: white !important;
+      color: black !important;
+      border-color: black !important;
+    }
+    .excel-table button {
+      background: white;
+      color: black;
+      border-color: black;
+    }
+  }
+`;
+
 export default function ManagerDashboard() {
   const [loading, setLoading] = useState(true);
   const [pos, setPos] = useState([]);
@@ -97,12 +172,16 @@ export default function ManagerDashboard() {
   ];
 
   return (
-    <div className="p-6 bg-[#212121] min-h-screen">
-      <h1 className="text-2xl mb-6 text-[#00c600]">Production Control</h1>
-      {loading && <div>Loading...</div>}
-      {!loading && (
-        <div className="border border-[#00c600] rounded p-6">
-          <table>
+    <div className="bg-[#212121] min-h-screen">
+      <style>{tableStyles}</style>
+      <div className="p-6">
+        <div className="flex justify-between items-center mb-6">
+          <h1 className="text-2xl text-[#00c600]">Production Control</h1>
+          <TableExport data={pos} filename="production_control.csv" />
+        </div>
+        {loading && <div>Loading...</div>}
+        {!loading && (
+          <table className="excel-table">
             <thead>
               <tr>
                 <th>Date</th>
@@ -128,8 +207,8 @@ export default function ManagerDashboard() {
               ))}
             </tbody>
           </table>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 }
