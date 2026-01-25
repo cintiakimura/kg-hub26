@@ -276,6 +276,140 @@ export default function ClientDashboard() {
           </table>
         </div>
       </div>
+
+      {/* Add Vehicle Modal */}
+      <Dialog open={showAddVehicleModal} onOpenChange={setShowAddVehicleModal}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle>Add New Vehicle</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4">
+            <input 
+              type="text" 
+              placeholder="Brand"
+              value={newVehicle.brand}
+              onChange={(e) => setNewVehicle({ ...newVehicle, brand: e.target.value })}
+              className="w-full p-2 bg-[#2a2a2a] border border-[#00c600] rounded text-white text-sm"
+            />
+            <input 
+              type="text" 
+              placeholder="Model"
+              value={newVehicle.model}
+              onChange={(e) => setNewVehicle({ ...newVehicle, model: e.target.value })}
+              className="w-full p-2 bg-[#2a2a2a] border border-[#00c600] rounded text-white text-sm"
+            />
+            <input 
+              type="number" 
+              placeholder="Year"
+              value={newVehicle.year}
+              onChange={(e) => setNewVehicle({ ...newVehicle, year: e.target.value })}
+              className="w-full p-2 bg-[#2a2a2a] border border-[#00c600] rounded text-white text-sm"
+            />
+            <div className="flex gap-2">
+              <input 
+                type="text" 
+                placeholder="VIN"
+                value={newVehicle.vin}
+                onChange={(e) => setNewVehicle({ ...newVehicle, vin: e.target.value })}
+                className="flex-1 p-2 bg-[#2a2a2a] border border-[#00c600] rounded text-white text-sm"
+              />
+              <button 
+                onClick={decodeVIN}
+                className="bg-[#00c600] text-black px-3 py-2 rounded text-sm hover:opacity-80 whitespace-nowrap"
+              >
+                DECODE
+              </button>
+            </div>
+            <select 
+              value={newVehicle.fuel}
+              onChange={(e) => setNewVehicle({ ...newVehicle, fuel: e.target.value })}
+              className="w-full p-2 bg-[#2a2a2a] border border-[#00c600] rounded text-white text-sm"
+            >
+              <option value="">Select Fuel</option>
+              <option value="diesel">Diesel</option>
+              <option value="petrol">Petrol</option>
+              <option value="electric">Electric</option>
+              <option value="hybrid">Hybrid</option>
+            </select>
+            <input 
+              type="text" 
+              placeholder="Engine Code"
+              value={newVehicle.engine_code}
+              onChange={(e) => setNewVehicle({ ...newVehicle, engine_code: e.target.value })}
+              className="w-full p-2 bg-[#2a2a2a] border border-[#00c600] rounded text-white text-sm"
+            />
+            <select 
+              value={newVehicle.transmission}
+              onChange={(e) => setNewVehicle({ ...newVehicle, transmission: e.target.value })}
+              className="w-full p-2 bg-[#2a2a2a] border border-[#00c600] rounded text-white text-sm"
+            >
+              <option value="">Select Transmission</option>
+              <option value="automatic">Automatic</option>
+              <option value="manual">Manual</option>
+            </select>
+            <div className="flex gap-3">
+              <button 
+                onClick={() => setShowAddVehicleModal(false)}
+                className="flex-1 p-2 border border-[#00c600] text-[#00c600] rounded text-sm hover:opacity-80"
+              >
+                Cancel
+              </button>
+              <button 
+                onClick={saveVehicle}
+                className="flex-1 bg-[#00c600] text-black p-2 rounded text-sm hover:opacity-80"
+              >
+                Save
+              </button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Add Purchase Modal */}
+      <Dialog open={showAddPurchaseModal} onOpenChange={setShowAddPurchaseModal}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle>Add Purchase Order</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4">
+            <input 
+              type="text" 
+              placeholder="PO ID"
+              value={newPurchase.po_id}
+              onChange={(e) => setNewPurchase({ ...newPurchase, po_id: e.target.value })}
+              className="w-full p-2 bg-[#2a2a2a] border border-[#00c600] rounded text-white text-sm"
+            />
+            <input 
+              type="date" 
+              placeholder="Order Date"
+              value={newPurchase.order_date}
+              onChange={(e) => setNewPurchase({ ...newPurchase, order_date: e.target.value })}
+              className="w-full p-2 bg-[#2a2a2a] border border-[#00c600] rounded text-white text-sm"
+            />
+            <input 
+              type="date" 
+              placeholder="ETA"
+              value={newPurchase.eta}
+              onChange={(e) => setNewPurchase({ ...newPurchase, eta: e.target.value })}
+              className="w-full p-2 bg-[#2a2a2a] border border-[#00c600] rounded text-white text-sm"
+            />
+            <div className="flex gap-3">
+              <button 
+                onClick={() => setShowAddPurchaseModal(false)}
+                className="flex-1 p-2 border border-[#00c600] text-[#00c600] rounded text-sm hover:opacity-80"
+              >
+                Cancel
+              </button>
+              <button 
+                onClick={savePurchase}
+                className="flex-1 bg-[#00c600] text-black p-2 rounded text-sm hover:opacity-80"
+              >
+                Save
+              </button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
