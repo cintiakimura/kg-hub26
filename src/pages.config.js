@@ -13,10 +13,10 @@ import ManagerLogistics from './pages/ManagerLogistics';
 import ManagerPurchases from './pages/ManagerPurchases';
 import ManagerSalesQuotes from './pages/ManagerSalesQuotes';
 import ManagerSupplierQuotes from './pages/ManagerSupplierQuotes';
-import ManagerProfile from './pages/ManagerProfile';
-import ManagerCalendar from './pages/ManagerCalendar';
 import SupplierDashboard from './pages/SupplierDashboard';
 import SupplierLogin from './pages/SupplierLogin';
+import ManagerCalendar from './pages/ManagerCalendar';
+import ManagerProfile from './pages/ManagerProfile';
 import __Layout from './Layout.jsx';
 
 
@@ -36,10 +36,10 @@ export const PAGES = {
     "ManagerPurchases": ManagerPurchases,
     "ManagerSalesQuotes": ManagerSalesQuotes,
     "ManagerSupplierQuotes": ManagerSupplierQuotes,
-    "ManagerProfile": ManagerProfile,
-    "ManagerCalendar": ManagerCalendar,
     "SupplierDashboard": SupplierDashboard,
     "SupplierLogin": SupplierLogin,
+    "ManagerCalendar": ManagerCalendar,
+    "ManagerProfile": ManagerProfile,
 }
 
 export const pagesConfig = {

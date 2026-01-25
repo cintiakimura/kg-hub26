@@ -118,7 +118,7 @@ export default function ManagerDashboard() {
           <div
             key={card.page}
             onClick={() => navigate(createPageUrl(card.page))}
-            className={`bg-[#1a1a1a] rounded-lg p-6 cursor-pointer hover:shadow-lg transition-all border-2 ${card.color} flex flex-col items-center text-center`}
+            className={`bg-gray-100 dark:bg-[#1a1a1a] rounded-lg p-6 cursor-pointer hover:shadow-lg transition-all border-2 ${card.color} flex flex-col items-center text-center`}
           >
             <div className="text-4xl mb-3">{card.icon}</div>
             <div className="text-base mb-1">{card.name}</div>
