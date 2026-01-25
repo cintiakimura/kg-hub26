@@ -158,9 +158,7 @@ export default function SupplierDashboard() {
             </tbody>
           </table>
           </div>
-          </div>
 
-          {/* Add Product Modal */}
           <Dialog open={showAddProductModal} onOpenChange={setShowAddProductModal}>
            <DialogContent className="max-w-md bg-[#212121] border border-[#00c600]">
              <DialogHeader>
@@ -177,6 +175,7 @@ export default function SupplierDashboard() {
              </div>
            </DialogContent>
           </Dialog>
+          </div>
           )}
           </div>
           );
