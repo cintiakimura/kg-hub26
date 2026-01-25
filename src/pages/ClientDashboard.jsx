@@ -39,92 +39,96 @@ export default function ClientDashboard() {
   if (loading) return <div className="flex items-center justify-center h-screen">Loading...</div>;
 
   return (
-    <div className="p-8">
-      <img 
-        src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/697651f65fc49ec896171492/e2c435b98_KG_primary_logo_green.png"
-        alt="KG Logo"
-        style={{ height: 38 }}
-        className="mb-8"
-      />
-      
-      <TableExport data={[org, ...vehicles, ...purchases]} filename="client-data" />
-
-      <h2 className="text-lg mb-4">Organisation Info</h2>
-      <table className="mb-8">
-        <thead>
-          <tr>
-            <th>Organisation</th>
-            <th>ID</th>
-            <th>VAT</th>
-            <th>Billing Address</th>
-            <th>Delivery Address</th>
-            <th>Contact</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>{org?.name}</td>
-            <td>{org?.org_id}</td>
-            <td>{org?.vat_number}</td>
-            <td>{org?.billing_address}</td>
-            <td>{org?.delivery_address}</td>
-            <td>{org?.contact_billing}</td>
-          </tr>
-        </tbody>
-      </table>
-
-      <div className="flex justify-between items-center mb-4">
-        <h2 className="text-lg">Vehicles</h2>
-        <button onClick={() => navigate(createPageUrl('ClientVehicleAdd'))}>Add Vehicle</button>
+    <div className="p-6">
+      <div className="flex justify-between items-center mb-6">
+        <img 
+          src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/697651f65fc49ec896171492/e2c435b98_KG_primary_logo_green.png"
+          alt="KG Protech"
+          style={{ height: 38 }}
+        />
+        <TableExport data={[org, ...vehicles, ...purchases]} filename="client-data" />
       </div>
-      <table className="mb-8">
-        <thead>
-          <tr>
-            <th>Brand</th>
-            <th>Model</th>
-            <th>Year</th>
-            <th>VIN</th>
-            <th>ID</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          {vehicles.map(v => (
-            <tr key={v.id} onClick={() => navigate(createPageUrl(`ClientVehicleDetail?id=${v.id}`))} className="cursor-pointer">
-              <td>{v.make}</td>
-              <td>{v.model}</td>
-              <td>{v.year}</td>
-              <td>{v.vin}</td>
-              <td>{v.vehicle_id}</td>
-              <td>View</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
 
-      <h2 className="text-lg mb-4">Purchases</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>Date</th>
-            <th>PO ID</th>
-            <th>Items</th>
-            <th>Status</th>
-            <th>Tracking</th>
-          </tr>
-        </thead>
-        <tbody>
-          {purchases.map(p => (
-            <tr key={p.id}>
-              <td>{p.order_date}</td>
-              <td>{p.po_id}</td>
-              <td>{p.items?.length || 0} items</td>
-              <td>{p.status}</td>
-              <td>{p.tracking_number_outbound}</td>
+      <div className="mb-6">
+        <div className="mb-2">Organisation</div>
+        <table>
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>ID</th>
+              <th>VAT</th>
+              <th>Billing</th>
+              <th>Delivery</th>
+              <th>Contact</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            <tr>
+              <td>{org?.name}</td>
+              <td>{org?.org_id}</td>
+              <td>{org?.vat_number}</td>
+              <td>{org?.billing_address}</td>
+              <td>{org?.delivery_address}</td>
+              <td>{org?.contact_billing}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div className="mb-6">
+        <div className="flex justify-between items-center mb-2">
+          <div>Vehicles</div>
+          <button onClick={() => navigate(createPageUrl('ClientVehicleAdd'))}>Add Vehicle</button>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>Make</th>
+              <th>Model</th>
+              <th>Year</th>
+              <th>VIN</th>
+              <th>ID</th>
+            </tr>
+          </thead>
+          <tbody>
+            {vehicles.map(v => (
+              <tr key={v.id} onClick={() => navigate(createPageUrl(`ClientVehicleDetail?id=${v.id}`))}>
+                <td>{v.make}</td>
+                <td>{v.model}</td>
+                <td>{v.year}</td>
+                <td>{v.vin}</td>
+                <td>{v.vehicle_id}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <div className="mb-6">
+        <div className="mb-2">Purchase Orders</div>
+        <table>
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>PO ID</th>
+              <th>Items</th>
+              <th>Status</th>
+              <th>Tracking</th>
+            </tr>
+          </thead>
+          <tbody>
+            {purchases.map(p => (
+              <tr key={p.id}>
+                <td>{p.order_date}</td>
+                <td>{p.po_id}</td>
+                <td>{p.items?.length || 0}</td>
+                <td>{p.status}</td>
+                <td>{p.tracking_number_outbound}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }
