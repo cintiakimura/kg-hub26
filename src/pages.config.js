@@ -23,6 +23,7 @@ import Supplier from './pages/Supplier';
 import SupplierDashboard from './pages/SupplierDashboard';
 import SupplierLogin from './pages/SupplierLogin';
 import SupplierLoginLanding from './pages/SupplierLoginLanding';
+import VehicleConnectorAdd from './pages/VehicleConnectorAdd';
 import __Layout from './Layout.jsx';
 
 
@@ -52,6 +53,7 @@ export const PAGES = {
     "SupplierDashboard": SupplierDashboard,
     "SupplierLogin": SupplierLogin,
     "SupplierLoginLanding": SupplierLoginLanding,
+    "VehicleConnectorAdd": VehicleConnectorAdd,
 }
 
 export const pagesConfig = {
