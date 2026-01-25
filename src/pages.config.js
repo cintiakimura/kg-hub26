@@ -11,6 +11,9 @@ import ManagerDashboard from './pages/ManagerDashboard';
 import ManagerClients from './pages/ManagerClients';
 import ManagerSalesQuotes from './pages/ManagerSalesQuotes';
 import ManagerSupplierQuotes from './pages/ManagerSupplierQuotes';
+import ManagerLogistics from './pages/ManagerLogistics';
+import ManagerPurchases from './pages/ManagerPurchases';
+import ManagerFinancials from './pages/ManagerFinancials';
 
 
 export const PAGES = {
@@ -27,6 +30,9 @@ export const PAGES = {
     "ManagerClients": ManagerClients,
     "ManagerSalesQuotes": ManagerSalesQuotes,
     "ManagerSupplierQuotes": ManagerSupplierQuotes,
+    "ManagerLogistics": ManagerLogistics,
+    "ManagerPurchases": ManagerPurchases,
+    "ManagerFinancials": ManagerFinancials,
 }
 
 export const pagesConfig = {
