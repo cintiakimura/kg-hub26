@@ -3,7 +3,10 @@ import { base44 } from '@/api/base44Client';
 import { createPageUrl } from '@/utils';
 import { useNavigate } from 'react-router-dom';
 import TableExport from '../components/TableExport';
-import { Users, FileText, Package, TruckIcon } from 'lucide-react';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { Users, FileText, Package, TruckIcon, Plus, Upload } from 'lucide-react';
 
 const tableStyles = `
   .excel-table {
@@ -84,6 +87,12 @@ export default function ManagerDashboard() {
   const [loading, setLoading] = useState(true);
   const [pos, setPos] = useState([]);
   const [clients, setClients] = useState({});
+  const [suppliers, setSuppliers] = useState([]);
+  const [quotes, setQuotes] = useState([]);
+  const [showProductionModal, setShowProductionModal] = useState(false);
+  const [showImportModal, setShowImportModal] = useState(false);
+  const [newProduction, setNewProduction] = useState({ order_date: '', client_org_id: '', product: '', total_cost: '', status: 'ordered', tracking_number_inbound: '' });
+  const [selectedQuote, setSelectedQuote] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -107,12 +116,53 @@ export default function ManagerDashboard() {
     clientsData.forEach(c => clientsMap[c.org_id] = c.name);
     setClients(clientsMap);
 
+    const supplierData = await base44.entities.Organisation.filter({ org_type: 'supplier' });
+    setSuppliers(supplierData);
+
+    const quoteData = await base44.entities.SupplierQuote.list();
+    setQuotes(quoteData);
+
     setLoading(false);
   };
 
   const updateStatus = async (id, status) => {
     await base44.entities.PurchaseOrder.update(id, { status });
     loadData();
+  };
+
+  const saveProduction = async () => {
+    await base44.entities.PurchaseOrder.create({
+      po_id: `Q-${Date.now()}-S-${Math.floor(Math.random() * 1000)}`,
+      order_date: newProduction.order_date,
+      client_org_id: newProduction.client_org_id,
+      supplier_org_id: suppliers[0]?.org_id || 'SUP-001',
+      status: newProduction.status,
+      items: [{ description: newProduction.product, quantity: 1, unit_price: newProduction.total_cost }],
+      total_cost: parseFloat(newProduction.total_cost) || 0,
+      tracking_number_inbound: newProduction.tracking_number_inbound
+    });
+    setNewProduction({ order_date: '', client_org_id: '', product: '', total_cost: '', status: 'ordered', tracking_number_inbound: '' });
+    setShowProductionModal(false);
+    loadData();
+  };
+
+  const importQuote = async () => {
+    if (!selectedQuote) return;
+    const quote = quotes.find(q => q.supplier_quote_id === selectedQuote);
+    if (quote) {
+      await base44.entities.PurchaseOrder.create({
+        po_id: quote.sales_quote_id,
+        order_date: quote.quote_date || new Date().toISOString().split('T')[0],
+        client_org_id: 'C-001',
+        supplier_org_id: quote.supplier_org_id,
+        status: 'ordered',
+        items: quote.items || [],
+        total_cost: quote.price || 0
+      });
+      setSelectedQuote(null);
+      setShowImportModal(false);
+      loadData();
+    }
   };
 
   if (loading) return <div className="flex items-center justify-center h-screen">Loading...</div>;
@@ -175,9 +225,17 @@ export default function ManagerDashboard() {
     <div className="bg-[#212121] min-h-screen">
       <style>{tableStyles}</style>
       <div className="p-6">
-        <div className="flex justify-between items-center mb-6">
+         <div className="flex justify-between items-center mb-6">
           <h1 className="text-2xl text-[#00c600]">Production Control</h1>
-          <TableExport data={pos} filename="production_control.csv" />
+          <div className="flex gap-2">
+            <Button onClick={() => setShowProductionModal(true)} className="bg-[#00c600] text-white border border-[#00c600]">
+              <Plus size={16} className="mr-1" /> Production
+            </Button>
+            <Button onClick={() => setShowImportModal(true)} className="bg-[#00c600] text-white border border-[#00c600]">
+              <Upload size={16} className="mr-1" /> Import Supplier
+            </Button>
+            <TableExport data={pos} filename="production_control.csv" />
+          </div>
         </div>
         {loading && <div>Loading...</div>}
         {!loading && (
@@ -208,7 +266,51 @@ export default function ManagerDashboard() {
             </tbody>
           </table>
         )}
-      </div>
-    </div>
-  );
-}
+
+        {/* Add Production Modal */}
+        <Dialog open={showProductionModal} onOpenChange={setShowProductionModal}>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Add Production Entry</DialogTitle>
+            </DialogHeader>
+            <div className="space-y-4">
+              <Input type="date" value={newProduction.order_date} onChange={(e) => setNewProduction({ ...newProduction, order_date: e.target.value })} />
+              <select value={newProduction.client_org_id} onChange={(e) => setNewProduction({ ...newProduction, client_org_id: e.target.value })} style={{ width: '100%', padding: '8px', borderRadius: '4px', border: '1px solid #00c600' }}>
+                <option value="">Select Client</option>
+                {Object.entries(clients).map(([id, name]) => <option key={id} value={id}>{name}</option>)}
+              </select>
+              <Input placeholder="Product" value={newProduction.product} onChange={(e) => setNewProduction({ ...newProduction, product: e.target.value })} />
+              <Input type="number" placeholder="Cost" value={newProduction.total_cost} onChange={(e) => setNewProduction({ ...newProduction, total_cost: e.target.value })} />
+              <select value={newProduction.status} onChange={(e) => setNewProduction({ ...newProduction, status: e.target.value })} style={{ width: '100%', padding: '8px', borderRadius: '4px', border: '1px solid #00c600' }}>
+                <option value="ordered">Ordered</option>
+                <option value="in_production">In Production</option>
+                <option value="dispatched">Dispatched</option>
+                <option value="in_transit">In Transit</option>
+                <option value="delayed">Delayed</option>
+                <option value="delivered">Delivered</option>
+              </select>
+              <Input placeholder="Tracking Number" value={newProduction.tracking_number_inbound} onChange={(e) => setNewProduction({ ...newProduction, tracking_number_inbound: e.target.value })} />
+              <Button onClick={saveProduction} className="w-full bg-[#00c600] text-white">Save</Button>
+            </div>
+          </DialogContent>
+        </Dialog>
+
+        {/* Import Supplier Quote Modal */}
+        <Dialog open={showImportModal} onOpenChange={setShowImportModal}>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Import from Supplier</DialogTitle>
+            </DialogHeader>
+            <div className="space-y-4">
+              <select value={selectedQuote || ''} onChange={(e) => setSelectedQuote(e.target.value)} style={{ width: '100%', padding: '8px', borderRadius: '4px', border: '1px solid #00c600' }}>
+                <option value="">Select Supplier Quote</option>
+                {quotes.map(q => <option key={q.id} value={q.supplier_quote_id}>{q.supplier_quote_id} - ${q.price}</option>)}
+              </select>
+              <Button onClick={importQuote} className="w-full bg-[#00c600] text-white">Import Quote</Button>
+            </div>
+          </DialogContent>
+        </Dialog>
+        </div>
+        </div>
+        );
+        }
