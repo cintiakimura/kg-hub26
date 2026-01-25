@@ -203,7 +203,7 @@ export default function ManagerClients() {
 
       {/* Add Client Modal */}
       <Dialog open={addClientModal} onOpenChange={setAddClientModal}>
-       <DialogContent className="max-w-md bg-[#212121] border border-[#00c600]">
+       <DialogContent className="w-[70vw] max-h-[70vh] bg-[#212121] border border-[#00c600]">
          <DialogHeader>
            <DialogTitle className="text-white">Add Client</DialogTitle>
          </DialogHeader>
