@@ -23,9 +23,9 @@ export default function Layout({ children, currentPageName }) {
     setTheme(saved);
     
     if (saved === 'dark') {
-      document.documentElement.classList.add('dark');
+      document.body.classList.add('dark');
     } else {
-      document.documentElement.classList.remove('dark');
+      document.body.classList.remove('dark');
     }
   }, []);
 
@@ -55,9 +55,9 @@ export default function Layout({ children, currentPageName }) {
     localStorage.setItem('theme', newTheme);
     
     if (newTheme === 'dark') {
-      document.documentElement.classList.add('dark');
+      document.body.classList.add('dark');
     } else {
-      document.documentElement.classList.remove('dark');
+      document.body.classList.remove('dark');
     }
   };
 

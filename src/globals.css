@@ -1,3 +1,4 @@
+css
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -9,20 +10,15 @@
     font-size: 14px;
   }
 
-  html {
-    @apply transition-colors duration-300 bg-white text-black;
-  }
-
-  html.dark {
-    @apply bg-[#212121] text-white;
-  }
-
   body {
-    @apply bg-white text-black transition-colors duration-300;
+    background: white;
+    color: #333;
+    transition: all 0.3s;
   }
 
-  html.dark body {
-    @apply bg-[#212121] text-white;
+  body.dark {
+    background: #212121;
+    color: white;
   }
 
   h1, h2, h3, h4, h5, h6 {
