@@ -162,41 +162,40 @@ export default function ManagerClients() {
               <p className="text-gray-500">No clients registered yet</p>
             </KGCard>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {clients.map((client) => {
-                const stats = getClientStats(client.org_id);
-                return (
-                  <KGCard 
-                    key={client.id}
-                    onClick={() => setSelectedClient(client)}
-                    className="cursor-pointer hover:shadow-md"
-                  >
-                    <div className="flex items-start justify-between mb-3">
-                      <span className="text-[#00C600] text-sm">{client.org_id}</span>
-                      <KGButton 
-                        size="sm" 
-                        variant="outline"
-                        onClick={(e) => { e.stopPropagation(); resellToClient(client); }}
-                      >
-                        <RefreshCw size={12} className="mr-1" />
-                        Resell
-                      </KGButton>
-                    </div>
-                    
-                    <p className="text-base">{client.name}</p>
-                    
-                    {client.contact_name && (
-                      <p className="text-sm text-gray-500 mt-1">{client.contact_name}</p>
-                    )}
-                    
-                    <div className="flex gap-4 mt-4 text-xs text-gray-500">
-                      <span>{stats.vehicles} vehicles</span>
-                      <span>{stats.quotes} quotes</span>
-                      <span className="text-[#00C600]">${stats.totalSpent.toFixed(2)}</span>
-                    </div>
-                  </KGCard>
-                );
-              })}
+            <div className="border border-[#00c600] rounded overflow-hidden">
+              <table className="w-full">
+                <thead>
+                  <tr className="bg-[#1e1e1e] border-b border-[#00c600]">
+                    <th className="px-4 py-3 text-left text-[#00c600] text-sm font-normal">ID</th>
+                    <th className="px-4 py-3 text-left text-[#00c600] text-sm font-normal">Name</th>
+                    <th className="px-4 py-3 text-left text-[#00c600] text-sm font-normal">Email</th>
+                    <th className="px-4 py-3 text-left text-[#00c600] text-sm font-normal">Phone</th>
+                    <th className="px-4 py-3 text-left text-[#00c600] text-sm font-normal">Vehicles</th>
+                    <th className="px-4 py-3 text-left text-[#00c600] text-sm font-normal">Quotes</th>
+                    <th className="px-4 py-3 text-left text-[#00c600] text-sm font-normal">Total Spent</th>
+                    <th className="px-4 py-3 text-left text-[#00c600] text-sm font-normal">Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {clients.map((client, idx) => {
+                    const stats = getClientStats(client.org_id);
+                    return (
+                      <tr key={client.id} className={`border-b border-[#00c600] ${idx % 2 === 0 ? 'bg-[#1e1e1e]' : 'bg-[#2a2a2a]'} hover:bg-[#004d00] cursor-pointer`} onClick={() => setSelectedClient(client)}>
+                        <td className="px-4 py-3 text-white text-sm">{client.org_id}</td>
+                        <td className="px-4 py-3 text-white text-sm">{client.name}</td>
+                        <td className="px-4 py-3 text-white text-sm">{client.contact_email || '-'}</td>
+                        <td className="px-4 py-3 text-white text-sm">{client.contact_phone || '-'}</td>
+                        <td className="px-4 py-3 text-white text-sm">{stats.vehicles}</td>
+                        <td className="px-4 py-3 text-white text-sm">{stats.quotes}</td>
+                        <td className="px-4 py-3 text-[#00C600] text-sm">${stats.totalSpent.toFixed(2)}</td>
+                        <td className="px-4 py-3 text-sm">
+                          <button onClick={(e) => { e.stopPropagation(); resellToClient(client); }} className="text-[#00c600] hover:text-white text-xs">Resell</button>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
             </div>
           )}
 
