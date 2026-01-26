@@ -52,7 +52,7 @@ export default function Layout({ children, currentPageName }) {
 
   const getNavItems = () => {
     if (!userRole) return [];
-    
+
     if (userRole === 'client') {
       return [
         { icon: Home, label: 'Dashboard', page: 'ClientDashboard' },
@@ -60,24 +60,24 @@ export default function Layout({ children, currentPageName }) {
         { icon: TruckIcon, label: 'Shipments', page: 'ClientShipments' }
       ];
     }
-    
+
     if (userRole === 'supplier') {
       return [
         { icon: Home, label: 'Dashboard', page: 'SupplierDashboard' }
       ];
     }
-    
+
     if (userRole === 'manager') {
       return [
-        { icon: Home, label: 'Production', page: 'ManagerDashboard' },
+        { icon: Home, label: 'Dashboard', page: 'ManagerDashboard' },
+        { icon: Package, label: 'Production Control', page: 'ProductionControl' },
         { icon: Users, label: 'Clients', page: 'ManagerClients' },
         { icon: FileText, label: 'Sales Quotes', page: 'ManagerSalesQuotes' },
-        { icon: Package, label: 'Supplier Quotes', page: 'ManagerSupplierQuotes' },
         { icon: TruckIcon, label: 'Logistics', page: 'ManagerLogistics' },
         { icon: DollarSign, label: 'Financials', page: 'ManagerFinancials' }
       ];
     }
-    
+
     return [];
   };
 

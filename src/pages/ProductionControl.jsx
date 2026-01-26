@@ -78,13 +78,13 @@ export default function ProductionControl() {
   const [userProfile, setUserProfile] = useState(null);
   const [newProduction, setNewProduction] = useState({
     order_date: '',
-    client_org_id: '',
+    expected_delivery: '',
+    client: '',
     product: '',
-    total_cost: '',
-    status: 'ordered',
-    tracking_number_inbound: '',
-    eta: '',
-    notes: ''
+    supplier: '',
+    cost: '',
+    status: 'Ordered',
+    tracking: ''
   });
   const [selectedQuote, setSelectedQuote] = useState(null);
   const navigate = useNavigate();
@@ -123,19 +123,18 @@ export default function ProductionControl() {
 
   const saveProduction = async () => {
     await base44.entities.PurchaseOrder.create({
-      po_id: `Q-${Date.now()}-S-${Math.floor(Math.random() * 1000)}`,
+      po_id: `PO-${Date.now()}`,
       order_date: newProduction.order_date,
-      client_org_id: newProduction.client_org_id,
-      supplier_org_id: suppliers[0]?.org_id || 'SUP-001',
-      status: newProduction.status,
-      items: [{ description: newProduction.product, quantity: 1, unit_price: newProduction.total_cost }],
-      total_cost: parseFloat(newProduction.total_cost) || 0,
-      tracking_number_inbound: newProduction.tracking_number_inbound,
-      eta: newProduction.eta,
-      notes: newProduction.notes
+      eta: newProduction.expected_delivery,
+      client_org_id: clients[newProduction.client] || newProduction.client,
+      supplier_org_id: newProduction.supplier,
+      status: newProduction.status.toLowerCase().replace(' ', '_'),
+      items: [{ description: newProduction.product, quantity: 1, unit_price: newProduction.cost }],
+      total_cost: parseFloat(newProduction.cost) || 0,
+      tracking_number_inbound: newProduction.tracking
     });
-    toast.success('Production entry added');
-    setNewProduction({ order_date: '', client_org_id: '', product: '', total_cost: '', status: 'ordered', tracking_number_inbound: '', eta: '', notes: '' });
+    toast.success('Saved');
+    setNewProduction({ order_date: '', expected_delivery: '', client: '', product: '', supplier: '', cost: '', status: 'Ordered', tracking: '' });
     setShowProductionModal(false);
     loadData();
   };
@@ -164,15 +163,15 @@ export default function ProductionControl() {
   return (
     <div className="bg-[#212121] min-h-screen">
       <style>{tableStyles}</style>
-      <div className="p-6">
-        <div className="flex justify-between items-center mb-6">
-          <h1 className="text-2xl text-[#00c600]">Production Control</h1>
+      <div className="p-6 ml-16">
+        <div className="flex justify-between items-center" style={{ padding: '20px 0' }}>
+          <h1 style={{ color: 'white', fontSize: '18px', margin: 0 }}>Production Control</h1>
           <div className="flex gap-2">
-            <Button onClick={() => setShowProductionModal(true)} className="bg-[#00c600] text-white border border-[#00c600]">
-              <Plus size={16} className="mr-1" /> Production
+            <Button onClick={() => setShowProductionModal(true)} className="bg-[#00c600] text-black border border-[#00c600]">
+              Production
             </Button>
-            <Button onClick={() => setShowImportModal(true)} className="bg-[#00c600] text-white border border-[#00c600]">
-              <Upload size={16} className="mr-1" /> Import
+            <Button onClick={() => setShowImportModal(true)} className="bg-[#00c600] text-black border border-[#00c600]">
+              Import from Supplier
             </Button>
             <TableExport data={pos} filename="production_control.csv" />
           </div>
@@ -181,25 +180,27 @@ export default function ProductionControl() {
         <table className="excel-table">
           <thead>
             <tr>
-              <th>Date</th>
+              <th>Order Date</th>
+              <th>Expected Delivery</th>
               <th>Client</th>
               <th>Product</th>
+              <th>Supplier</th>
               <th>Cost</th>
               <th>Status</th>
               <th>Tracking</th>
-              <th>Action</th>
             </tr>
           </thead>
           <tbody>
             {pos.map(po => (
               <tr key={po.id}>
-                <td>{po.order_date}</td>
-                <td>{clients[po.client_org_id]}</td>
+                <td>{po.order_date || '-'}</td>
+                <td>{po.eta || '-'}</td>
+                <td>{clients[po.client_org_id] || '-'}</td>
                 <td>{po.items?.[0]?.description || '-'}</td>
-                <td>${po.total_cost}</td>
-                <td>{po.status}</td>
+                <td>{po.supplier_org_id || '-'}</td>
+                <td>${po.total_cost || 0}</td>
+                <td>{po.status || '-'}</td>
                 <td>{po.tracking_number_inbound || '-'}</td>
-                <td><button>Edit</button></td>
               </tr>
             ))}
           </tbody>
@@ -208,30 +209,26 @@ export default function ProductionControl() {
         <Dialog open={showProductionModal} onOpenChange={setShowProductionModal}>
           <DialogContent className="max-w-[400px] bg-[#212121] border border-[#00c600]">
             <DialogHeader>
-              <DialogTitle className="text-white">Add Production Entry</DialogTitle>
+              <DialogTitle className="text-white">Production</DialogTitle>
             </DialogHeader>
             <div className="space-y-3 max-h-96 overflow-y-auto">
-              <Input type="date" placeholder="dd/mm/yyyy" value={newProduction.order_date} onChange={(e) => setNewProduction({ ...newProduction, order_date: e.target.value })} className="bg-[#2a2a2a] text-white border-[#00c600]" />
-              <select value={newProduction.client_org_id} onChange={(e) => setNewProduction({ ...newProduction, client_org_id: e.target.value })} className="w-full p-2 bg-[#2a2a2a] text-white border border-[#00c600] rounded text-sm">
-                <option value="">Select Client</option>
-                {Object.entries(clients).map(([id, name]) => <option key={id} value={id}>{name}</option>)}
-              </select>
-              <Input type="text" placeholder="e.g. 3 connectors + 1 KG Box" value={newProduction.product} onChange={(e) => setNewProduction({ ...newProduction, product: e.target.value })} className="bg-[#2a2a2a] text-white border-[#00c600]" />
-              <Input type="number" placeholder="Total cost" value={newProduction.total_cost} onChange={(e) => setNewProduction({ ...newProduction, total_cost: e.target.value })} className="bg-[#2a2a2a] text-white border-[#00c600]" />
+              <Input type="date" placeholder="Order Date" value={newProduction.order_date} onChange={(e) => setNewProduction({ ...newProduction, order_date: e.target.value })} className="bg-[#2a2a2a] text-white border-[#00c600]" />
+              <Input type="date" placeholder="Expected Delivery" value={newProduction.expected_delivery} onChange={(e) => setNewProduction({ ...newProduction, expected_delivery: e.target.value })} className="bg-[#2a2a2a] text-white border-[#00c600]" />
+              <Input type="text" placeholder="Client" value={newProduction.client} onChange={(e) => setNewProduction({ ...newProduction, client: e.target.value })} className="bg-[#2a2a2a] text-white border-[#00c600]" />
+              <Input type="text" placeholder="Product" value={newProduction.product} onChange={(e) => setNewProduction({ ...newProduction, product: e.target.value })} className="bg-[#2a2a2a] text-white border-[#00c600]" />
+              <Input type="text" placeholder="Supplier" value={newProduction.supplier} onChange={(e) => setNewProduction({ ...newProduction, supplier: e.target.value })} className="bg-[#2a2a2a] text-white border-[#00c600]" />
+              <Input type="number" placeholder="Cost" value={newProduction.cost} onChange={(e) => setNewProduction({ ...newProduction, cost: e.target.value })} className="bg-[#2a2a2a] text-white border-[#00c600]" />
               <select value={newProduction.status} onChange={(e) => setNewProduction({ ...newProduction, status: e.target.value })} className="w-full p-2 bg-[#2a2a2a] text-white border border-[#00c600] rounded text-sm">
-                <option value="ordered">Ordered</option>
-                <option value="in_production">In Production</option>
-                <option value="dispatched">Dispatched</option>
-                <option value="in_transit">In Transit</option>
-                <option value="delayed">Delayed</option>
-                <option value="delivered">Delivered</option>
+                <option value="Ordered">Ordered</option>
+                <option value="In Production">In Production</option>
+                <option value="Dispatched">Dispatched</option>
+                <option value="Delayed">Delayed</option>
+                <option value="Delivered">Delivered</option>
               </select>
-              <Input type="text" placeholder="FedEx tracking" value={newProduction.tracking_number_inbound} onChange={(e) => setNewProduction({ ...newProduction, tracking_number_inbound: e.target.value })} className="bg-[#2a2a2a] text-white border-[#00c600]" />
-              <Input type="date" placeholder="dd/mm/yyyy" value={newProduction.eta} onChange={(e) => setNewProduction({ ...newProduction, eta: e.target.value })} className="bg-[#2a2a2a] text-white border-[#00c600]" />
-              <textarea placeholder="Any notes" value={newProduction.notes} onChange={(e) => setNewProduction({ ...newProduction, notes: e.target.value })} className="w-full p-2 bg-[#2a2a2a] text-white border border-[#00c600] rounded text-sm" rows="3"></textarea>
+              <Input type="text" placeholder="Tracking" value={newProduction.tracking} onChange={(e) => setNewProduction({ ...newProduction, tracking: e.target.value })} className="bg-[#2a2a2a] text-white border-[#00c600]" />
               <div className="flex gap-2 pt-2 border-t border-[#00c600]">
                 <Button onClick={() => setShowProductionModal(false)} variant="outline" className="flex-1 border-[#00c600] text-gray-400">Cancel</Button>
-                <Button onClick={saveProduction} className="flex-1 bg-[#00c600] text-white">Save Production</Button>
+                <Button onClick={saveProduction} className="flex-1 bg-[#00c600] text-black">Save</Button>
               </div>
             </div>
           </DialogContent>
