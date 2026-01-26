@@ -68,7 +68,7 @@ export default function AddConnector() {
       photos: [form.front_view, form.lever_view, form.ecu_front].filter(Boolean)
     });
     toast.success('Connector added');
-    navigate(createPageUrl(`ClientVehicleDetail?id=${vehicle.id}`));
+    navigate(createPageUrl(`VehicleProfile?vehicle_id=${vehicle.vehicle_id}`));
   };
 
   if (!vehicle) return <div className="flex items-center justify-center h-screen text-white">Loading...</div>;

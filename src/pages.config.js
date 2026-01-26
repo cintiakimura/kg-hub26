@@ -30,6 +30,7 @@ import VehicleConnectorAdd from './pages/VehicleConnectorAdd';
 import VehicleDetail from './pages/VehicleDetail';
 import AddVehicle from './pages/AddVehicle';
 import AddConnector from './pages/AddConnector';
+import VehicleProfile from './pages/VehicleProfile';
 import __Layout from './Layout.jsx';
 
 
@@ -66,6 +67,7 @@ export const PAGES = {
     "VehicleDetail": VehicleDetail,
     "AddVehicle": AddVehicle,
     "AddConnector": AddConnector,
+    "VehicleProfile": VehicleProfile,
 }
 
 export const pagesConfig = {
