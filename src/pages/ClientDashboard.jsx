@@ -200,13 +200,12 @@ export default function ClientDashboard() {
   ];
 
   return (
-    <div className="p-6 max-w-7xl mx-auto">
-      <div className="mb-6">
-        <div className="text-2xl mb-1 text-[#00c600]">DASHBOARD</div>
-        <div className="text-sm opacity-70">Welcome back, {org?.contact_name}</div>
+    <div className="bg-[#212121] min-h-screen ml-16">
+      <div className="bg-[#212121] flex items-center justify-between px-6" style={{ height: '120px', width: '100%' }}>
+        <h1 style={{ color: 'white', fontSize: '32px', fontWeight: '400', marginLeft: '20px' }}>Dashboard</h1>
       </div>
-
-      <div className="bg-[#2a2a2a] rounded-lg p-6 mb-6 border border-[#00c600] relative">
+      <div className="px-6 py-6" style={{ width: '100%' }}>
+      <div className="bg-[#2a2a2a] rounded-lg p-6 mb-6 border border-[#00c600] relative" style={{ width: '100%' }}>
               <button 
                 onClick={() => setShowEditOrgModal(true)}
                 className="absolute top-4 right-4 p-2 hover:bg-[#00c600] hover:bg-opacity-20 rounded transition-all"
@@ -461,6 +460,7 @@ export default function ClientDashboard() {
           </div>
         </DialogContent>
       </Dialog>
+      </div>
     </div>
   );
 }

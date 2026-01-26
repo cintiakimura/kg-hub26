@@ -164,20 +164,17 @@ export default function ManagerPurchases() {
   }
 
   return (
-    <div className="p-6">
-          <div className="flex items-center justify-between mb-6">
-            <div className="flex items-center gap-2">
-              <ShoppingCart size={24} className="text-[#00C600]" />
-              <h1 className="text-xl text-[#00c600]">Non-Production Purchases</h1>
-            </div>
-            <KGButton onClick={() => openModal()}>
-              <Plus size={16} className="mr-2" />
-              Add Purchase
-            </KGButton>
-          </div>
-
+    <div className="bg-[#212121] min-h-screen ml-16">
+      <div className="bg-[#212121] flex items-center justify-between px-6" style={{ height: '120px', width: '100%' }}>
+        <h1 style={{ color: 'white', fontSize: '32px', fontWeight: '400', marginLeft: '20px' }}>Non-Production Purchases</h1>
+        <KGButton onClick={() => openModal()}>
+          <Plus size={16} className="mr-2" />
+          Add Purchase
+        </KGButton>
+      </div>
+      <div className="px-6 py-6" style={{ width: '100%' }}>
           {/* Summary Cards */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6" style={{ width: '100%' }}>
             <KGCard>
               <p className="text-sm text-gray-500">Total Spend</p>
               <p className="text-2xl text-[#00C600]">${totalSpend.toFixed(2)}</p>
@@ -234,6 +231,7 @@ export default function ManagerPurchases() {
               ))}
             </div>
           )}
+      </div>
 
 
       {/* Add/Edit Modal */}

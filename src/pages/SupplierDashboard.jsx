@@ -103,18 +103,19 @@ export default function SupplierDashboard() {
   ];
 
   return (
-    <div className="p-6 bg-[#212121] min-h-screen">
+    <div className="bg-[#212121] min-h-screen ml-16">
+      <div className="bg-[#212121] flex items-center justify-between px-6" style={{ height: '120px', width: '100%' }}>
+        <h1 style={{ color: 'white', fontSize: '32px', fontWeight: '400', marginLeft: '20px' }}>Products & Quotes</h1>
+        <Button onClick={() => setShowAddProductModal(true)} className="bg-[#00c600] text-white border border-[#00c600]">
+          <Plus size={16} className="mr-1" /> Product
+        </Button>
+      </div>
+      <div className="px-6 py-6" style={{ width: '100%' }}>
       {loading && <div>Loading...</div>}
 
       {!loading && (
         <div>
-          <div className="flex justify-between items-center mb-6">
-            <h2 className="text-lg text-[#00c600]">Products & Quotes</h2>
-            <Button onClick={() => setShowAddProductModal(true)} className="bg-[#00c600] text-white border border-[#00c600]">
-              <Plus size={16} className="mr-1" /> Product
-            </Button>
-          </div>
-          <div className="border border-[#00c600] rounded p-6">
+          <div className="border border-[#00c600] rounded p-6" style={{ width: '100%' }}>
           <h2 className="text-lg mb-4 text-[#00c600]">Incoming POs</h2>
           <table>
             <thead>
@@ -177,6 +178,7 @@ export default function SupplierDashboard() {
           </Dialog>
           </div>
           )}
-          </div>
-          );
-          }
+      </div>
+    </div>
+  );
+}

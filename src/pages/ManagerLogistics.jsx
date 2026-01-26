@@ -161,19 +161,16 @@ export default function ManagerLogistics() {
   }
 
   return (
-    <div className="p-6">
-          <div className="flex items-center justify-between mb-6">
-            <div className="flex items-center gap-2">
-              <Truck size={24} className="text-[#00C600]" />
-              <h1 className="text-xl text-[#00c600]">Logistics</h1>
-            </div>
-            <KGButton onClick={() => setShowAddModal(true)}>
-              <Plus size={16} className="mr-2" />
-              Add Shipment
-            </KGButton>
-          </div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+    <div className="bg-[#212121] min-h-screen ml-16">
+      <div className="bg-[#212121] flex items-center justify-between px-6" style={{ height: '120px', width: '100%' }}>
+        <h1 style={{ color: 'white', fontSize: '32px', fontWeight: '400', marginLeft: '20px' }}>Logistics</h1>
+        <KGButton onClick={() => setShowAddModal(true)}>
+          <Plus size={16} className="mr-2" />
+          Add Shipment
+        </KGButton>
+      </div>
+      <div className="px-6 py-6" style={{ width: '100%' }}>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6" style={{ width: '100%' }}>
             {/* Inbound - Supplier to KG */}
             <div>
              <h2 className="text-lg text-[#00c600] mb-4 flex items-center gap-2">
@@ -285,6 +282,7 @@ export default function ManagerLogistics() {
               </div>
             </div>
           </div>
+      </div>
 
 
       {/* Add Logistic Request Modal */}

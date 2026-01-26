@@ -130,14 +130,13 @@ export default function ManagerFinancials() {
   }
 
   return (
-    <div className="p-6">
-          <div className="flex items-center gap-2 mb-6">
-            <DollarSign size={24} className="text-[#00C600]" />
-            <h1 className="text-xl text-[#00c600]">Financials</h1>
-          </div>
-
+    <div className="bg-[#212121] min-h-screen ml-16">
+      <div className="bg-[#212121] flex items-center justify-between px-6" style={{ height: '120px', width: '100%' }}>
+        <h1 style={{ color: 'white', fontSize: '32px', fontWeight: '400', marginLeft: '20px' }}>Financials</h1>
+      </div>
+      <div className="px-6 py-6" style={{ width: '100%' }}>
           {/* Summary Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8" style={{ width: '100%' }}>
             <KGCard>
               <div className="flex items-start justify-between">
                 <div>
@@ -255,6 +254,7 @@ export default function ManagerFinancials() {
               </div>
             </KGCard>
           </div>
+      </div>
     </div>
   );
 }

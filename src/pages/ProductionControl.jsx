@@ -161,23 +161,22 @@ export default function ProductionControl() {
   if (loading) return <div className="flex items-center justify-center h-screen">Loading...</div>;
 
   return (
-    <div className="bg-[#212121] min-h-screen">
+    <div className="bg-[#212121] min-h-screen ml-16">
       <style>{tableStyles}</style>
-      <div className="p-6 ml-16">
-        <div className="flex justify-between items-center" style={{ padding: '20px 0' }}>
-          <h1 style={{ color: 'white', fontSize: '18px', margin: 0 }}>Production Control</h1>
-          <div className="flex gap-2">
-            <Button onClick={() => setShowProductionModal(true)} className="bg-[#00c600] text-black border border-[#00c600]">
-              Production
-            </Button>
-            <Button onClick={() => setShowImportModal(true)} className="bg-[#00c600] text-black border border-[#00c600]">
-              Import from Supplier
-            </Button>
-            <TableExport data={pos} filename="production_control.csv" />
-          </div>
+      <div className="bg-[#212121] flex items-center justify-between px-6" style={{ height: '120px', width: '100%' }}>
+        <h1 style={{ color: 'white', fontSize: '32px', fontWeight: '400', marginLeft: '20px' }}>Production Control</h1>
+        <div className="flex gap-2">
+          <Button onClick={() => setShowProductionModal(true)} className="bg-[#00c600] text-black border border-[#00c600]">
+            Production
+          </Button>
+          <Button onClick={() => setShowImportModal(true)} className="bg-[#00c600] text-black border border-[#00c600]">
+            Import from Supplier
+          </Button>
+          <TableExport data={pos} filename="production_control.csv" />
         </div>
-        
-        <table className="excel-table">
+      </div>
+      <div className="px-6 py-6" style={{ width: '100%' }}>
+        <table className="excel-table" style={{ width: '100%' }}>
           <thead>
             <tr>
               <th>Order Date</th>
@@ -205,6 +204,7 @@ export default function ProductionControl() {
             ))}
           </tbody>
         </table>
+      </div>
 
         <Dialog open={showProductionModal} onOpenChange={setShowProductionModal}>
           <DialogContent className="max-w-[400px] bg-[#212121] border border-[#00c600]">
