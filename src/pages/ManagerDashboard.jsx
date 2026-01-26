@@ -288,14 +288,14 @@ export default function ManagerDashboard() {
       <style>{`
         .dashboard-grid {
           display: grid;
-          grid-template-columns: repeat(2, 320px);
-          gap: 30px 40px;
+          grid-template-columns: repeat(4, 220px);
+          gap: 20px 30px;
           justify-content: center;
         }
         
         .dashboard-card {
-          width: 320px;
-          height: 140px;
+          width: 220px;
+          height: 120px;
           background: #212121;
           border: 1px solid #00c600;
           border-radius: 8px;
