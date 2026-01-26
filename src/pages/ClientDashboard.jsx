@@ -269,9 +269,25 @@ export default function ClientDashboard() {
             </thead>
             <tbody>
               {vehicles.map(v => (
-                <tr key={v.id} onClick={() => navigate(createPageUrl(`VehicleProfile?vehicle_id=${v.vehicle_id}`))}>
-                  <td>{v.make}</td>
-                  <td>{v.model}</td>
+                <tr key={v.id}>
+                  <td>
+                    <a 
+                      href={createPageUrl(`VehicleProfile?vehicle_id=${v.vehicle_id}`)}
+                      onClick={(e) => { e.preventDefault(); navigate(createPageUrl(`VehicleProfile?vehicle_id=${v.vehicle_id}`)); }}
+                      className="text-[#00c600] hover:underline cursor-pointer"
+                    >
+                      {v.make}
+                    </a>
+                  </td>
+                  <td>
+                    <a 
+                      href={createPageUrl(`VehicleProfile?vehicle_id=${v.vehicle_id}`)}
+                      onClick={(e) => { e.preventDefault(); navigate(createPageUrl(`VehicleProfile?vehicle_id=${v.vehicle_id}`)); }}
+                      className="text-[#00c600] hover:underline cursor-pointer"
+                    >
+                      {v.model}
+                    </a>
+                  </td>
                   <td>{v.year}</td>
                   <td>{v.vin}</td>
                   <td>{v.vehicle_id}</td>
