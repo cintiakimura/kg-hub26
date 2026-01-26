@@ -57,8 +57,9 @@ No "um". No filler. Always please`
 
     if (!response.ok) {
       const errorText = await response.text();
-      console.error('Grok API error:', errorText);
-      return Response.json({ error: 'Grok API error' }, { status: response.status });
+      console.error('Grok API error status:', response.status);
+      console.error('Grok API error body:', errorText);
+      return Response.json({ error: `Grok API error: ${errorText}` }, { status: response.status });
     }
 
     const data = await response.json();
