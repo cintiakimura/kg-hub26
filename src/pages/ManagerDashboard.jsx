@@ -148,8 +148,51 @@ export default function ManagerDashboard() {
       setShowProductionModal(true);
     } else if (modalParam === 'client') {
       setShowAddClientModal(true);
+    } else if (modalParam === 'quote') {
+      setShowAddQuotationModal(true);
+    } else if (modalParam === 'supplier') {
+      setShowAddSupplierModal(true);
     }
   }, [location.search]);
+
+  useEffect(() => {
+    const handleFillForm = (e) => {
+      const { modal, fields, auto_save } = e.detail;
+      
+      if (modal === 'client') {
+        setNewClient(prev => ({ ...prev, ...fields }));
+        if (auto_save) {
+          setTimeout(() => {
+            saveClient();
+          }, 300);
+        }
+      } else if (modal === 'production') {
+        setNewProduction(prev => ({ ...prev, ...fields }));
+        if (auto_save) {
+          setTimeout(() => {
+            saveProduction();
+          }, 300);
+        }
+      } else if (modal === 'quote') {
+        setNewQuotation(prev => ({ ...prev, ...fields }));
+        if (auto_save) {
+          setTimeout(() => {
+            saveQuotation();
+          }, 300);
+        }
+      } else if (modal === 'supplier') {
+        setNewSupplier(prev => ({ ...prev, ...fields }));
+        if (auto_save) {
+          setTimeout(() => {
+            saveSupplier();
+          }, 300);
+        }
+      }
+    };
+
+    window.addEventListener('fillAndSaveForm', handleFillForm);
+    return () => window.removeEventListener('fillAndSaveForm', handleFillForm);
+  }, []);
 
   const loadData = async () => {
     const user = await base44.auth.me();
