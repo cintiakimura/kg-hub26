@@ -10,7 +10,6 @@ import Home from './pages/Home';
 import Manager from './pages/Manager';
 import ManagerCalendar from './pages/ManagerCalendar';
 import ManagerClients from './pages/ManagerClients';
-import ManagerDashboard from './pages/ManagerDashboard';
 import ManagerFinancials from './pages/ManagerFinancials';
 import ManagerLogin from './pages/ManagerLogin';
 import ManagerLoginLanding from './pages/ManagerLoginLanding';
@@ -27,6 +26,7 @@ import VehicleConnectorAdd from './pages/VehicleConnectorAdd';
 import ClientVehicleAddForm from './pages/ClientVehicleAddForm';
 import ClientOrganisationDetail from './pages/ClientOrganisationDetail';
 import VehicleDetail from './pages/VehicleDetail';
+import ManagerDashboard from './pages/ManagerDashboard';
 import __Layout from './Layout.jsx';
 
 
@@ -43,7 +43,6 @@ export const PAGES = {
     "Manager": Manager,
     "ManagerCalendar": ManagerCalendar,
     "ManagerClients": ManagerClients,
-    "ManagerDashboard": ManagerDashboard,
     "ManagerFinancials": ManagerFinancials,
     "ManagerLogin": ManagerLogin,
     "ManagerLoginLanding": ManagerLoginLanding,
@@ -60,6 +59,7 @@ export const PAGES = {
     "ClientVehicleAddForm": ClientVehicleAddForm,
     "ClientOrganisationDetail": ClientOrganisationDetail,
     "VehicleDetail": VehicleDetail,
+    "ManagerDashboard": ManagerDashboard,
 }
 
 export const pagesConfig = {

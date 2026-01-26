@@ -326,24 +326,60 @@ export default function ManagerDashboard() {
   return (
     <div className="bg-[#212121] min-h-screen">
       <style>{tableStyles}</style>
-      <div className="p-6">
-         <div className="flex justify-between items-center mb-6">
-          <h1 className="text-2xl text-[#00c600]">Production Control</h1>
+      <div className="p-6 max-w-7xl mx-auto">
+        <div className="flex justify-between items-start mb-8">
+          <div className="flex items-center gap-4">
+            <div className="text-4xl">📊</div>
+            <div>
+              <h1 className="text-3xl text-white mb-1">Manager Dashboard</h1>
+              <p className="text-gray-400 text-sm">Overview of all clients, companies, and fleets.</p>
+            </div>
+          </div>
+          <button 
+            onClick={async () => {
+              const email = prompt('Enter user email:');
+              if (email) {
+                await base44.users.inviteUser(email, 'user');
+                toast.success('User invited');
+              }
+            }}
+            className="bg-[#00c600] text-white px-4 py-2 rounded flex items-center gap-2 hover:opacity-80"
+          >
+            <Plus size={16} /> Invite User
+          </button>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+          {menuCards.map((card, i) => (
+            <button
+              key={i}
+              onClick={() => navigate(createPageUrl(card.page))}
+              className={`bg-[#2a2a2a] p-6 rounded-lg border-2 ${card.color} hover:bg-[#333] transition-all text-left`}
+            >
+              <div className="text-4xl mb-3">{card.icon}</div>
+              <h3 className="text-white text-lg mb-1">{card.name}</h3>
+              <p className="text-gray-400 text-sm">{card.desc}</p>
+            </button>
+          ))}
+        </div>
+
+        <div className="flex justify-between items-center mb-4">
+          <h2 className="text-xl text-[#00c600]">Production Control</h2>
           <div className="flex gap-2">
-            <Button onClick={() => setShowAddClientModal(true)} className="bg-[#00c600] text-white border border-[#00c600]">
-              <Plus size={16} className="mr-1" /> Client
+            <Button onClick={() => setShowAddClientModal(true)} size="sm" className="bg-[#00c600] text-white border border-[#00c600]">
+              <Plus size={14} className="mr-1" /> Client
             </Button>
-            <Button onClick={() => setShowAddSupplierModal(true)} className="bg-[#00c600] text-white border border-[#00c600]">
-              <Plus size={16} className="mr-1" /> Supplier
+            <Button onClick={() => setShowAddSupplierModal(true)} size="sm" className="bg-[#00c600] text-white border border-[#00c600]">
+              <Plus size={14} className="mr-1" /> Supplier
             </Button>
-            <Button onClick={() => setShowAddQuotationModal(true)} className="bg-[#00c600] text-white border border-[#00c600]">
-              <Plus size={16} className="mr-1" /> Quotation
+            <Button onClick={() => setShowAddQuotationModal(true)} size="sm" className="bg-[#00c600] text-white border border-[#00c600]">
+              <Plus size={14} className="mr-1" /> Quotation
             </Button>
-            <Button onClick={() => setShowProductionModal(true)} className="bg-[#00c600] text-white border border-[#00c600]">
-              <Plus size={16} className="mr-1" /> Production
+            <Button onClick={() => setShowProductionModal(true)} size="sm" className="bg-[#00c600] text-white border border-[#00c600]">
+              <Plus size={14} className="mr-1" /> Production
             </Button>
-            <Button onClick={() => setShowImportModal(true)} className="bg-[#00c600] text-white border border-[#00c600]">
-              <Upload size={16} className="mr-1" /> Import Supplier
+            <Button onClick={() => setShowImportModal(true)} size="sm" className="bg-[#00c600] text-white border border-[#00c600]">
+              <Upload size={14} className="mr-1" /> Import
             </Button>
             <TableExport data={pos} filename="production_control.csv" />
           </div>
