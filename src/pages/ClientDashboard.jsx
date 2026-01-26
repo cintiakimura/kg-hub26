@@ -52,11 +52,26 @@ export default function ClientDashboard() {
 
   const loadData = async () => {
     const user = await base44.auth.me();
-    const profileData = (await base44.entities.UserProfile.filter({ user_email: user.email }))[0];
+    let profileData = (await base44.entities.UserProfile.filter({ user_email: user.email }))[0];
     
     if (!profileData) {
-      navigate(createPageUrl('ClientLogin'));
-      return;
+      // New user - create profile and organization
+      const orgId = `C-${Date.now()}`;
+      await base44.entities.Organisation.create({
+        org_id: orgId,
+        org_type: 'client',
+        name: user.full_name || user.email,
+        contact_email: user.email
+      });
+      
+      profileData = await base44.entities.UserProfile.create({
+        user_email: user.email,
+        org_id: orgId,
+        role: 'client',
+        display_name: user.full_name
+      });
+      
+      toast.success('Welcome! Your account has been created.');
     }
 
     setProfile(profileData);

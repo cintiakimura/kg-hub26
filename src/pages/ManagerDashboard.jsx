@@ -142,10 +142,20 @@ export default function ManagerDashboard() {
 
   const loadData = async () => {
     const user = await base44.auth.me();
-    const profile = (await base44.entities.UserProfile.filter({ user_email: user.email }))[0];
+    let profile = (await base44.entities.UserProfile.filter({ user_email: user.email }))[0];
     
-    if (!profile || profile.role !== 'manager') {
-      navigate(createPageUrl('ManagerLogin'));
+    if (!profile) {
+      // New user - create manager profile
+      profile = await base44.entities.UserProfile.create({
+        user_email: user.email,
+        role: 'manager',
+        display_name: user.full_name
+      });
+      
+      toast.success('Welcome! Your manager account has been created.');
+    } else if (profile.role !== 'manager') {
+      toast.error('Access denied. This area is for managers only.');
+      navigate(createPageUrl('ClientLoginLanding'));
       return;
     }
     

@@ -28,11 +28,26 @@ export default function SupplierDashboard() {
 
   const loadData = async () => {
     const user = await base44.auth.me();
-    const profile = (await base44.entities.UserProfile.filter({ user_email: user.email }))[0];
+    let profile = (await base44.entities.UserProfile.filter({ user_email: user.email }))[0];
     
     if (!profile) {
-      navigate(createPageUrl('SupplierLogin'));
-      return;
+      // New user - create supplier profile and organization
+      const orgId = `SUP-${Date.now()}`;
+      await base44.entities.Organisation.create({
+        org_id: orgId,
+        org_type: 'supplier',
+        name: user.full_name || user.email,
+        contact_email: user.email
+      });
+      
+      profile = await base44.entities.UserProfile.create({
+        user_email: user.email,
+        org_id: orgId,
+        role: 'supplier',
+        display_name: user.full_name
+      });
+      
+      toast.success('Welcome! Your supplier account has been created.');
     }
 
     const orgData = (await base44.entities.Organisation.filter({ org_id: profile.org_id }))[0];
