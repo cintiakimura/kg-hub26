@@ -1,3 +1,5 @@
+import AddConnector from './pages/AddConnector';
+import AddVehicle from './pages/AddVehicle';
 import Client from './pages/Client';
 import ClientDashboard from './pages/ClientDashboard';
 import ClientLogin from './pages/ClientLogin';
@@ -28,13 +30,13 @@ import SupplierLogin from './pages/SupplierLogin';
 import SupplierLoginLanding from './pages/SupplierLoginLanding';
 import VehicleConnectorAdd from './pages/VehicleConnectorAdd';
 import VehicleDetail from './pages/VehicleDetail';
-import AddVehicle from './pages/AddVehicle';
-import AddConnector from './pages/AddConnector';
 import VehicleProfile from './pages/VehicleProfile';
 import __Layout from './Layout.jsx';
 
 
 export const PAGES = {
+    "AddConnector": AddConnector,
+    "AddVehicle": AddVehicle,
     "Client": Client,
     "ClientDashboard": ClientDashboard,
     "ClientLogin": ClientLogin,
@@ -65,8 +67,6 @@ export const PAGES = {
     "SupplierLoginLanding": SupplierLoginLanding,
     "VehicleConnectorAdd": VehicleConnectorAdd,
     "VehicleDetail": VehicleDetail,
-    "AddVehicle": AddVehicle,
-    "AddConnector": AddConnector,
     "VehicleProfile": VehicleProfile,
 }
 
