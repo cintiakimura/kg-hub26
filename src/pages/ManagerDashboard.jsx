@@ -285,31 +285,39 @@ export default function ManagerDashboard() {
 
   return (
     <div className="bg-[#212121] min-h-screen flex items-center justify-center">
+      <style>{`
+        @media (max-width: 800px) {
+          .dashboard-grid {
+            grid-template-columns: 1fr !important;
+          }
+        }
+      `}</style>
       <div className="p-6 max-w-7xl mx-auto">
         <h1 style={{ textAlign: 'left', color: 'white', fontSize: '24px', marginBottom: '40px' }}>Manager Dashboard</h1>
-        <div className="grid grid-cols-4 gap-6">
+        <div className="dashboard-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '30px' }}>
           {menuCards.map((card, i) => (
             <button
               key={i}
               onClick={card.action}
               style={{
-                width: '330px',
+                width: '100%',
                 height: '150px',
                 background: '#212121',
                 border: '1px solid #00c600',
-                borderRadius: '0',
+                borderRadius: '6px',
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
                 justifyContent: 'center',
                 cursor: 'pointer',
                 transition: 'transform 0.2s',
+                boxShadow: 'none',
               }}
               onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.02)'}
               onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}
             >
-              <h3 style={{ color: 'white', fontSize: '16px', fontWeight: '400', margin: '0 0 8px 0' }}>{card.name}</h3>
-              <p style={{ color: '#888', fontSize: '12px', fontWeight: '400', margin: '0' }}>{card.desc}</p>
+              <h3 style={{ color: 'white', fontSize: '18px', fontWeight: '400', margin: '0 0 8px 0' }}>{card.name}</h3>
+              <p style={{ color: '#888', fontSize: '14px', fontWeight: '400', margin: '0' }}>{card.desc}</p>
             </button>
           ))}
         </div>
