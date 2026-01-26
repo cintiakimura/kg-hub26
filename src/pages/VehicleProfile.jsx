@@ -71,9 +71,9 @@ export default function VehicleProfile() {
       </div>
 
       <div className="px-6 py-6" style={{ width: '100%', maxWidth: '1400px' }}>
-        <div className="grid grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 gap-6">
           {/* Vehicle Info */}
-          <div className="col-span-1">
+          <div>
             <div className="bg-[#2a2a2a] rounded-lg p-6 border border-[#00c600] mb-6">
               <div className="grid grid-cols-2 gap-6">
                 <div>
@@ -188,118 +188,99 @@ export default function VehicleProfile() {
               </div>
             </div>
 
-            {/* Photos Section */}
+          {/* Add New Connector Section */}
+          <div>
             <div className="bg-[#2a2a2a] rounded-lg p-6 border border-[#00c600]">
-              <div className="flex items-center justify-between mb-4">
-                <div className="flex items-center gap-2">
-                  <Image size={20} color="#00c600" />
-                  <h2 className="text-white text-lg">Photos</h2>
+              <h2 className="text-white text-sm mb-6">ADD NEW CONNECTOR</h2>
+              
+              <div className="grid grid-cols-2 gap-6 mb-6">
+                <div>
+                  <label className="text-white text-xs mb-2 block">CALCULATOR SYSTEM</label>
+                  <input
+                    type="text"
+                    placeholder="e.g. ABS"
+                    className="w-full p-3 bg-[#1a1a1a] border border-[#00c600] rounded text-white text-sm"
+                  />
                 </div>
-                <label className="cursor-pointer">
-                  <input type="file" className="hidden" accept="image/*" onChange={handlePhotoUpload} />
-                  <Plus size={20} color="#00c600" />
-                </label>
+                
+                <div>
+                  <label className="text-white text-xs mb-2 block">CONNECTOR COLOR</label>
+                  <input
+                    type="text"
+                    placeholder="e.g. Black"
+                    className="w-full p-3 bg-[#1a1a1a] border border-[#00c600] rounded text-white text-sm"
+                  />
+                </div>
               </div>
-              <div className="grid grid-cols-2 gap-3">
-                {vehicle.photos?.map((photo, idx) => (
-                  <div key={idx} className="aspect-square rounded-lg overflow-hidden border border-[#00c600]">
-                    <img src={photo} alt="" className="w-full h-full object-cover" />
+              
+              <div className="mb-6">
+                <label className="text-white text-xs mb-2 block">PIN QUANTITY</label>
+                <input
+                  type="text"
+                  placeholder="e.g. 16"
+                  className="w-full p-3 bg-[#1a1a1a] border border-[#00c600] rounded text-white text-sm"
+                  style={{ maxWidth: '50%' }}
+                />
+              </div>
+              
+              <div className="grid grid-cols-2 gap-6 mb-6">
+                <div>
+                  <label className="text-white text-xs mb-2 block">ELECTRICAL SCHEME</label>
+                  <p className="text-gray-400 text-xs mb-2">Upload Scheme</p>
+                  <div className="border-2 border-dashed border-[#00c600] rounded-lg p-12 text-center bg-[#1a1a1a]">
+                    <Upload size={32} className="mx-auto mb-2 text-gray-500" />
+                    <p className="text-gray-400 text-sm">Click to upload</p>
                   </div>
-                ))}
-                {(!vehicle.photos || vehicle.photos.length === 0) && (
-                  <div className="col-span-2 text-center py-8 text-gray-500 text-sm">
-                    No photos uploaded
+                </div>
+                
+                <div>
+                  <label className="text-white text-xs mb-2 block">LIST OF FUNCTIONS</label>
+                  <p className="text-gray-400 text-xs mb-2">Upload Functions List</p>
+                  <div className="border-2 border-dashed border-[#00c600] rounded-lg p-12 text-center bg-[#1a1a1a]">
+                    <Upload size={32} className="mx-auto mb-2 text-gray-500" />
+                    <p className="text-gray-400 text-sm">Click to upload</p>
                   </div>
-                )}
-              </div>
-            </div>
-          </div>
-
-          {/* Connectors Section */}
-          <div className="col-span-2">
-            <div className="bg-[#2a2a2a] rounded-lg p-6 border border-[#00c600]">
-              <div className="flex items-center justify-between mb-6">
-                <div className="flex items-center gap-2">
-                  <Plug size={20} color="#00c600" />
-                  <h2 className="text-white text-lg">Connectors</h2>
                 </div>
-                <button
-                  onClick={() => navigate(createPageUrl(`AddConnector?vehicle_id=${vehicle.vehicle_id}`))}
-                  className="px-4 py-2 bg-[#00c600] text-black rounded hover:opacity-80 text-sm"
-                >
-                  + Add Connector
-                </button>
               </div>
-
-              {connectors.length === 0 ? (
-                <div className="text-center py-12 text-gray-500">
-                  <Plug size={48} className="mx-auto mb-4 opacity-30" />
-                  <p>No connectors added yet</p>
-                </div>
-              ) : (
-                <div className="grid grid-cols-3 gap-4">
-                  {connectors.map((conn) => (
-                    <div
-                      key={conn.id}
-                      className="bg-[#1a1a1a] rounded-lg p-4 border border-[#00c600] hover:bg-[#252525] transition-all cursor-pointer"
-                    >
-                      <div className="flex items-start justify-between mb-3">
-                        <span className="text-[#00c600] text-xs font-mono">{conn.connector_id}</span>
-                      </div>
-
-                      {conn.photos?.length > 0 && (
-                        <div className="grid grid-cols-3 gap-1 mb-3">
-                          {conn.photos.slice(0, 3).map((photo, idx) => (
-                            <div key={idx} className="aspect-square rounded overflow-hidden border border-[#00c600]">
-                              <img src={photo} alt="" className="w-full h-full object-cover" />
-                            </div>
-                          ))}
-                        </div>
-                      )}
-
-                      <p className="text-white text-sm mb-2">{conn.system}</p>
-                      <div className="flex gap-2 text-xs text-gray-400">
-                        {conn.color && <span>{conn.color}</span>}
-                        {conn.pin_count && <span>• {conn.pin_count} pins</span>}
-                      </div>
-
-                      {conn.scheme_url && (
-                        <div className="mt-3 pt-3 border-t border-[#00c600]">
-                          <a
-                            href={conn.scheme_url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-xs text-[#00c600] hover:underline flex items-center gap-1"
-                          >
-                            <FileText size={12} />
-                            View Scheme
-                          </a>
-                        </div>
-                      )}
-
-                      {conn.functions && (
-                        <p className="text-xs text-gray-500 mt-2 line-clamp-2">{conn.functions}</p>
-                      )}
+              
+              <div className="mb-6">
+                <h3 className="text-white text-xs mb-4">CONNECTOR IMAGES</h3>
+                <div className="grid grid-cols-3 gap-6">
+                  <div>
+                    <label className="text-gray-400 text-xs mb-2 block">FRONT VIEW</label>
+                    <p className="text-white text-sm mb-2">Front View</p>
+                    <div className="border-2 border-dashed border-[#00c600] rounded-lg p-12 text-center bg-[#1a1a1a]">
+                      <Upload size={24} className="mx-auto mb-2 text-gray-500" />
+                      <p className="text-gray-400 text-xs">Click to upload</p>
                     </div>
-                  ))}
+                  </div>
+                  
+                  <div>
+                    <label className="text-gray-400 text-xs mb-2 block">VIEW (LEVER)</label>
+                    <p className="text-white text-sm mb-2">View (Lever)</p>
+                    <div className="border-2 border-dashed border-[#00c600] rounded-lg p-12 text-center bg-[#1a1a1a]">
+                      <Upload size={24} className="mx-auto mb-2 text-gray-500" />
+                      <p className="text-gray-400 text-xs">Click to upload</p>
+                    </div>
+                  </div>
+                  
+                  <div>
+                    <label className="text-gray-400 text-xs mb-2 block">ECU FRONT (PART NUMBER)</label>
+                    <p className="text-white text-sm mb-2">Add ECU Image</p>
+                    <div className="border-2 border-dashed border-[#00c600] rounded-lg p-12 text-center bg-[#1a1a1a]">
+                      <Upload size={24} className="mx-auto mb-2 text-gray-500" />
+                      <p className="text-gray-400 text-xs">Click to upload</p>
+                    </div>
+                  </div>
                 </div>
-              )}
-            </div>
-
-            {/* Documents Section */}
-            <div className="bg-[#2a2a2a] rounded-lg p-6 border border-[#00c600] mt-6">
-              <div className="flex items-center justify-between mb-4">
-                <div className="flex items-center gap-2">
-                  <FileText size={20} color="#00c600" />
-                  <h2 className="text-white text-lg">Documents</h2>
-                </div>
-                <label className="cursor-pointer">
-                  <input type="file" className="hidden" />
-                  <Plus size={20} color="#00c600" />
-                </label>
               </div>
-              <div className="text-center py-8 text-gray-500 text-sm">
-                No documents uploaded
+              
+              <div className="flex justify-end">
+                <button
+                  className="px-8 py-3 bg-[#00c600] text-black rounded hover:opacity-80 text-sm"
+                >
+                  + SAVE CONNECTOR
+                </button>
               </div>
             </div>
           </div>
