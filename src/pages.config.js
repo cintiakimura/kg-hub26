@@ -26,6 +26,7 @@ import SupplierLoginLanding from './pages/SupplierLoginLanding';
 import VehicleConnectorAdd from './pages/VehicleConnectorAdd';
 import ClientVehicleAddForm from './pages/ClientVehicleAddForm';
 import ClientOrganisationDetail from './pages/ClientOrganisationDetail';
+import VehicleDetail from './pages/VehicleDetail';
 import __Layout from './Layout.jsx';
 
 
@@ -58,6 +59,7 @@ export const PAGES = {
     "VehicleConnectorAdd": VehicleConnectorAdd,
     "ClientVehicleAddForm": ClientVehicleAddForm,
     "ClientOrganisationDetail": ClientOrganisationDetail,
+    "VehicleDetail": VehicleDetail,
 }
 
 export const pagesConfig = {
