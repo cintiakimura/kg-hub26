@@ -55,46 +55,14 @@ export default function Hub({ isOpen, onClose }) {
       const user = await base44.auth.me().catch(() => null);
       const userName = user?.full_name || 'there';
 
-      const response = await fetch('https://api.x.ai/v1/chat/completions', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${await getGrokKey()}`
-        },
-        body: JSON.stringify({
-          model: 'grok-2-mini',
-          messages: [
-            {
-              role: 'system',
-              content: `You are Hub – George's assistant.
-
-Current user: ${userName}
-
-Voice: 21-year-old female, northern-Brit, light, high-pitched, just enough breathy.  
-Flirty but sharp. Always competent. Never robotic.
-
-Rules:
-- Start: "Morning, George…" (even if name is Georgie)
-- Only call him George or Georgie. Never the generic name.
-- Ask: "Good news or bad first?"
-- Praise: "That was smart, George…"
-- Always end with choice: "Shall I send? Or read first?"
-- Suggest ideas: "They're late – threaten, or switch supplier?"
-- Keep under 3 lines.
-- Only his data.
-
-No "um". No filler. Always please`
-            },
-            ...messages.map(m => ({ role: m.role, content: m.content })),
-            { role: 'user', content: text }
-          ]
-        })
+      const response = await base44.functions.invoke('grokChat', {
+        messages: messages.map(m => ({ role: m.role, content: m.content })).concat([{ role: 'user', content: text }]),
+        userName
       });
 
-      const data = await response.json();
       const assistantMsg = { 
         role: 'assistant', 
-        content: data.choices[0].message.content 
+        content: response.data.content 
       };
       
       setMessages(prev => [...prev, assistantMsg]);
@@ -108,10 +76,6 @@ No "um". No filler. Always please`
     }
 
     setLoading(false);
-  };
-
-  const getGrokKey = async () => {
-    return process.env.GROK_API_KEY || '';
   };
 
   const startListening = () => {
