@@ -251,10 +251,10 @@ export default function ClientDashboard() {
             <div className="flex justify-between items-center mb-2">
               <div>Your Vehicles</div>
               <button 
-                onClick={() => setShowAddVehicleModal(true)}
+                onClick={() => navigate(createPageUrl('AddVehicle'))}
                 className="bg-[#00c600] text-black px-3 py-1 rounded text-sm hover:opacity-80"
               >
-                + Add Vehicle
+                + Create New Vehicle
               </button>
             </div>
             <table>
