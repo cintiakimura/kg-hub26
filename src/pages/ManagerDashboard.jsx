@@ -272,34 +272,43 @@ export default function ManagerDashboard() {
   const columns = ['ordered', 'in_production', 'dispatched', 'in_transit', 'delayed', 'delivered'];
 
   const menuCards = [
-    { icon: '⚙️', name: 'New Production', desc: 'Start new build', action: () => setShowProductionModal(true) },
-    { icon: '👥', name: 'New Client', desc: 'Add customer', action: () => setShowAddClientModal(true) },
-    { icon: '📝', name: 'New Quotation', desc: 'Send quote', action: () => setShowAddQuotationModal(true) },
-    { icon: '🏭', name: 'New Supplier', desc: 'Add supplier', action: () => setShowAddSupplierModal(true) },
-    { icon: '🛒', name: 'New Purchase', desc: 'Order parts', action: () => navigate(createPageUrl('ManagerPurchases')) },
-    { icon: '🚛', name: 'New Logistics', desc: 'Ship or receive', action: () => navigate(createPageUrl('ManagerLogistics')) },
-    { icon: '💼', name: 'Financials', desc: 'Invoices, payments', action: () => navigate(createPageUrl('ManagerFinancials')) },
+    { name: 'New Production', desc: 'Order a new build', action: () => setShowProductionModal(true) },
+    { name: 'New Client', desc: 'Add customer', action: () => setShowAddClientModal(true) },
+    { name: 'New Quotation', desc: 'Send quote', action: () => setShowAddQuotationModal(true) },
+    { name: 'New Supplier', desc: 'Add supplier', action: () => setShowAddSupplierModal(true) },
+    { name: 'New Purchase', desc: 'Place order', action: () => navigate(createPageUrl('ManagerPurchases')) },
+    { name: 'New Logistics', desc: 'Ship or receive', action: () => navigate(createPageUrl('ManagerLogistics')) },
+    { name: 'Financials', desc: 'View payments', action: () => navigate(createPageUrl('ManagerFinancials')) },
   ];
 
   return (
     <div className="bg-[#212121] min-h-screen flex items-center justify-center">
-      <div className="p-6 max-w-6xl mx-auto">
-        <div className="grid grid-cols-4 gap-6">
+      <div className="p-6 max-w-7xl mx-auto">
+        <h1 style={{ textAlign: 'center', color: 'white', fontSize: '24px', marginBottom: '40px' }}>Manager Dashboard</h1>
+        <div className="grid grid-cols-2 gap-6">
           {menuCards.map((card, i) => (
-            <div
+            <button
               key={i}
-              className="bg-[#2a2a2a] bg-opacity-50 backdrop-blur-sm p-8 rounded-lg border-2 border-[#00c600] hover:bg-[#333] transition-all flex flex-col items-center text-center"
+              onClick={card.action}
+              style={{
+                width: '330px',
+                height: '150px',
+                background: '#212121',
+                border: '1px solid #00c600',
+                borderRadius: '0',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+                cursor: 'pointer',
+                transition: 'transform 0.2s',
+              }}
+              onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.02)'}
+              onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}
             >
-              <div className="text-6xl mb-4">{card.icon}</div>
-              <h3 className="text-white text-xl mb-2">{card.name}</h3>
-              <p className="text-gray-400 text-sm mb-6">{card.desc}</p>
-              <button
-                onClick={card.action}
-                className="bg-[#00c600] text-black px-4 py-2 rounded hover:opacity-80 font-medium flex items-center gap-1"
-              >
-                <Plus size={16} /> New
-              </button>
-            </div>
+              <h3 style={{ color: 'white', fontSize: '16px', fontWeight: '400', margin: '0 0 8px 0' }}>{card.name}</h3>
+              <p style={{ color: '#888', fontSize: '12px', fontWeight: '400', margin: '0' }}>{card.desc}</p>
+            </button>
           ))}
         </div>
 
