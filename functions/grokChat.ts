@@ -51,7 +51,18 @@ No "um". No filler. Always please`
       })
     });
 
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error('Grok API error:', errorText);
+      return Response.json({ error: 'Grok API error' }, { status: response.status });
+    }
+
     const data = await response.json();
+    
+    if (!data.choices || !data.choices[0] || !data.choices[0].message) {
+      return Response.json({ error: 'Invalid response from Grok API' }, { status: 500 });
+    }
+    
     return Response.json({ content: data.choices[0].message.content });
   } catch (error) {
     return Response.json({ error: error.message }, { status: 500 });
