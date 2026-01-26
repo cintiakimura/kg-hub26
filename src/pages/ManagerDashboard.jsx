@@ -345,7 +345,6 @@ export default function ManagerDashboard() {
       `}</style>
       <div className="bg-[#212121] flex items-center justify-between px-6" style={{ height: '120px', width: '100%' }}>
         <h1 style={{ color: 'white', fontSize: '32px', fontWeight: '400', marginLeft: '20px' }}>Manager Dashboard</h1>
-        <TableExport data={pos} filename="dashboard.csv" />
       </div>
       <div className="px-6 py-6" style={{ width: '100%' }}>
         <div className="dashboard-grid">
