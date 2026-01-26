@@ -269,7 +269,7 @@ export default function ClientDashboard() {
             </thead>
             <tbody>
               {vehicles.map(v => (
-                <tr key={v.id} onClick={() => navigate(createPageUrl(`ClientVehicleDetail?id=${v.id}`))}>
+                <tr key={v.id} onClick={() => navigate(createPageUrl(`VehicleProfile?vehicle_id=${v.vehicle_id}`))}>
                   <td>{v.make}</td>
                   <td>{v.model}</td>
                   <td>{v.year}</td>
