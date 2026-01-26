@@ -9,12 +9,16 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const { messages, userName } = await req.json();
+    const payload = await req.json();
+    const messages = payload.messages || [];
+    const userName = payload.userName || 'there';
     
     const grokApiKey = Deno.env.get('GROK_API_KEY');
     if (!grokApiKey) {
       return Response.json({ error: 'GROK_API_KEY not configured' }, { status: 500 });
     }
+
+    console.log('Calling Grok with', messages.length, 'messages');
 
     const response = await fetch('https://api.x.ai/v1/chat/completions', {
       method: 'POST',
