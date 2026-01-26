@@ -7,7 +7,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/u
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
-import { Plus, Upload } from 'lucide-react';
+import { Plus, Upload, Edit2 } from 'lucide-react';
 
 const tableStyles = `
   .excel-table {
@@ -73,9 +73,10 @@ export default function ProductionControl() {
   const [clients, setClients] = useState({});
   const [suppliers, setSuppliers] = useState([]);
   const [quotes, setQuotes] = useState([]);
-  const [showProductionModal, setShowProductionModal] = useState(false);
   const [showImportModal, setShowImportModal] = useState(false);
   const [userProfile, setUserProfile] = useState(null);
+  const [editingId, setEditingId] = useState(null);
+  const [editingData, setEditingData] = useState(null);
   const [newProduction, setNewProduction] = useState({
     order_date: '',
     expected_delivery: '',
@@ -121,6 +122,37 @@ export default function ProductionControl() {
     setLoading(false);
   };
 
+  const startEdit = (po) => {
+    setEditingId(po.id);
+    setEditingData({
+      order_date: po.order_date || '',
+      expected_delivery: po.eta || '',
+      client: po.client_org_id || '',
+      product: po.items?.[0]?.description || '',
+      supplier: po.supplier_org_id || '',
+      cost: po.total_cost || '',
+      status: po.status || 'ordered',
+      tracking: po.tracking_number_inbound || ''
+    });
+  };
+
+  const saveEdit = async () => {
+    await base44.entities.PurchaseOrder.update(editingId, {
+      order_date: editingData.order_date,
+      eta: editingData.expected_delivery,
+      client_org_id: editingData.client,
+      supplier_org_id: editingData.supplier,
+      status: editingData.status,
+      items: [{ description: editingData.product, quantity: 1, unit_price: editingData.cost }],
+      total_cost: parseFloat(editingData.cost) || 0,
+      tracking_number_inbound: editingData.tracking
+    });
+    toast.success('Saved');
+    setEditingId(null);
+    setEditingData(null);
+    loadData();
+  };
+
   const saveProduction = async () => {
     await base44.entities.PurchaseOrder.create({
       po_id: `PO-${Date.now()}`,
@@ -135,7 +167,7 @@ export default function ProductionControl() {
     });
     toast.success('Saved');
     setNewProduction({ order_date: '', expected_delivery: '', client: '', product: '', supplier: '', cost: '', status: 'Ordered', tracking: '' });
-    setShowProductionModal(false);
+    setEditingId(null);
     loadData();
   };
 
@@ -166,13 +198,9 @@ export default function ProductionControl() {
       <div className="bg-[#212121] flex items-center justify-between px-6" style={{ height: '120px', width: '100%' }}>
         <h1 style={{ color: 'white', fontSize: '32px', fontWeight: '400', marginLeft: '20px' }}>Production Control</h1>
         <div className="flex gap-2">
-          <Button onClick={() => setShowProductionModal(true)} className="bg-[#00c600] text-black border border-[#00c600]">
-            Production
-          </Button>
           <Button onClick={() => setShowImportModal(true)} className="bg-[#00c600] text-black border border-[#00c600]">
             Import from Supplier
           </Button>
-          <TableExport data={pos} filename="production_control.csv" />
         </div>
       </div>
       <div className="px-6 py-6" style={{ width: '100%' }}>
@@ -187,51 +215,59 @@ export default function ProductionControl() {
               <th>Cost</th>
               <th>Status</th>
               <th>Tracking</th>
+              <th style={{ width: '50px' }}>Action</th>
             </tr>
           </thead>
           <tbody>
-            {pos.map(po => (
-              <tr key={po.id}>
-                <td>{po.order_date || '-'}</td>
-                <td>{po.eta || '-'}</td>
-                <td>{clients[po.client_org_id] || '-'}</td>
-                <td>{po.items?.[0]?.description || '-'}</td>
-                <td>{po.supplier_org_id || '-'}</td>
-                <td>${po.total_cost || 0}</td>
-                <td>{po.status || '-'}</td>
-                <td>{po.tracking_number_inbound || '-'}</td>
+            {editingId === 'new' && (
+              <tr style={{ background: '#2a2a2a' }}>
+                <td><input type="date" value={newProduction.order_date} onChange={(e) => setNewProduction({ ...newProduction, order_date: e.target.value })} style={{ width: '100%', background: '#1e1e1e', border: '1px solid #00c600', color: 'white', padding: '4px' }} /></td>
+                <td><input type="date" value={newProduction.expected_delivery} onChange={(e) => setNewProduction({ ...newProduction, expected_delivery: e.target.value })} style={{ width: '100%', background: '#1e1e1e', border: '1px solid #00c600', color: 'white', padding: '4px' }} /></td>
+                <td><input type="text" placeholder="Client" value={newProduction.client} onChange={(e) => setNewProduction({ ...newProduction, client: e.target.value })} style={{ width: '100%', background: '#1e1e1e', border: '1px solid #00c600', color: 'white', padding: '4px' }} /></td>
+                <td><input type="text" placeholder="Product" value={newProduction.product} onChange={(e) => setNewProduction({ ...newProduction, product: e.target.value })} style={{ width: '100%', background: '#1e1e1e', border: '1px solid #00c600', color: 'white', padding: '4px' }} /></td>
+                <td><input type="text" placeholder="Supplier" value={newProduction.supplier} onChange={(e) => setNewProduction({ ...newProduction, supplier: e.target.value })} style={{ width: '100%', background: '#1e1e1e', border: '1px solid #00c600', color: 'white', padding: '4px' }} /></td>
+                <td><input type="number" placeholder="Cost" value={newProduction.cost} onChange={(e) => setNewProduction({ ...newProduction, cost: e.target.value })} style={{ width: '100%', background: '#1e1e1e', border: '1px solid #00c600', color: 'white', padding: '4px' }} /></td>
+                <td><select value={newProduction.status} onChange={(e) => setNewProduction({ ...newProduction, status: e.target.value })} style={{ width: '100%', background: '#1e1e1e', border: '1px solid #00c600', color: 'white', padding: '4px' }}><option value="Ordered">Ordered</option><option value="In Production">In Production</option><option value="Dispatched">Dispatched</option><option value="Delayed">Delayed</option><option value="Delivered">Delivered</option></select></td>
+                <td><input type="text" placeholder="Tracking" value={newProduction.tracking} onChange={(e) => setNewProduction({ ...newProduction, tracking: e.target.value })} style={{ width: '100%', background: '#1e1e1e', border: '1px solid #00c600', color: 'white', padding: '4px' }} /></td>
+                <td><button onClick={saveProduction} style={{ background: '#00c600', color: 'black', border: 'none', padding: '4px 8px', cursor: 'pointer', fontSize: '12px' }}>Save</button></td>
               </tr>
+            )}
+            {pos.map(po => (
+              editingId === po.id ? (
+                <tr key={po.id} style={{ background: '#2a2a2a' }}>
+                  <td><input type="date" value={editingData.order_date} onChange={(e) => setEditingData({ ...editingData, order_date: e.target.value })} style={{ width: '100%', background: '#1e1e1e', border: '1px solid #00c600', color: 'white', padding: '4px' }} /></td>
+                  <td><input type="date" value={editingData.expected_delivery} onChange={(e) => setEditingData({ ...editingData, expected_delivery: e.target.value })} style={{ width: '100%', background: '#1e1e1e', border: '1px solid #00c600', color: 'white', padding: '4px' }} /></td>
+                  <td><input type="text" value={editingData.client} onChange={(e) => setEditingData({ ...editingData, client: e.target.value })} style={{ width: '100%', background: '#1e1e1e', border: '1px solid #00c600', color: 'white', padding: '4px' }} /></td>
+                  <td><input type="text" value={editingData.product} onChange={(e) => setEditingData({ ...editingData, product: e.target.value })} style={{ width: '100%', background: '#1e1e1e', border: '1px solid #00c600', color: 'white', padding: '4px' }} /></td>
+                  <td><input type="text" value={editingData.supplier} onChange={(e) => setEditingData({ ...editingData, supplier: e.target.value })} style={{ width: '100%', background: '#1e1e1e', border: '1px solid #00c600', color: 'white', padding: '4px' }} /></td>
+                  <td><input type="number" value={editingData.cost} onChange={(e) => setEditingData({ ...editingData, cost: e.target.value })} style={{ width: '100%', background: '#1e1e1e', border: '1px solid #00c600', color: 'white', padding: '4px' }} /></td>
+                  <td><select value={editingData.status} onChange={(e) => setEditingData({ ...editingData, status: e.target.value })} style={{ width: '100%', background: '#1e1e1e', border: '1px solid #00c600', color: 'white', padding: '4px' }}><option value="ordered">Ordered</option><option value="in_production">In Production</option><option value="dispatched">Dispatched</option><option value="delayed">Delayed</option><option value="delivered">Delivered</option></select></td>
+                  <td><input type="text" value={editingData.tracking} onChange={(e) => setEditingData({ ...editingData, tracking: e.target.value })} style={{ width: '100%', background: '#1e1e1e', border: '1px solid #00c600', color: 'white', padding: '4px' }} /></td>
+                  <td><button onClick={saveEdit} style={{ background: '#00c600', color: 'black', border: 'none', padding: '4px 8px', cursor: 'pointer', fontSize: '12px' }}>Save</button></td>
+                </tr>
+              ) : (
+                <tr key={po.id}>
+                  <td>{po.order_date || '-'}</td>
+                  <td>{po.eta || '-'}</td>
+                  <td>{clients[po.client_org_id] || '-'}</td>
+                  <td>{po.items?.[0]?.description || '-'}</td>
+                  <td>{po.supplier_org_id || '-'}</td>
+                  <td>${po.total_cost || 0}</td>
+                  <td>{po.status || '-'}</td>
+                  <td>{po.tracking_number_inbound || '-'}</td>
+                  <td><button onClick={() => startEdit(po)} style={{ background: 'transparent', border: 'none', color: '#00c600', cursor: 'pointer', padding: '0' }}><Edit2 size={16} /></button></td>
+                </tr>
+              )
             ))}
+            {editingId !== 'new' && (
+              <tr style={{ background: '#1e1e1e', cursor: 'pointer' }} onClick={() => setEditingId('new')}>
+                <td colSpan="9" style={{ textAlign: 'center', color: '#00c600', padding: '16px', fontWeight: 'bold' }}>+ Add New Production</td>
+              </tr>
+            )}
           </tbody>
         </table>
 
-        <Dialog open={showProductionModal} onOpenChange={setShowProductionModal}>
-          <DialogContent className="max-w-[400px] bg-[#212121] border border-[#00c600]">
-            <DialogHeader>
-              <DialogTitle className="text-white">Production</DialogTitle>
-            </DialogHeader>
-            <div className="space-y-3 max-h-96 overflow-y-auto">
-              <Input type="date" placeholder="Order Date" value={newProduction.order_date} onChange={(e) => setNewProduction({ ...newProduction, order_date: e.target.value })} className="bg-[#2a2a2a] text-white border-[#00c600]" />
-              <Input type="date" placeholder="Expected Delivery" value={newProduction.expected_delivery} onChange={(e) => setNewProduction({ ...newProduction, expected_delivery: e.target.value })} className="bg-[#2a2a2a] text-white border-[#00c600]" />
-              <Input type="text" placeholder="Client" value={newProduction.client} onChange={(e) => setNewProduction({ ...newProduction, client: e.target.value })} className="bg-[#2a2a2a] text-white border-[#00c600]" />
-              <Input type="text" placeholder="Product" value={newProduction.product} onChange={(e) => setNewProduction({ ...newProduction, product: e.target.value })} className="bg-[#2a2a2a] text-white border-[#00c600]" />
-              <Input type="text" placeholder="Supplier" value={newProduction.supplier} onChange={(e) => setNewProduction({ ...newProduction, supplier: e.target.value })} className="bg-[#2a2a2a] text-white border-[#00c600]" />
-              <Input type="number" placeholder="Cost" value={newProduction.cost} onChange={(e) => setNewProduction({ ...newProduction, cost: e.target.value })} className="bg-[#2a2a2a] text-white border-[#00c600]" />
-              <select value={newProduction.status} onChange={(e) => setNewProduction({ ...newProduction, status: e.target.value })} className="w-full p-2 bg-[#2a2a2a] text-white border border-[#00c600] rounded text-sm">
-                <option value="Ordered">Ordered</option>
-                <option value="In Production">In Production</option>
-                <option value="Dispatched">Dispatched</option>
-                <option value="Delayed">Delayed</option>
-                <option value="Delivered">Delivered</option>
-              </select>
-              <Input type="text" placeholder="Tracking" value={newProduction.tracking} onChange={(e) => setNewProduction({ ...newProduction, tracking: e.target.value })} className="bg-[#2a2a2a] text-white border-[#00c600]" />
-              <div className="flex gap-2 pt-2 border-t border-[#00c600]">
-                <Button onClick={() => setShowProductionModal(false)} variant="outline" className="flex-1 border-[#00c600] text-gray-400">Cancel</Button>
-                <Button onClick={saveProduction} className="flex-1 bg-[#00c600] text-black">Save</Button>
-              </div>
-            </div>
-          </DialogContent>
-        </Dialog>
+
 
         <Dialog open={showImportModal} onOpenChange={setShowImportModal}>
           <DialogContent className="max-w-md bg-[#212121] border border-[#00c600]">
