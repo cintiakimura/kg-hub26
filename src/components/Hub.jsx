@@ -212,17 +212,15 @@ No "um". No filler. Always please`
           </button>
         </div>
 
-        <audio 
-          key={audioUrl}
-          src={audioUrl}
-          autoPlay
-          controls
-          className="fixed bottom-4 right-4 z-50 h-12 rounded-lg"
-          style={{
-            backgroundColor: '#1a1a1a',
-            border: '1px solid #00c600'
-          }}
-        />
+        {audioUrl && (
+          <audio 
+            key={audioUrl}
+            src={audioUrl}
+            autoPlay
+            ref={audioRef}
+            style={{ display: 'none' }}
+          />
+        )}
       </div>
     </div>
   );
