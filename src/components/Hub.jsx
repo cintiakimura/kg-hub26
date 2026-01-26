@@ -200,7 +200,7 @@ No "um". No filler. Always please`
             onChange={(e) => setInput(e.target.value)}
             onKeyPress={(e) => e.key === 'Enter' && sendMessage(input)}
             placeholder="Ask Hub anything..."
-            className="flex-1"
+            className="flex-1 bg-[#2a2a2a] text-white border-[#00c600]"
             style={{ borderRadius: '6px' }}
           />
           <button
