@@ -81,9 +81,13 @@ export default function Layout({ children, currentPageName }) {
     return [];
   };
 
-  const handleProfileClick = () => {
+  const handleLogoClick = () => {
     if (userRole === 'manager') {
-      navigate(createPageUrl('ManagerProfile'));
+      navigate(createPageUrl('ManagerDashboard'));
+    } else if (userRole === 'client') {
+      navigate(createPageUrl('ClientDashboard'));
+    } else if (userRole === 'supplier') {
+      navigate(createPageUrl('SupplierDashboard'));
     }
   };
 
@@ -106,7 +110,7 @@ export default function Layout({ children, currentPageName }) {
             src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/697651f65fc49ec896171492/e2c435b98_KG_primary_logo_green.png"
             alt="KG"
             className="w-10 h-10 object-contain cursor-pointer"
-            onClick={handleProfileClick}
+            onClick={handleLogoClick}
           />
 
           {navItems.map((item) => {
