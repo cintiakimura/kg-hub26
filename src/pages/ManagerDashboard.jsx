@@ -284,17 +284,17 @@ export default function ManagerDashboard() {
   ];
 
   return (
-    <div className="bg-[#212121] min-h-screen">
+    <div className="bg-[#212121] min-h-screen ml-16">
       <style>{`
         .dashboard-grid {
           display: grid;
-          grid-template-columns: repeat(4, 220px);
+          grid-template-columns: repeat(4, 1fr);
           gap: 20px 30px;
-          justify-content: center;
+          width: 100%;
         }
         
         .dashboard-card {
-          width: 220px;
+          width: 100%;
           height: 120px;
           background: #212121;
           border: 1px solid #00c600;
@@ -318,9 +318,6 @@ export default function ManagerDashboard() {
           .dashboard-grid {
             grid-template-columns: 1fr;
           }
-          .dashboard-card {
-            width: 100%;
-          }
         }
         
         @media print {
@@ -336,13 +333,11 @@ export default function ManagerDashboard() {
           }
         }
       `}</style>
-      <div className="p-6 ml-16">
-        <div className="flex justify-between items-center mb-8">
-          <h1 style={{ color: 'white', fontSize: '24px', fontWeight: '400' }}>Manager Dashboard</h1>
-          <div style={{ display: 'flex', gap: '8px' }}>
-            <TableExport data={pos} filename="dashboard.csv" />
-          </div>
-        </div>
+      <div className="bg-[#212121] flex items-center justify-between px-6" style={{ height: '120px', width: '100%' }}>
+        <h1 style={{ color: 'white', fontSize: '32px', fontWeight: '400', marginLeft: '20px' }}>Manager Dashboard</h1>
+        <TableExport data={pos} filename="dashboard.csv" />
+      </div>
+      <div className="px-6 py-6" style={{ width: '100%' }}>
         <div className="dashboard-grid">
           {menuCards.map((card, i) => {
             const Icon = card.icon;

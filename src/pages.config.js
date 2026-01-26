@@ -21,13 +21,13 @@ import ManagerProfile from './pages/ManagerProfile';
 import ManagerPurchases from './pages/ManagerPurchases';
 import ManagerSalesQuotes from './pages/ManagerSalesQuotes';
 import ManagerSupplierQuotes from './pages/ManagerSupplierQuotes';
+import ProductionControl from './pages/ProductionControl';
 import Supplier from './pages/Supplier';
 import SupplierDashboard from './pages/SupplierDashboard';
 import SupplierLogin from './pages/SupplierLogin';
 import SupplierLoginLanding from './pages/SupplierLoginLanding';
 import VehicleConnectorAdd from './pages/VehicleConnectorAdd';
 import VehicleDetail from './pages/VehicleDetail';
-import ProductionControl from './pages/ProductionControl';
 import __Layout from './Layout.jsx';
 
 
@@ -55,13 +55,13 @@ export const PAGES = {
     "ManagerPurchases": ManagerPurchases,
     "ManagerSalesQuotes": ManagerSalesQuotes,
     "ManagerSupplierQuotes": ManagerSupplierQuotes,
+    "ProductionControl": ProductionControl,
     "Supplier": Supplier,
     "SupplierDashboard": SupplierDashboard,
     "SupplierLogin": SupplierLogin,
     "SupplierLoginLanding": SupplierLoginLanding,
     "VehicleConnectorAdd": VehicleConnectorAdd,
     "VehicleDetail": VehicleDetail,
-    "ProductionControl": ProductionControl,
 }
 
 export const pagesConfig = {
