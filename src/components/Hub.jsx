@@ -30,6 +30,8 @@ export default function Hub({ isOpen, onClose }) {
       base44.entities[action.entity].create(action.data).catch(err => console.error('Create failed:', err));
     } else if (action.type === 'delete') {
       base44.entities[action.entity].delete(action.id).catch(err => console.error('Delete failed:', err));
+    } else if (action.type === 'fill_form') {
+      window.dispatchEvent(new CustomEvent('fillForm', { detail: action }));
     }
   };
 
@@ -43,6 +45,38 @@ export default function Hub({ isOpen, onClose }) {
       } catch (e) {
         console.error('Action parse error:', e);
       }
+    }
+  };
+
+  const parseVoiceForForms = async (userText) => {
+    try {
+      const response = await base44.functions.invoke('parseVoiceCommand', { text: userText });
+      const parsed = response.data;
+
+      if (parsed.action === 'navigate' && parsed.entity === 'calendar') {
+        navigate(createPageUrl('ManagerFinancials'));
+      } else if (parsed.action === 'create' || parsed.action === 'open') {
+        let modalName = null;
+        if (parsed.entity === 'client') modalName = 'client';
+        else if (parsed.entity === 'production') modalName = 'production';
+        else if (parsed.entity === 'quote') modalName = 'quote';
+        else if (parsed.entity === 'supplier') modalName = 'supplier';
+
+        if (modalName) {
+          navigate(createPageUrl('ManagerDashboard') + '?modal=' + modalName);
+          setTimeout(() => {
+            window.dispatchEvent(new CustomEvent('fillAndSaveForm', { 
+              detail: { 
+                modal: modalName, 
+                fields: parsed.fields,
+                auto_save: parsed.auto_save 
+              } 
+            }));
+          }, 500);
+        }
+      }
+    } catch (err) {
+      console.error('Voice parse error:', err);
     }
   };
 
@@ -177,6 +211,7 @@ export default function Hub({ isOpen, onClose }) {
       if (!event.results[event.results.length - 1].isFinal) {
         return;
       }
+      parseVoiceForForms(transcript);
       sendMessage(transcript);
       recognition.stop();
     };
