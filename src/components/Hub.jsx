@@ -18,7 +18,12 @@ export default function Hub({ isOpen, onClose }) {
 
   const executeAction = (action) => {
     if (action.type === 'navigate') {
-      navigate(createPageUrl(action.page));
+      const url = createPageUrl(action.page);
+      if (action.modal) {
+        navigate(url + (url.includes('?') ? '&' : '?') + 'modal=' + action.modal);
+      } else {
+        navigate(url);
+      }
     } else if (action.type === 'update') {
       base44.entities[action.entity].update(action.id, action.data).catch(err => console.error('Update failed:', err));
     } else if (action.type === 'create') {
