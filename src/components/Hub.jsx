@@ -213,7 +213,7 @@ export default function Hub({ isOpen, onClose }) {
       }
       parseVoiceForForms(transcript);
       sendMessage(transcript);
-      recognition.stop();
+      setInput('');
     };
 
     recognition.onerror = (event) => {
