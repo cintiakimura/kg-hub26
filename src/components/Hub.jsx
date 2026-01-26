@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { X, Mic, Send } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
+import { useNavigate } from 'react-router-dom';
+import { createPageUrl } from '@/utils';
 
 export default function Hub({ isOpen, onClose }) {
   const [messages, setMessages] = useState([]);
@@ -12,6 +14,32 @@ export default function Hub({ isOpen, onClose }) {
   const chatRef = useRef(null);
   const audioRef = useRef(null);
   const recognitionRef = useRef(null);
+  const navigate = useNavigate();
+
+  const executeAction = (action) => {
+    if (action.type === 'navigate') {
+      navigate(createPageUrl(action.page));
+    } else if (action.type === 'update') {
+      base44.entities[action.entity].update(action.id, action.data).catch(err => console.error('Update failed:', err));
+    } else if (action.type === 'create') {
+      base44.entities[action.entity].create(action.data).catch(err => console.error('Create failed:', err));
+    } else if (action.type === 'delete') {
+      base44.entities[action.entity].delete(action.id).catch(err => console.error('Delete failed:', err));
+    }
+  };
+
+  const parseActions = (content) => {
+    const actionPattern = /\[ACTION: (.*?)\]/g;
+    let match;
+    while ((match = actionPattern.exec(content)) !== null) {
+      try {
+        const action = JSON.parse(match[1]);
+        executeAction(action);
+      } catch (e) {
+        console.error('Action parse error:', e);
+      }
+    }
+  };
 
   useEffect(() => {
     if (isOpen && !conversationId) {
@@ -100,6 +128,7 @@ export default function Hub({ isOpen, onClose }) {
         
         const lastMsg = data.messages[data.messages.length - 1];
         if (lastMsg?.role === 'assistant') {
+          parseActions(lastMsg.content);
           speak(lastMsg.content);
           
           // Save assistant message to database
