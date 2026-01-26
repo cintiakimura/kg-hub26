@@ -26,9 +26,27 @@ export default function Hub({ isOpen, onClose }) {
       });
       setConversationId(conversation.id);
       
-      const greeting = { role: 'assistant', content: 'Good evening. Ready when you are.' };
-      setMessages([greeting]);
-      speak(greeting.content);
+      // Load previous chat history
+      const previousMessages = await base44.entities.ChatMessage.filter(
+        { conversation_id: conversation.id },
+        '-created_date',
+        100
+      );
+      
+      if (previousMessages.length > 0) {
+        setMessages(previousMessages.map(m => ({ role: m.role, content: m.content })));
+      } else {
+        const greeting = { role: 'assistant', content: 'Good evening. Ready when you are.' };
+        setMessages([greeting]);
+        speak(greeting.content);
+        
+        await base44.entities.ChatMessage.create({
+          conversation_id: conversation.id,
+          role: 'assistant',
+          content: greeting.content,
+          expires_at: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString()
+        });
+      }
     } catch (error) {
       console.error('Conversation init error:', error);
     }
@@ -66,6 +84,14 @@ export default function Hub({ isOpen, onClose }) {
     setLoading(true);
 
     try {
+      // Save user message to database
+      await base44.entities.ChatMessage.create({
+        conversation_id: conversationId,
+        role: 'user',
+        content: text,
+        expires_at: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString()
+      });
+
       const conversation = await base44.agents.getConversation(conversationId);
       await base44.agents.addMessage(conversation, { role: 'user', content: text });
 
@@ -73,8 +99,16 @@ export default function Hub({ isOpen, onClose }) {
         setMessages(data.messages);
         
         const lastMsg = data.messages[data.messages.length - 1];
-        if (lastMsg?.role === 'assistant' && !data.messages.some(m => m.role === 'user' && m.content === text && m !== userMsg)) {
+        if (lastMsg?.role === 'assistant') {
           speak(lastMsg.content);
+          
+          // Save assistant message to database
+          base44.entities.ChatMessage.create({
+            conversation_id: conversationId,
+            role: 'assistant',
+            content: lastMsg.content,
+            expires_at: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString()
+          }).catch(err => console.error('Failed to save message:', err));
         }
       });
 
@@ -97,7 +131,7 @@ export default function Hub({ isOpen, onClose }) {
     }
 
     const recognition = new webkitSpeechRecognition();
-    recognition.continuous = false;
+    recognition.continuous = true;
     recognition.interimResults = false;
     recognition.lang = 'en-US';
 
@@ -106,8 +140,11 @@ export default function Hub({ isOpen, onClose }) {
     recognition.onresult = (event) => {
       const transcript = event.results[event.results.length - 1][0].transcript;
       setInput(transcript);
-      setListening(false);
+      if (!event.results[event.results.length - 1].isFinal) {
+        return;
+      }
       sendMessage(transcript);
+      recognition.stop();
     };
 
     recognition.onerror = (event) => {
