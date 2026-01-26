@@ -141,8 +141,8 @@ No "um". No filler. Always please`
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
-      <div className="bg-white dark:bg-[#212121] w-full h-full flex flex-col">
+    <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-end justify-end p-6">
+      <div className="bg-white dark:bg-[#212121] w-full max-w-md h-[600px] rounded-lg shadow-2xl flex flex-col border border-[#00c600]">
         <div className="p-4 border-b border-[#00c600] flex items-center justify-between">
           <div className="flex items-center gap-3">
             <img 
