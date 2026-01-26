@@ -7,7 +7,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/u
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
-import { Users, FileText, Package, TruckIcon, Plus, Upload } from 'lucide-react';
+import { Users, FileText, Package, TruckIcon, Plus, Upload, Settings, Building, DollarSign, ShoppingCart, Truck, Box, Car } from 'lucide-react';
 
 const tableStyles = `
   .excel-table {
@@ -272,54 +272,88 @@ export default function ManagerDashboard() {
   const columns = ['ordered', 'in_production', 'dispatched', 'in_transit', 'delayed', 'delivered'];
 
   const menuCards = [
-    { name: 'New Production', desc: 'Order a new build', action: () => setShowProductionModal(true) },
-    { name: 'New Client', desc: 'Add customer', action: () => setShowAddClientModal(true) },
-    { name: 'New Quotation', desc: 'Send quote', action: () => setShowAddQuotationModal(true) },
-    { name: 'New Supplier', desc: 'Add supplier', action: () => setShowAddSupplierModal(true) },
-    { name: 'New Purchase', desc: 'Place order', action: () => navigate(createPageUrl('ManagerPurchases')) },
-    { name: 'New Logistics', desc: 'Ship or receive', action: () => navigate(createPageUrl('ManagerLogistics')) },
-    { name: 'New Product', desc: 'Add product', action: () => {} },
-    { name: 'New Vehicle', desc: 'Add vehicle', action: () => {} },
-    { name: 'Financials', desc: 'View payments', action: () => navigate(createPageUrl('ManagerFinancials')) },
+    { icon: Settings, name: 'New Production', desc: 'Order a new build', action: () => setShowProductionModal(true) },
+    { icon: Building, name: 'New Client', desc: 'Add customer', action: () => setShowAddClientModal(true) },
+    { icon: FileText, name: 'New Quotation', desc: 'Send quote', action: () => setShowAddQuotationModal(true) },
+    { icon: Package, name: 'New Supplier', desc: 'Add supplier', action: () => setShowAddSupplierModal(true) },
+    { icon: ShoppingCart, name: 'New Purchase', desc: 'Place order', action: () => navigate(createPageUrl('ManagerPurchases')) },
+    { icon: Truck, name: 'New Logistics', desc: 'Ship or receive', action: () => navigate(createPageUrl('ManagerLogistics')) },
+    { icon: Box, name: 'New Product', desc: 'Add product', action: () => {} },
+    { icon: Car, name: 'New Vehicle', desc: 'Add vehicle', action: () => {} },
+    { icon: DollarSign, name: 'Financials', desc: 'View payments', action: () => navigate(createPageUrl('ManagerFinancials')) },
   ];
 
   return (
-    <div className="bg-[#212121] min-h-screen flex items-center justify-center">
+    <div className="bg-[#212121] min-h-screen">
       <style>{`
-        @media (max-width: 800px) {
+        .dashboard-grid {
+          display: grid;
+          grid-template-columns: repeat(2, 320px);
+          gap: 30px 40px;
+          justify-content: center;
+        }
+        
+        .dashboard-card {
+          width: 320px;
+          height: 140px;
+          background: #212121;
+          border: 1px solid #00c600;
+          border-radius: 8px;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+          transition: all 0.3s ease;
+          box-shadow: none;
+        }
+        
+        .dashboard-card:hover {
+          border-width: 2px;
+          box-shadow: 0 0 8px #00c600;
+          transform: scale(1.02);
+        }
+        
+        @media (max-width: 768px) {
           .dashboard-grid {
-            grid-template-columns: 1fr !important;
+            grid-template-columns: 1fr;
+          }
+          .dashboard-card {
+            width: 100%;
+          }
+        }
+        
+        @media print {
+          body, .bg-\\[\\#212121\\] {
+            background: white !important;
+          }
+          .dashboard-card {
+            background: white !important;
+            border-color: black !important;
+          }
+          .dashboard-card h3, .dashboard-card p, .dashboard-card svg {
+            color: black !important;
           }
         }
       `}</style>
-      <div className="p-6 max-w-7xl mx-auto">
-        <h1 style={{ textAlign: 'left', color: 'white', fontSize: '24px', marginBottom: '40px' }}>Manager Dashboard</h1>
-        <div className="dashboard-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '30px' }}>
-          {menuCards.map((card, i) => (
-            <button
-              key={i}
-              onClick={card.action}
-              style={{
-                width: '100%',
-                height: '150px',
-                background: '#212121',
-                border: '1px solid #00c600',
-                borderRadius: '6px',
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                justifyContent: 'center',
-                cursor: 'pointer',
-                transition: 'transform 0.2s',
-                boxShadow: 'none',
-              }}
-              onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.02)'}
-              onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}
-            >
-              <h3 style={{ color: 'white', fontSize: '18px', fontWeight: '400', margin: '0 0 8px 0' }}>{card.name}</h3>
-              <p style={{ color: '#888', fontSize: '14px', fontWeight: '400', margin: '0' }}>{card.desc}</p>
-            </button>
-          ))}
+      <div className="p-6 ml-16">
+        <div className="flex justify-between items-center mb-8">
+          <h1 style={{ color: 'white', fontSize: '24px', fontWeight: '400' }}>Manager Dashboard</h1>
+          <div style={{ display: 'flex', gap: '8px' }}>
+            <TableExport data={pos} filename="dashboard.csv" />
+          </div>
+        </div>
+        <div className="dashboard-grid">
+          {menuCards.map((card, i) => {
+            const Icon = card.icon;
+            return (
+              <button key={i} onClick={card.action} className="dashboard-card">
+                <Icon size={20} style={{ color: '#00c600', marginBottom: '12px' }} />
+                <h3 style={{ color: 'white', fontSize: '18px', fontWeight: '400', margin: '0 0 4px 0' }}>{card.name}</h3>
+                <p style={{ color: '#aaa', fontSize: '14px', fontWeight: '400', margin: '0' }}>{card.desc}</p>
+              </button>
+            );
+          })}
         </div>
 
         {/* Add Production Modal */}
