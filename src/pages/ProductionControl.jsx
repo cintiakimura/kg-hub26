@@ -204,7 +204,6 @@ export default function ProductionControl() {
             ))}
           </tbody>
         </table>
-      </div>
 
         <Dialog open={showProductionModal} onOpenChange={setShowProductionModal}>
           <DialogContent className="max-w-[400px] bg-[#212121] border border-[#00c600]">
