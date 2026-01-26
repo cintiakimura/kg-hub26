@@ -272,147 +272,36 @@ export default function ManagerDashboard() {
   const columns = ['ordered', 'in_production', 'dispatched', 'in_transit', 'delayed', 'delivered'];
 
   const menuCards = [
-    { 
-      icon: '🏭', 
-      name: 'Production Control', 
-      desc: 'Manage orders, production and logistics', 
-      page: 'ManagerDashboard',
-      color: 'border-purple-500'
-    },
-    { 
-      icon: '👥', 
-      name: 'Clients', 
-      desc: 'View all registered clients', 
-      page: 'ManagerClients',
-      color: 'border-green-500'
-    },
-    { 
-      icon: '📋', 
-      name: 'Quotations / Sales', 
-      desc: 'Manage sales quotes and invoices', 
-      page: 'ManagerSalesQuotes',
-      color: 'border-blue-500'
-    },
-    { 
-      icon: '📄', 
-      name: 'Supplier Quotes', 
-      desc: 'Review quotes from suppliers', 
-      page: 'ManagerSupplierQuotes',
-      color: 'border-pink-500'
-    },
-    { 
-      icon: '🛒', 
-      name: 'Purchases', 
-      desc: 'Manage supplier orders', 
-      page: 'ManagerPurchases',
-      color: 'border-green-500'
-    },
-    { 
-      icon: '🚚', 
-      name: 'Logistics', 
-      desc: 'Track deliveries', 
-      page: 'ManagerLogistics',
-      color: 'border-green-500'
-    },
-    { 
-      icon: '📊', 
-      name: 'Financials', 
-      desc: 'Analyze costs and income', 
-      page: 'ManagerFinancials',
-      color: 'border-green-500'
-    }
+    { icon: '⚙️', name: 'New Production', desc: 'Start new build', action: () => setShowProductionModal(true) },
+    { icon: '👥', name: 'New Client', desc: 'Add customer', action: () => setShowAddClientModal(true) },
+    { icon: '📝', name: 'New Quotation', desc: 'Send quote', action: () => setShowAddQuotationModal(true) },
+    { icon: '🏭', name: 'New Supplier', desc: 'Add supplier', action: () => setShowAddSupplierModal(true) },
+    { icon: '🛒', name: 'New Purchase', desc: 'Order parts', action: () => navigate(createPageUrl('ManagerPurchases')) },
+    { icon: '🚛', name: 'New Logistics', desc: 'Ship or receive', action: () => navigate(createPageUrl('ManagerLogistics')) },
+    { icon: '💼', name: 'Financials', desc: 'Invoices, payments', action: () => navigate(createPageUrl('ManagerFinancials')) },
   ];
 
   return (
-    <div className="bg-[#212121] min-h-screen">
-      <style>{tableStyles}</style>
-      <div className="p-6 max-w-7xl mx-auto">
-        <div className="flex justify-between items-start mb-8">
-          <div className="flex items-center gap-4">
-            <div className="text-4xl">📊</div>
-            <div>
-              <h1 className="text-3xl text-white mb-1">Manager Dashboard</h1>
-              <p className="text-gray-400 text-sm">Overview of all clients, companies, and fleets.</p>
-            </div>
-          </div>
-          <button 
-            onClick={async () => {
-              const email = prompt('Enter user email:');
-              if (email) {
-                await base44.users.inviteUser(email, 'user');
-                toast.success('User invited');
-              }
-            }}
-            className="bg-[#00c600] text-white px-4 py-2 rounded flex items-center gap-2 hover:opacity-80"
-          >
-            <Plus size={16} /> Invite User
-          </button>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+    <div className="bg-[#212121] min-h-screen flex items-center justify-center">
+      <div className="p-6 max-w-6xl mx-auto">
+        <div className="grid grid-cols-4 gap-6">
           {menuCards.map((card, i) => (
-            <button
+            <div
               key={i}
-              onClick={() => navigate(createPageUrl(card.page))}
-              className={`bg-[#2a2a2a] p-6 rounded-lg border-2 ${card.color} hover:bg-[#333] transition-all text-left`}
+              className="bg-[#2a2a2a] bg-opacity-50 backdrop-blur-sm p-8 rounded-lg border-2 border-[#00c600] hover:bg-[#333] transition-all flex flex-col items-center text-center"
             >
-              <div className="text-4xl mb-3">{card.icon}</div>
-              <h3 className="text-white text-lg mb-1">{card.name}</h3>
-              <p className="text-gray-400 text-sm">{card.desc}</p>
-            </button>
+              <div className="text-6xl mb-4">{card.icon}</div>
+              <h3 className="text-white text-xl mb-2">{card.name}</h3>
+              <p className="text-gray-400 text-sm mb-6">{card.desc}</p>
+              <button
+                onClick={card.action}
+                className="bg-[#00c600] text-black px-4 py-2 rounded hover:opacity-80 font-medium flex items-center gap-1"
+              >
+                <Plus size={16} /> New
+              </button>
+            </div>
           ))}
         </div>
-
-        <div className="flex justify-between items-center mb-4">
-          <h2 className="text-xl text-[#00c600]">Production Control</h2>
-          <div className="flex gap-2">
-            <Button onClick={() => setShowAddClientModal(true)} size="sm" className="bg-[#00c600] text-white border border-[#00c600]">
-              <Plus size={14} className="mr-1" /> Client
-            </Button>
-            <Button onClick={() => setShowAddSupplierModal(true)} size="sm" className="bg-[#00c600] text-white border border-[#00c600]">
-              <Plus size={14} className="mr-1" /> Supplier
-            </Button>
-            <Button onClick={() => setShowAddQuotationModal(true)} size="sm" className="bg-[#00c600] text-white border border-[#00c600]">
-              <Plus size={14} className="mr-1" /> Quotation
-            </Button>
-            <Button onClick={() => setShowProductionModal(true)} size="sm" className="bg-[#00c600] text-white border border-[#00c600]">
-              <Plus size={14} className="mr-1" /> Production
-            </Button>
-            <Button onClick={() => setShowImportModal(true)} size="sm" className="bg-[#00c600] text-white border border-[#00c600]">
-              <Upload size={14} className="mr-1" /> Import
-            </Button>
-            <TableExport data={pos} filename="production_control.csv" />
-          </div>
-        </div>
-        {loading && <div>Loading...</div>}
-        {!loading && (
-          <table className="excel-table">
-            <thead>
-              <tr>
-                <th>Date</th>
-                <th>Client</th>
-                <th>Product</th>
-                <th>Cost</th>
-                <th>Status</th>
-                <th>Tracking</th>
-                <th>Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {pos.map(po => (
-                <tr key={po.id}>
-                  <td>{po.order_date}</td>
-                  <td>{clients[po.client_org_id]}</td>
-                  <td>{po.items?.[0]?.description || '-'}</td>
-                  <td>${po.total_cost}</td>
-                  <td>{po.status}</td>
-                  <td>{po.tracking_number_inbound || '-'}</td>
-                  <td><button>Edit</button></td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        )}
 
         {/* Add Production Modal */}
         <Dialog open={showProductionModal} onOpenChange={setShowProductionModal}>
