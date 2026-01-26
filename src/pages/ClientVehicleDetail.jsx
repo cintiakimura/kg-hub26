@@ -211,10 +211,12 @@ export default function ClientVehicleDetail() {
                 Request Quote ({selectedItems.length})
               </KGButton>
             )}
-            <KGButton onClick={() => setShowConnectorModal(true)}>
-              <Plus size={16} className="mr-2" />
-              Add Connector
-            </KGButton>
+            <button
+              onClick={() => navigate(createPageUrl(`AddConnector?vehicle_id=${vehicle.vehicle_id}`))}
+              className="bg-[#00c600] text-black px-3 py-1 rounded text-sm hover:opacity-80"
+            >
+              + Create New Connector
+            </button>
           </div>
       </div>
 
