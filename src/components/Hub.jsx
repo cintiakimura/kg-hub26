@@ -142,7 +142,7 @@ No "um". No filler. Always please`
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-end justify-end p-6">
-      <div className="bg-white dark:bg-[#212121] w-full max-w-md h-[600px] rounded-lg shadow-2xl flex flex-col border border-[#00c600]">
+      <div className="bg-white dark:bg-[#212121] w-full max-w-md h-[600px] shadow-2xl flex flex-col border border-[#00c600]" style={{ borderRadius: '6px' }}>
         <div className="p-4 border-b border-[#00c600] flex items-center justify-between">
           <div className="flex items-center gap-3">
             <img 
@@ -170,11 +170,12 @@ No "um". No filler. Always please`
               className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
             >
               <div 
-                className={`max-w-[80%] p-3 rounded-lg ${
+                className={`max-w-[80%] p-3 ${
                   msg.role === 'user' 
                     ? 'bg-[#00c600] text-white' 
                     : 'bg-[#2a2a2a] text-white'
                 }`}
+                style={{ borderRadius: '6px' }}
               >
                 {msg.content}
               </div>
@@ -182,7 +183,7 @@ No "um". No filler. Always please`
           ))}
           {loading && (
             <div className="flex justify-start">
-              <div className="bg-[#2a2a2a] text-white p-3 rounded-lg">
+              <div className="bg-[#2a2a2a] text-white p-3" style={{ borderRadius: '6px' }}>
                 <div className="flex gap-1">
                   <div className="w-2 h-2 bg-[#00c600] rounded-full animate-pulse" />
                   <div className="w-2 h-2 bg-[#00c600] rounded-full animate-pulse delay-100" />
@@ -200,14 +201,20 @@ No "um". No filler. Always please`
             onKeyPress={(e) => e.key === 'Enter' && sendMessage(input)}
             placeholder="Ask Hub anything..."
             className="flex-1"
+            style={{ borderRadius: '6px' }}
           />
           <button
             onClick={startListening}
             className={`p-2 ${listening ? 'bg-red-500' : ''}`}
+            style={{ borderRadius: '6px' }}
           >
             <Mic size={20} />
           </button>
-          <button onClick={() => sendMessage(input)} disabled={loading}>
+          <button 
+            onClick={() => sendMessage(input)} 
+            disabled={loading}
+            style={{ borderRadius: '6px' }}
+          >
             <Send size={20} />
           </button>
         </div>
