@@ -34,7 +34,10 @@ Deno.serve(async (req) => {
     });
 
     if (!response.ok) {
-      throw new Error('ElevenLabs API error');
+      const errorText = await response.text();
+      console.error('ElevenLabs status:', response.status);
+      console.error('ElevenLabs error:', errorText);
+      throw new Error(`ElevenLabs API error: ${errorText}`);
     }
 
     const audioBlob = await response.blob();
