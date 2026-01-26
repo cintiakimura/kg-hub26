@@ -278,14 +278,16 @@ export default function ManagerDashboard() {
     { name: 'New Supplier', desc: 'Add supplier', action: () => setShowAddSupplierModal(true) },
     { name: 'New Purchase', desc: 'Place order', action: () => navigate(createPageUrl('ManagerPurchases')) },
     { name: 'New Logistics', desc: 'Ship or receive', action: () => navigate(createPageUrl('ManagerLogistics')) },
+    { name: 'New Product', desc: 'Add product', action: () => {} },
+    { name: 'New Vehicle', desc: 'Add vehicle', action: () => {} },
     { name: 'Financials', desc: 'View payments', action: () => navigate(createPageUrl('ManagerFinancials')) },
   ];
 
   return (
     <div className="bg-[#212121] min-h-screen flex items-center justify-center">
       <div className="p-6 max-w-7xl mx-auto">
-        <h1 style={{ textAlign: 'center', color: 'white', fontSize: '24px', marginBottom: '40px' }}>Manager Dashboard</h1>
-        <div className="grid grid-cols-2 gap-6">
+        <h1 style={{ textAlign: 'left', color: 'white', fontSize: '24px', marginBottom: '40px' }}>Manager Dashboard</h1>
+        <div className="grid grid-cols-4 gap-6">
           {menuCards.map((card, i) => (
             <button
               key={i}
