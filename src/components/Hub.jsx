@@ -1,19 +1,38 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { X, Send } from 'lucide-react';
+import { X, Mic, Send } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
 
 export default function Hub({ isOpen, onClose }) {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
+  const [listening, setListening] = useState(false);
+  const [audioUrl, setAudioUrl] = useState(null);
+  const [conversationId, setConversationId] = useState(null);
   const chatRef = useRef(null);
+  const audioRef = useRef(null);
+  const recognitionRef = useRef(null);
 
   useEffect(() => {
-    if (isOpen && messages.length === 0) {
-      const greeting = { role: 'assistant', content: 'Good evening. Ready when you are.' };
-      setMessages([greeting]);
+    if (isOpen && !conversationId) {
+      initializeConversation();
     }
   }, [isOpen]);
+
+  const initializeConversation = async () => {
+    try {
+      const conversation = await base44.agents.createConversation({
+        agent_name: 'grokCommander'
+      });
+      setConversationId(conversation.id);
+      
+      const greeting = { role: 'assistant', content: 'Good evening. Ready when you are.' };
+      setMessages([greeting]);
+      speak(greeting.content);
+    } catch (error) {
+      console.error('Conversation init error:', error);
+    }
+  };
 
   useEffect(() => {
     if (chatRef.current) {
@@ -21,8 +40,25 @@ export default function Hub({ isOpen, onClose }) {
     }
   }, [messages]);
 
+  const speak = async (text) => {
+    try {
+      const response = await base44.functions.invoke('elevenlabsTTS', { text });
+      const arrayBuffer = response.data;
+      const blob = new Blob([arrayBuffer], { type: 'audio/mpeg' });
+      const url = URL.createObjectURL(blob);
+      
+      if (audioUrl) {
+        URL.revokeObjectURL(audioUrl);
+      }
+      
+      setAudioUrl(url);
+    } catch (error) {
+      console.error('TTS error:', error);
+    }
+  };
+
   const sendMessage = async (text) => {
-    if (!text.trim()) return;
+    if (!text.trim() || !conversationId) return;
 
     const userMsg = { role: 'user', content: text };
     setMessages(prev => [...prev, userMsg]);
@@ -30,20 +66,19 @@ export default function Hub({ isOpen, onClose }) {
     setLoading(true);
 
     try {
-      const user = await base44.auth.me().catch(() => null);
-      const userName = user?.full_name || 'there';
+      const conversation = await base44.agents.getConversation(conversationId);
+      await base44.agents.addMessage(conversation, { role: 'user', content: text });
 
-      const response = await base44.functions.invoke('grokChat', {
-        messages: messages.map(m => ({ role: m.role, content: m.content })).concat([{ role: 'user', content: text }]),
-        userName
+      const unsubscribe = base44.agents.subscribeToConversation(conversationId, (data) => {
+        setMessages(data.messages);
+        
+        const lastMsg = data.messages[data.messages.length - 1];
+        if (lastMsg?.role === 'assistant' && !data.messages.some(m => m.role === 'user' && m.content === text && m !== userMsg)) {
+          speak(lastMsg.content);
+        }
       });
 
-      const assistantMsg = { 
-        role: 'assistant', 
-        content: response.data.content 
-      };
-      
-      setMessages(prev => [...prev, assistantMsg]);
+      setTimeout(() => unsubscribe(), 15000);
     } catch (err) {
       const errorMsg = { 
         role: 'assistant', 
@@ -53,6 +88,43 @@ export default function Hub({ isOpen, onClose }) {
     }
 
     setLoading(false);
+  };
+
+  const startListening = () => {
+    if (!('webkitSpeechRecognition' in window)) {
+      alert('Voice not supported in this browser');
+      return;
+    }
+
+    const recognition = new webkitSpeechRecognition();
+    recognition.continuous = false;
+    recognition.interimResults = false;
+    recognition.lang = 'en-US';
+
+    recognition.onstart = () => setListening(true);
+    
+    recognition.onresult = (event) => {
+      const transcript = event.results[event.results.length - 1][0].transcript;
+      setInput(transcript);
+      setListening(false);
+      sendMessage(transcript);
+    };
+
+    recognition.onerror = (event) => {
+      console.error('Speech recognition error:', event.error);
+      setListening(false);
+    };
+
+    recognition.onend = () => setListening(false);
+    recognition.start();
+    recognitionRef.current = recognition;
+  };
+
+  const stopListening = () => {
+    if (recognitionRef.current) {
+      recognitionRef.current.stop();
+      setListening(false);
+    }
   };
 
   if (!isOpen) return null;
@@ -120,6 +192,13 @@ export default function Hub({ isOpen, onClose }) {
             className="flex-1 bg-[#2a2a2a] text-white border-[#00c600]"
             style={{ borderRadius: '6px' }}
           />
+          <button
+            onClick={listening ? stopListening : startListening}
+            className={`p-2 ${listening ? 'bg-red-500' : ''}`}
+            style={{ borderRadius: '6px' }}
+          >
+            <Mic size={20} />
+          </button>
           <button 
             onClick={() => sendMessage(input)} 
             disabled={loading}
@@ -128,6 +207,16 @@ export default function Hub({ isOpen, onClose }) {
             <Send size={20} />
           </button>
         </div>
+
+        {audioUrl && (
+          <audio 
+            key={audioUrl}
+            src={audioUrl}
+            autoPlay
+            ref={audioRef}
+            style={{ display: 'none' }}
+          />
+        )}
       </div>
     </div>
   );
