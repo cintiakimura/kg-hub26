@@ -1,22 +1,17 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { X, Mic, Send } from 'lucide-react';
+import { X, Send } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
 
 export default function Hub({ isOpen, onClose }) {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
-  const [listening, setListening] = useState(false);
-  const [audioUrl, setAudioUrl] = useState(null);
   const chatRef = useRef(null);
-  const audioRef = useRef(null);
-  const recognitionRef = useRef(null);
 
   useEffect(() => {
     if (isOpen && messages.length === 0) {
       const greeting = { role: 'assistant', content: 'Good evening. Ready when you are.' };
       setMessages([greeting]);
-      speak(greeting.content);
     }
   }, [isOpen]);
 
@@ -25,23 +20,6 @@ export default function Hub({ isOpen, onClose }) {
       chatRef.current.scrollTop = chatRef.current.scrollHeight;
     }
   }, [messages]);
-
-  const speak = async (text) => {
-    try {
-      const response = await base44.functions.invoke('elevenlabsTTS', { text });
-      const arrayBuffer = response.data;
-      const blob = new Blob([arrayBuffer], { type: 'audio/mpeg' });
-      const url = URL.createObjectURL(blob);
-      
-      if (audioUrl) {
-        URL.revokeObjectURL(audioUrl);
-      }
-      
-      setAudioUrl(url);
-    } catch (error) {
-      console.error('TTS error:', error);
-    }
-  };
 
   const sendMessage = async (text) => {
     if (!text.trim()) return;
@@ -66,7 +44,6 @@ export default function Hub({ isOpen, onClose }) {
       };
       
       setMessages(prev => [...prev, assistantMsg]);
-      speak(assistantMsg.content);
     } catch (err) {
       const errorMsg = { 
         role: 'assistant', 
@@ -76,41 +53,6 @@ export default function Hub({ isOpen, onClose }) {
     }
 
     setLoading(false);
-  };
-
-  const startListening = () => {
-    if (!('webkitSpeechRecognition' in window)) {
-      alert('Voice not supported in this browser');
-      return;
-    }
-
-    const recognition = new webkitSpeechRecognition();
-    recognition.continuous = true;
-    recognition.interimResults = false;
-    recognition.lang = 'en-US';
-
-    recognition.onstart = () => setListening(true);
-    
-    recognition.onresult = (event) => {
-      const transcript = event.results[event.results.length - 1][0].transcript;
-      setInput(transcript);
-      sendMessage(transcript);
-    };
-
-    recognition.onerror = (event) => {
-      console.error('Speech recognition error:', event.error);
-      setListening(false);
-    };
-
-    recognition.start();
-    recognitionRef.current = recognition;
-  };
-
-  const stopListening = () => {
-    if (recognitionRef.current) {
-      recognitionRef.current.stop();
-      setListening(false);
-    }
   };
 
   if (!isOpen) return null;
@@ -178,13 +120,6 @@ export default function Hub({ isOpen, onClose }) {
             className="flex-1 bg-[#2a2a2a] text-white border-[#00c600]"
             style={{ borderRadius: '6px' }}
           />
-          <button
-            onClick={listening ? stopListening : startListening}
-            className={`p-2 ${listening ? 'bg-red-500' : ''}`}
-            style={{ borderRadius: '6px' }}
-          >
-            <Mic size={20} />
-          </button>
           <button 
             onClick={() => sendMessage(input)} 
             disabled={loading}
@@ -193,16 +128,6 @@ export default function Hub({ isOpen, onClose }) {
             <Send size={20} />
           </button>
         </div>
-
-        {audioUrl && (
-          <audio 
-            key={audioUrl}
-            src={audioUrl}
-            autoPlay
-            ref={audioRef}
-            style={{ display: 'none' }}
-          />
-        )}
       </div>
     </div>
   );
