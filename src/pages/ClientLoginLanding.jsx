@@ -1,4 +1,6 @@
 import React from 'react';
+import { createPageUrl } from '@/utils';
+import { base44 } from '@/api/base44Client';
 
 export default function ClientLoginLanding() {
   return (
@@ -22,36 +24,23 @@ export default function ClientLoginLanding() {
         <p style={{ fontSize: '16px', marginBottom: '40px', opacity: 0.8 }}>
           Track your vehicles, quotes, deliveries – all in one place.
         </p>
-        <div style={{ display: 'flex', gap: '10px', justifyContent: 'center' }}>
-          <button 
-            onClick={() => window.location.href = '/login'}
-            style={{
-              background: '#00c600',
-              color: '#000',
-              padding: '10px 20px',
-              border: 'none',
-              cursor: 'pointer',
-              fontSize: '14px',
-              fontWeight: '500'
-            }}
-          >
-            Log in
-          </button>
-          <button 
-            onClick={() => window.location.href = '/signup'}
-            style={{
-              background: '#000',
-              color: '#00c600',
-              padding: '10px 20px',
-              border: '1px solid #00c600',
-              cursor: 'pointer',
-              fontSize: '14px',
-              fontWeight: '500'
-            }}
-          >
-            Sign up
-          </button>
-        </div>
+        <button 
+          onClick={() => {
+            base44.auth.redirectToLogin(createPageUrl('ClientDashboard'));
+          }}
+          style={{
+            background: '#00c600',
+            color: '#000',
+            padding: '15px 40px',
+            border: 'none',
+            cursor: 'pointer',
+            fontSize: '16px',
+            fontWeight: '500',
+            borderRadius: '8px'
+          }}
+        >
+          Log in as Client
+        </button>
       </div>
     </div>
   );
