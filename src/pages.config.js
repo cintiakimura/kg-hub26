@@ -11,6 +11,7 @@ import ClientVehicleAdd from './pages/ClientVehicleAdd';
 import ClientVehicleAddForm from './pages/ClientVehicleAddForm';
 import ClientVehicleDetail from './pages/ClientVehicleDetail';
 import Home from './pages/Home';
+import MainLanding from './pages/MainLanding';
 import Manager from './pages/Manager';
 import ManagerCalendar from './pages/ManagerCalendar';
 import ManagerClients from './pages/ManagerClients';
@@ -31,7 +32,6 @@ import SupplierLoginLanding from './pages/SupplierLoginLanding';
 import VehicleConnectorAdd from './pages/VehicleConnectorAdd';
 import VehicleDetail from './pages/VehicleDetail';
 import VehicleProfile from './pages/VehicleProfile';
-import MainLanding from './pages/MainLanding';
 import __Layout from './Layout.jsx';
 
 
@@ -49,6 +49,7 @@ export const PAGES = {
     "ClientVehicleAddForm": ClientVehicleAddForm,
     "ClientVehicleDetail": ClientVehicleDetail,
     "Home": Home,
+    "MainLanding": MainLanding,
     "Manager": Manager,
     "ManagerCalendar": ManagerCalendar,
     "ManagerClients": ManagerClients,
@@ -69,11 +70,10 @@ export const PAGES = {
     "VehicleConnectorAdd": VehicleConnectorAdd,
     "VehicleDetail": VehicleDetail,
     "VehicleProfile": VehicleProfile,
-    "MainLanding": MainLanding,
 }
 
 export const pagesConfig = {
-    mainPage: "Home",
+    mainPage: "MainLanding",
     Pages: PAGES,
     Layout: __Layout,
 };
