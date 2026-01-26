@@ -152,9 +152,14 @@ export default function ManagerClients() {
               <h1 className="text-xl text-[#00c600]">Clients</h1>
               <span className="text-sm text-gray-500 ml-2">({clients.length})</span>
             </div>
-            <Button onClick={() => setAddClientModal(true)} className="bg-[#00c600] text-white border border-[#00c600]">
-              <Plus size={16} className="mr-1" /> Add Client
-            </Button>
+            <div className="flex gap-2">
+              <Button onClick={() => setAddClientModal(true)} className="bg-[#00c600] text-white border border-[#00c600]">
+                <Plus size={16} className="mr-1" /> Add Client
+              </Button>
+              <Button onClick={() => { const client = selectedClient; setSelectedClient(null); resellToClient(client); }} disabled={!selectedClient} className="bg-[#00c600] text-white border border-[#00c600] disabled:opacity-50 disabled:cursor-not-allowed">
+                <Plus size={16} className="mr-1" /> New Quote
+              </Button>
+            </div>
           </div>
 
           {clients.length === 0 ? (
@@ -181,9 +186,9 @@ export default function ManagerClients() {
                   {clients.map((client, idx) => {
                     const stats = getClientStats(client.org_id);
                     return (
-                      <tr key={client.id} className={`border-b border-[#00c600] ${idx % 2 === 0 ? 'bg-[#1e1e1e]' : 'bg-[#2a2a2a]'} hover:bg-[#004d00] cursor-pointer`} onClick={() => setSelectedClient(client)}>
-                        <td className="px-4 py-3 text-white text-sm">{client.org_id}</td>
-                        <td className="px-4 py-3 text-white text-sm">{client.name}</td>
+                      <tr key={client.id} className={`border-b border-[#00c600] ${idx % 2 === 0 ? 'bg-[#1e1e1e]' : 'bg-[#2a2a2a]'}`}>
+                        <td className="px-4 py-3 text-[#00c600] text-sm cursor-pointer hover:underline" onClick={() => navigate(createPageUrl('ClientOverview') + `?clientId=${client.org_id}`)}>{client.org_id}</td>
+                        <td className="px-4 py-3 text-white text-sm cursor-pointer hover:underline" onClick={() => navigate(createPageUrl('ClientOverview') + `?clientId=${client.org_id}`)}>{client.name}</td>
                         <td className="px-4 py-3 text-white text-sm">{client.contact_email || '-'}</td>
                         <td className="px-4 py-3 text-white text-sm">{client.contact_phone || '-'}</td>
                         <td className="px-4 py-3 text-white text-sm">{stats.vehicles}</td>
@@ -293,72 +298,7 @@ export default function ManagerClients() {
        </DialogContent>
       </Dialog>
 
-      {/* Client Detail Modal */}
-      <Dialog open={!!selectedClient} onOpenChange={() => setSelectedClient(null)}>
-        <DialogContent className="max-w-lg">
-          <DialogHeader>
-            <DialogTitle>{selectedClient?.name}</DialogTitle>
-          </DialogHeader>
-          {selectedClient && (
-            <div className="space-y-4">
-              <div className="flex items-center gap-2">
-                <span className="text-[#00C600]">{selectedClient.org_id}</span>
-              </div>
 
-              <div className="grid grid-cols-2 gap-4 text-sm">
-                {selectedClient.vat_number && (
-                  <div>
-                    <span className="text-gray-500">VAT:</span>
-                    <p>{selectedClient.vat_number}</p>
-                  </div>
-                )}
-                {selectedClient.contact_name && (
-                  <div>
-                    <span className="text-gray-500">Contact:</span>
-                    <p>{selectedClient.contact_name}</p>
-                  </div>
-                )}
-                {selectedClient.contact_email && (
-                  <div>
-                    <span className="text-gray-500">Email:</span>
-                    <p>{selectedClient.contact_email}</p>
-                  </div>
-                )}
-                {selectedClient.contact_phone && (
-                  <div>
-                    <span className="text-gray-500">Phone:</span>
-                    <p>{selectedClient.contact_phone}</p>
-                  </div>
-                )}
-              </div>
-
-              {selectedClient.billing_address && (
-                <div>
-                  <span className="text-sm text-gray-500">Billing Address:</span>
-                  <p className="text-sm">{selectedClient.billing_address}</p>
-                </div>
-              )}
-
-              {selectedClient.delivery_address && (
-                <div>
-                  <span className="text-sm text-gray-500">Delivery Address:</span>
-                  <p className="text-sm">{selectedClient.delivery_address}</p>
-                </div>
-              )}
-
-              <div className="border-t pt-4">
-                <KGButton 
-                  className="w-full"
-                  onClick={() => { setSelectedClient(null); resellToClient(selectedClient); }}
-                >
-                  <RefreshCw size={16} className="mr-2" />
-                  Create New Quote for Client
-                </KGButton>
-              </div>
-            </div>
-          )}
-        </DialogContent>
-      </Dialog>
     </div>
   );
 }
