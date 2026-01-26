@@ -75,44 +75,116 @@ export default function VehicleProfile() {
           {/* Vehicle Info */}
           <div className="col-span-1">
             <div className="bg-[#2a2a2a] rounded-lg p-6 border border-[#00c600] mb-6">
-              <h2 className="text-white text-lg mb-4">Vehicle Information</h2>
-              <div className="space-y-3 text-sm">
-                {vehicle.vin && (
-                  <div>
-                    <span className="text-gray-400">VIN:</span>
-                    <span className="text-white ml-2">{vehicle.vin}</span>
-                  </div>
-                )}
-                {vehicle.trim && (
-                  <div>
-                    <span className="text-gray-400">Trim:</span>
-                    <span className="text-white ml-2">{vehicle.trim}</span>
-                  </div>
-                )}
-                {vehicle.engine && (
-                  <div>
-                    <span className="text-gray-400">Engine:</span>
-                    <span className="text-white ml-2">{vehicle.engine}</span>
-                  </div>
-                )}
-                {vehicle.transmission && (
-                  <div>
-                    <span className="text-gray-400">Transmission:</span>
-                    <span className="text-white ml-2">{vehicle.transmission}</span>
-                  </div>
-                )}
-                {vehicle.body_type && (
-                  <div>
-                    <span className="text-gray-400">Body Type:</span>
-                    <span className="text-white ml-2">{vehicle.body_type}</span>
-                  </div>
-                )}
-                {vehicle.color && (
-                  <div>
-                    <span className="text-gray-400">Color:</span>
-                    <span className="text-white ml-2">{vehicle.color}</span>
-                  </div>
-                )}
+              <div className="grid grid-cols-2 gap-6">
+                <div>
+                  <label className="text-white text-xs mb-2 block">BRAND</label>
+                  <input
+                    type="text"
+                    value={vehicle.make || ''}
+                    readOnly
+                    className="w-full p-3 bg-[#1a1a1a] border border-[#00c600] rounded text-white text-sm"
+                  />
+                </div>
+                
+                <div>
+                  <label className="text-white text-xs mb-2 block">MODEL</label>
+                  <input
+                    type="text"
+                    value={vehicle.model || ''}
+                    readOnly
+                    className="w-full p-3 bg-[#1a1a1a] border border-[#00c600] rounded text-white text-sm"
+                  />
+                </div>
+                
+                <div>
+                  <label className="text-white text-xs mb-2 block">VERSION</label>
+                  <input
+                    type="text"
+                    value={vehicle.trim || ''}
+                    readOnly
+                    className="w-full p-3 bg-[#1a1a1a] border border-[#00c600] rounded text-white text-sm"
+                  />
+                </div>
+                
+                <div>
+                  <label className="text-white text-xs mb-2 block">YEAR</label>
+                  <input
+                    type="text"
+                    value={vehicle.year || ''}
+                    readOnly
+                    className="w-full p-3 bg-[#1a1a1a] border border-[#00c600] rounded text-white text-sm"
+                  />
+                </div>
+                
+                <div>
+                  <label className="text-white text-xs mb-2 block">FUEL</label>
+                  <input
+                    type="text"
+                    value={vehicle.body_type || ''}
+                    readOnly
+                    className="w-full p-3 bg-[#1a1a1a] border border-[#00c600] rounded text-white text-sm"
+                  />
+                </div>
+                
+                <div>
+                  <label className="text-white text-xs mb-2 block">VIN</label>
+                  <input
+                    type="text"
+                    value={vehicle.vin || ''}
+                    readOnly
+                    className="w-full p-3 bg-[#1a1a1a] border border-[#00c600] rounded text-white text-sm"
+                  />
+                </div>
+                
+                <div>
+                  <label className="text-white text-xs mb-2 block">ENGINE SIZE</label>
+                  <input
+                    type="text"
+                    value=""
+                    readOnly
+                    className="w-full p-3 bg-[#1a1a1a] border border-[#00c600] rounded text-white text-sm"
+                  />
+                </div>
+                
+                <div>
+                  <label className="text-white text-xs mb-2 block">ENGINE POWER</label>
+                  <input
+                    type="text"
+                    value=""
+                    readOnly
+                    className="w-full p-3 bg-[#1a1a1a] border border-[#00c600] rounded text-white text-sm"
+                  />
+                </div>
+                
+                <div>
+                  <label className="text-white text-xs mb-2 block">ENGINE CODE</label>
+                  <input
+                    type="text"
+                    value={vehicle.engine || ''}
+                    readOnly
+                    className="w-full p-3 bg-[#1a1a1a] border border-[#00c600] rounded text-white text-sm"
+                  />
+                </div>
+                
+                <div>
+                  <label className="text-white text-xs mb-2 block">TRANSMISSION</label>
+                  <input
+                    type="text"
+                    value={vehicle.transmission || ''}
+                    readOnly
+                    className="w-full p-3 bg-[#1a1a1a] border border-[#00c600] rounded text-white text-sm"
+                  />
+                </div>
+                
+                <div>
+                  <label className="text-white text-xs mb-2 block">GEARS</label>
+                  <input
+                    type="text"
+                    value=""
+                    readOnly
+                    className="w-full p-3 bg-[#1a1a1a] border border-[#00c600] rounded text-white text-sm"
+                  />
+                </div>
               </div>
             </div>
 
