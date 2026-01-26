@@ -319,87 +319,24 @@ export default function ClientDashboard() {
 
       {/* Add Vehicle Modal */}
       <Dialog open={showAddVehicleModal} onOpenChange={setShowAddVehicleModal}>
-        <DialogContent className="max-w-md">
+        <DialogContent className="max-w-[400px] bg-[#212121] border border-[#00c600]">
           <DialogHeader>
-            <DialogTitle>Add New Vehicle</DialogTitle>
+            <DialogTitle className="text-white">Add Vehicle</DialogTitle>
           </DialogHeader>
-          <div className="space-y-4">
-            <input 
-              type="text" 
-              placeholder="Brand"
-              value={newVehicle.brand}
-              onChange={(e) => setNewVehicle({ ...newVehicle, brand: e.target.value })}
-              className="w-full p-2 bg-[#2a2a2a] border border-[#00c600] rounded text-white text-sm"
-            />
-            <input 
-              type="text" 
-              placeholder="Model"
-              value={newVehicle.model}
-              onChange={(e) => setNewVehicle({ ...newVehicle, model: e.target.value })}
-              className="w-full p-2 bg-[#2a2a2a] border border-[#00c600] rounded text-white text-sm"
-            />
-            <input 
-              type="number" 
-              placeholder="Year"
-              value={newVehicle.year}
-              onChange={(e) => setNewVehicle({ ...newVehicle, year: e.target.value })}
-              className="w-full p-2 bg-[#2a2a2a] border border-[#00c600] rounded text-white text-sm"
-            />
-            <div className="flex gap-2">
-              <input 
-                type="text" 
-                placeholder="VIN"
-                value={newVehicle.vin}
-                onChange={(e) => setNewVehicle({ ...newVehicle, vin: e.target.value })}
-                className="flex-1 p-2 bg-[#2a2a2a] border border-[#00c600] rounded text-white text-sm"
-              />
-              <button 
-                onClick={decodeVIN}
-                className="bg-[#00c600] text-black px-3 py-2 rounded text-sm hover:opacity-80 whitespace-nowrap"
-              >
-                DECODE
-              </button>
-            </div>
-            <select 
-              value={newVehicle.fuel}
-              onChange={(e) => setNewVehicle({ ...newVehicle, fuel: e.target.value })}
-              className="w-full p-2 bg-[#2a2a2a] border border-[#00c600] rounded text-white text-sm"
-            >
-              <option value="">Select Fuel</option>
-              <option value="diesel">Diesel</option>
-              <option value="petrol">Petrol</option>
-              <option value="electric">Electric</option>
-              <option value="hybrid">Hybrid</option>
-            </select>
-            <input 
-              type="text" 
-              placeholder="Engine Code"
-              value={newVehicle.engine_code}
-              onChange={(e) => setNewVehicle({ ...newVehicle, engine_code: e.target.value })}
-              className="w-full p-2 bg-[#2a2a2a] border border-[#00c600] rounded text-white text-sm"
-            />
-            <select 
-              value={newVehicle.transmission}
-              onChange={(e) => setNewVehicle({ ...newVehicle, transmission: e.target.value })}
-              className="w-full p-2 bg-[#2a2a2a] border border-[#00c600] rounded text-white text-sm"
-            >
-              <option value="">Select Transmission</option>
-              <option value="automatic">Automatic</option>
-              <option value="manual">Manual</option>
-            </select>
-            <div className="flex gap-3">
-              <button 
-                onClick={() => setShowAddVehicleModal(false)}
-                className="flex-1 p-2 border border-[#00c600] text-[#00c600] rounded text-sm hover:opacity-80"
-              >
-                Cancel
-              </button>
-              <button 
-                onClick={saveVehicle}
-                className="flex-1 bg-[#00c600] text-black p-2 rounded text-sm hover:opacity-80"
-              >
-                Save
-              </button>
+          <div className="space-y-3 max-h-96 overflow-y-auto">
+            <input type="text" placeholder="e.g. Renault" value={newVehicle.brand} onChange={(e) => setNewVehicle({ ...newVehicle, brand: e.target.value })} className="w-full p-2 bg-[#2a2a2a] border border-[#00c600] rounded text-white text-sm" />
+            <input type="text" placeholder="e.g. Captur II" value={newVehicle.model} onChange={(e) => setNewVehicle({ ...newVehicle, model: e.target.value })} className="w-full p-2 bg-[#2a2a2a] border border-[#00c600] rounded text-white text-sm" />
+            <input type="text" placeholder="e.g. 2026" value={newVehicle.year} onChange={(e) => setNewVehicle({ ...newVehicle, year: e.target.value })} className="w-full p-2 bg-[#2a2a2a] border border-[#00c600] rounded text-white text-sm" />
+            <input type="text" placeholder="e.g. VF1RJA00X6XXXXXXX" value={newVehicle.vin} onChange={(e) => setNewVehicle({ ...newVehicle, vin: e.target.value })} className="w-full p-2 bg-[#2a2a2a] border border-[#00c600] rounded text-white text-sm" />
+            <input type="text" placeholder="e.g. Diesel" value={newVehicle.fuel} onChange={(e) => setNewVehicle({ ...newVehicle, fuel: e.target.value })} className="w-full p-2 bg-[#2a2a2a] border border-[#00c600] rounded text-white text-sm" />
+            <input type="text" placeholder="e.g. 1500cm3" value={newVehicle.engine_size} onChange={(e) => setNewVehicle({ ...newVehicle, engine_size: e.target.value })} className="w-full p-2 bg-[#2a2a2a] border border-[#00c600] rounded text-white text-sm" />
+            <input type="text" placeholder="e.g. 120PS" value={newVehicle.engine_power} onChange={(e) => setNewVehicle({ ...newVehicle, engine_power: e.target.value })} className="w-full p-2 bg-[#2a2a2a] border border-[#00c600] rounded text-white text-sm" />
+            <input type="text" placeholder="e.g. K9K" value={newVehicle.engine_code} onChange={(e) => setNewVehicle({ ...newVehicle, engine_code: e.target.value })} className="w-full p-2 bg-[#2a2a2a] border border-[#00c600] rounded text-white text-sm" />
+            <input type="text" placeholder="e.g. Automatic" value={newVehicle.transmission} onChange={(e) => setNewVehicle({ ...newVehicle, transmission: e.target.value })} className="w-full p-2 bg-[#2a2a2a] border border-[#00c600] rounded text-white text-sm" />
+            <input type="text" placeholder="e.g. 6" value={newVehicle.gears} onChange={(e) => setNewVehicle({ ...newVehicle, gears: e.target.value })} className="w-full p-2 bg-[#2a2a2a] border border-[#00c600] rounded text-white text-sm" />
+            <div className="flex gap-2 pt-2 border-t border-[#00c600]">
+              <button onClick={() => setShowAddVehicleModal(false)} className="flex-1 p-2 border border-[#00c600] text-gray-400 rounded text-sm hover:opacity-80">Cancel</button>
+              <button onClick={saveVehicle} className="flex-1 bg-[#00c600] text-white p-2 rounded text-sm hover:opacity-80">Save Vehicle</button>
             </div>
           </div>
         </DialogContent>

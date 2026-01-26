@@ -266,82 +266,46 @@ export default function ClientVehicleDetail() {
 
       {/* Add Connector Modal */}
       <Dialog open={showConnectorModal} onOpenChange={setShowConnectorModal}>
-        <DialogContent className="max-w-lg">
+        <DialogContent className="max-w-[400px] bg-[#212121] border border-[#00c600]">
           <DialogHeader>
-            <DialogTitle>Add Connector</DialogTitle>
+            <DialogTitle className="text-white">Add Connector</DialogTitle>
           </DialogHeader>
-          <div className="space-y-4">
-            <KGInput
-              label="System Name"
-              value={connectorForm.system}
-              onChange={(e) => setConnectorForm({ ...connectorForm, system: e.target.value })}
-              placeholder="e.g., Engine ECU, ABS Module"
-            />
-            <div className="grid grid-cols-2 gap-4">
-              <KGInput
-                label="Connector Color"
-                value={connectorForm.color}
-                onChange={(e) => setConnectorForm({ ...connectorForm, color: e.target.value })}
-                placeholder="e.g., Black, Grey"
-              />
-              <KGInput
-                label="Pin Count"
-                type="number"
-                value={connectorForm.pin_count}
-                onChange={(e) => setConnectorForm({ ...connectorForm, pin_count: e.target.value })}
-                placeholder="e.g., 32"
-              />
-            </div>
-
+          <div className="space-y-3 max-h-96 overflow-y-auto">
+            <input type="text" placeholder="e.g. ABS" value={connectorForm.system} onChange={(e) => setConnectorForm({ ...connectorForm, system: e.target.value })} className="w-full p-2 bg-[#2a2a2a] border border-[#00c600] rounded text-white text-sm" />
+            <input type="text" placeholder="e.g. Black" value={connectorForm.color} onChange={(e) => setConnectorForm({ ...connectorForm, color: e.target.value })} className="w-full p-2 bg-[#2a2a2a] border border-[#00c600] rounded text-white text-sm" />
+            <input type="text" placeholder="e.g. 16" value={connectorForm.pin_count} onChange={(e) => setConnectorForm({ ...connectorForm, pin_count: e.target.value })} className="w-full p-2 bg-[#2a2a2a] border border-[#00c600] rounded text-white text-sm" />
             <div>
-              <label className="text-sm text-gray-600 block mb-2">Connector Photos (up to 3)</label>
-              <div className="flex flex-wrap gap-2">
-                {connectorForm.photos.map((p, i) => (
-                  <div key={i} className="relative w-20 h-20 rounded border-2 border-[#00C600] overflow-hidden">
-                    <img src={p} alt="" className="w-full h-full object-cover" />
-                    <button type="button" onClick={() => removePhoto(i)} className="absolute top-1 right-1 bg-red-500 text-white rounded-full p-0.5">
-                      <X size={10} />
-                    </button>
-                  </div>
-                ))}
-                {connectorForm.photos.length < 3 && (
-                  <label className="w-20 h-20 border-2 border-dashed border-[#00C600] rounded flex items-center justify-center cursor-pointer">
-                    {uploading ? <Loader2 className="animate-spin" size={20} /> : <Upload size={20} className="text-[#00C600]" />}
-                    <input type="file" className="hidden" accept="image/*" onChange={(e) => handlePhotoUpload(e, false)} />
-                  </label>
-                )}
-              </div>
+              <label className="text-sm text-gray-400 block mb-1">Front View</label>
+              <label className="w-full h-16 border-2 border-dashed border-[#00c600] rounded flex items-center justify-center cursor-pointer bg-[#2a2a2a] hover:bg-[#333]">
+                {uploading ? <Loader2 className="animate-spin text-[#00c600]" size={16} /> : <span className="text-sm text-gray-400">Click to upload</span>}
+                <input type="file" className="hidden" accept="image/*" onChange={(e) => handlePhotoUpload(e, false)} />
+              </label>
             </div>
-
             <div>
-              <label className="text-sm text-gray-600 block mb-2">Pinout Scheme</label>
-              {connectorForm.scheme_url ? (
-                <div className="relative w-full h-32 rounded border-2 border-[#00C600] overflow-hidden">
-                  <img src={connectorForm.scheme_url} alt="" className="w-full h-full object-contain" />
-                  <button type="button" onClick={() => setConnectorForm(f => ({ ...f, scheme_url: '' }))} className="absolute top-2 right-2 bg-red-500 text-white rounded-full p-1">
-                    <X size={12} />
-                  </button>
-                </div>
-              ) : (
-                <label className="w-full h-20 border-2 border-dashed border-[#00C600] rounded flex items-center justify-center cursor-pointer">
-                  <Upload size={20} className="text-[#00C600] mr-2" />
-                  <span className="text-sm text-gray-500">Upload scheme</span>
-                  <input type="file" className="hidden" accept="image/*" onChange={(e) => handlePhotoUpload(e, true)} />
-                </label>
-              )}
+              <label className="text-sm text-gray-400 block mb-1">Side View (Lever)</label>
+              <label className="w-full h-16 border-2 border-dashed border-[#00c600] rounded flex items-center justify-center cursor-pointer bg-[#2a2a2a] hover:bg-[#333]">
+                <span className="text-sm text-gray-400">Click to upload</span>
+                <input type="file" className="hidden" accept="image/*" onChange={(e) => handlePhotoUpload(e, false)} />
+              </label>
             </div>
-
-            <KGTextarea
-              label="Pin Functions"
-              value={connectorForm.functions}
-              onChange={(e) => setConnectorForm({ ...connectorForm, functions: e.target.value })}
-              placeholder="Pin 1: 12V Power&#10;Pin 2: Ground&#10;..."
-              rows={4}
-            />
-
-            <div className="flex gap-3">
-              <KGButton variant="outline" onClick={() => setShowConnectorModal(false)}>Cancel</KGButton>
-              <KGButton onClick={saveConnector} className="flex-1">Save Connector</KGButton>
+            <div>
+              <label className="text-sm text-gray-400 block mb-1">ECU Front (Part Number)</label>
+              <label className="w-full h-16 border-2 border-dashed border-[#00c600] rounded flex items-center justify-center cursor-pointer bg-[#2a2a2a] hover:bg-[#333]">
+                <span className="text-sm text-gray-400">Click to upload</span>
+                <input type="file" className="hidden" accept="image/*" onChange={(e) => handlePhotoUpload(e, false)} />
+              </label>
+            </div>
+            <div>
+              <label className="text-sm text-gray-400 block mb-1">Electrical Scheme</label>
+              <label className="w-full h-16 border-2 border-dashed border-[#00c600] rounded flex items-center justify-center cursor-pointer bg-[#2a2a2a] hover:bg-[#333]">
+                <span className="text-sm text-gray-400">Click to upload</span>
+                <input type="file" className="hidden" accept="image/*" onChange={(e) => handlePhotoUpload(e, true)} />
+              </label>
+            </div>
+            <textarea placeholder="e.g. sensor list, actuator list" value={connectorForm.functions} onChange={(e) => setConnectorForm({ ...connectorForm, functions: e.target.value })} className="w-full p-2 bg-[#2a2a2a] border border-[#00c600] rounded text-white text-sm" rows="3"></textarea>
+            <div className="flex gap-2 pt-2 border-t border-[#00c600]">
+              <button onClick={() => setShowConnectorModal(false)} className="flex-1 p-2 border border-[#00c600] text-gray-400 rounded text-sm hover:opacity-80">Cancel</button>
+              <button onClick={saveConnector} className="flex-1 bg-[#00c600] text-white p-2 rounded text-sm hover:opacity-80">Save Connector</button>
             </div>
           </div>
         </DialogContent>

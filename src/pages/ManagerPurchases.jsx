@@ -238,91 +238,25 @@ export default function ManagerPurchases() {
 
       {/* Add/Edit Modal */}
       <Dialog open={showModal} onOpenChange={setShowModal}>
-        <DialogContent className="max-w-md">
+        <DialogContent className="max-w-[400px] bg-[#212121] border border-[#00c600]">
           <DialogHeader>
-            <DialogTitle>{editingPurchase ? 'Edit Purchase' : 'Add Purchase'}</DialogTitle>
+            <DialogTitle className="text-white">{editingPurchase ? 'Edit Purchase' : 'Add Purchase'}</DialogTitle>
           </DialogHeader>
-          <div className="space-y-4">
-            <KGInput
-              label="Description"
-              value={form.description}
-              onChange={(e) => setForm({ ...form, description: e.target.value })}
-              placeholder="What was purchased"
-            />
-
-            <KGSelect
-              label="Category"
-              value={form.category}
-              onChange={(e) => setForm({ ...form, category: e.target.value })}
-              options={categories}
-              placeholder="Select category..."
-            />
-
-            <div className="grid grid-cols-2 gap-4">
-              <KGInput
-                label="Amount"
-                type="number"
-                step="0.01"
-                value={form.amount}
-                onChange={(e) => setForm({ ...form, amount: e.target.value })}
-                placeholder="0.00"
-              />
-              <KGInput
-                label="Date"
-                type="date"
-                value={form.date}
-                onChange={(e) => setForm({ ...form, date: e.target.value })}
-              />
-            </div>
-
-            <KGInput
-              label="Vendor"
-              value={form.vendor}
-              onChange={(e) => setForm({ ...form, vendor: e.target.value })}
-              placeholder="Where purchased"
-            />
-
-            <div>
-              <label className="text-sm text-gray-600 block mb-2">Receipt</label>
-              {form.receipt_url ? (
-                <div className="relative w-full h-32 border-2 border-[#00C600] rounded-lg overflow-hidden">
-                  <img src={form.receipt_url} alt="" className="w-full h-full object-contain" />
-                  <button 
-                    onClick={() => setForm({ ...form, receipt_url: '' })}
-                    className="absolute top-2 right-2 bg-red-500 text-white rounded-full p-1"
-                  >
-                    <X size={12} />
-                  </button>
-                </div>
-              ) : (
-                <label className="flex items-center justify-center gap-2 p-4 border-2 border-dashed border-[#00C600] rounded-lg cursor-pointer hover:bg-[#00C600]/5">
-                  {uploading ? (
-                    <Loader2 className="animate-spin" size={20} />
-                  ) : (
-                    <>
-                      <Upload size={20} className="text-[#00C600]" />
-                      <span className="text-sm">Upload Receipt</span>
-                    </>
-                  )}
-                  <input type="file" className="hidden" accept="image/*,.pdf" onChange={handleReceiptUpload} />
-                </label>
-              )}
-            </div>
-
-            <KGTextarea
-              label="Notes"
-              value={form.notes}
-              onChange={(e) => setForm({ ...form, notes: e.target.value })}
-              placeholder="Additional notes"
-            />
-
-            <div className="flex gap-3">
-              <KGButton variant="outline" onClick={() => setShowModal(false)}>
-                Cancel
-              </KGButton>
-              <KGButton onClick={savePurchase} className="flex-1">
-                {editingPurchase ? 'Update' : 'Add'} Purchase
-              </KGButton>
+          <div className="space-y-3 max-h-96 overflow-y-auto">
+            <input type="text" placeholder="e.g. Toner printer" value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} className="w-full p-2 bg-[#2a2a2a] border border-[#00c600] rounded text-white text-sm" />
+            <input type="text" placeholder="e.g. Amazon" value={form.vendor} onChange={(e) => setForm({ ...form, vendor: e.target.value })} className="w-full p-2 bg-[#2a2a2a] border border-[#00c600] rounded text-white text-sm" />
+            <input type="number" placeholder="Total cost" value={form.amount} onChange={(e) => setForm({ ...form, amount: e.target.value })} className="w-full p-2 bg-[#2a2a2a] border border-[#00c600] rounded text-white text-sm" />
+            <input type="text" placeholder="e.g. Amazon Prime 2 days" value={form.notes} onChange={(e) => setForm({ ...form, notes: e.target.value })} className="w-full p-2 bg-[#2a2a2a] border border-[#00c600] rounded text-white text-sm" />
+            <select value={form.category} onChange={(e) => setForm({ ...form, category: e.target.value })} className="w-full p-2 bg-[#2a2a2a] text-white border border-[#00c600] rounded text-sm">
+              <option value="">Select Status</option>
+              <option value="office">Ordered</option>
+              <option value="equipment">Delivered</option>
+              <option value="software">Delayed</option>
+            </select>
+            <input type="text" placeholder="Tracking number" value={form.receipt_url || ''} onChange={(e) => setForm({ ...form, receipt_url: e.target.value })} className="w-full p-2 bg-[#2a2a2a] border border-[#00c600] rounded text-white text-sm" />
+            <div className="flex gap-2 pt-2 border-t border-[#00c600]">
+              <button onClick={() => setShowModal(false)} className="flex-1 p-2 border border-[#00c600] text-gray-400 rounded text-sm hover:opacity-80">Cancel</button>
+              <button onClick={savePurchase} className="flex-1 bg-[#00c600] text-white p-2 rounded text-sm hover:opacity-80">Save Purchase</button>
             </div>
           </div>
         </DialogContent>

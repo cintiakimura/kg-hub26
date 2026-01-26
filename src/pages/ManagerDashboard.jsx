@@ -380,63 +380,31 @@ export default function ManagerDashboard() {
 
         {/* Add Production Modal */}
         <Dialog open={showProductionModal} onOpenChange={setShowProductionModal}>
-          <DialogContent className="max-w-md bg-[#212121] border border-[#00c600]">
+          <DialogContent className="max-w-[400px] bg-[#212121] border border-[#00c600]">
             <DialogHeader>
               <DialogTitle className="text-white">Add Production Entry</DialogTitle>
             </DialogHeader>
             <div className="space-y-3 max-h-96 overflow-y-auto">
-              <div>
-                <label className="text-white text-sm">Date</label>
-                <Input className="mt-1" type="date" placeholder="dd/mm/yyyy" value={newProduction.order_date} onChange={(e) => setNewProduction({ ...newProduction, order_date: e.target.value })} />
-              </div>
-
-              <div>
-                <label className="text-white text-sm">Client</label>
-                <select value={newProduction.client_org_id} onChange={(e) => setNewProduction({ ...newProduction, client_org_id: e.target.value })} className="mt-1 w-full p-2 bg-[#2a2a2a] text-white border border-[#00c600] rounded text-sm">
-                  <option value="">Select Client</option>
-                  {Object.entries(clients).map(([id, name]) => <option key={id} value={id}>{name}</option>)}
-                </select>
-              </div>
-
-              <div>
-                <label className="text-white text-sm">Product</label>
-                <Input className="mt-1" type="text" placeholder="Product name or description" value={newProduction.product} onChange={(e) => setNewProduction({ ...newProduction, product: e.target.value })} />
-              </div>
-
-              <div>
-                <label className="text-white text-sm">Cost</label>
-                <Input className="mt-1" type="number" placeholder="Total cost" value={newProduction.total_cost} onChange={(e) => setNewProduction({ ...newProduction, total_cost: e.target.value })} />
-              </div>
-
-              <div>
-                <label className="text-white text-sm">Status</label>
-                <select value={newProduction.status} onChange={(e) => setNewProduction({ ...newProduction, status: e.target.value })} className="mt-1 w-full p-2 bg-[#2a2a2a] text-white border border-[#00c600] rounded text-sm">
-                  <option value="ordered">Ordered</option>
-                  <option value="in_production">In Production</option>
-                  <option value="dispatched">Dispatched</option>
-                  <option value="in_transit">In Transit</option>
-                  <option value="delayed">Delayed</option>
-                  <option value="delivered">Delivered</option>
-                </select>
-              </div>
-
-              <div>
-                <label className="text-white text-sm">Tracking Number</label>
-                <Input className="mt-1" type="text" placeholder="FedEx or DHL tracking" value={newProduction.tracking_number_inbound} onChange={(e) => setNewProduction({ ...newProduction, tracking_number_inbound: e.target.value })} />
-              </div>
-
-              <div>
-                <label className="text-white text-sm">Expected Delivery Date</label>
-                <Input className="mt-1" type="date" placeholder="dd/mm/yyyy" value={newProduction.eta} onChange={(e) => setNewProduction({ ...newProduction, eta: e.target.value })} />
-              </div>
-
-              <div>
-                <label className="text-white text-sm">Notes</label>
-                <textarea className="mt-1 w-full p-2 bg-[#2a2a2a] text-white border border-[#00c600] rounded text-sm" placeholder="Any additional info" value={newProduction.notes} onChange={(e) => setNewProduction({ ...newProduction, notes: e.target.value })} />
-              </div>
-
+              <Input type="date" placeholder="dd/mm/yyyy" value={newProduction.order_date} onChange={(e) => setNewProduction({ ...newProduction, order_date: e.target.value })} className="bg-[#2a2a2a] text-white border-[#00c600]" />
+              <select value={newProduction.client_org_id} onChange={(e) => setNewProduction({ ...newProduction, client_org_id: e.target.value })} className="w-full p-2 bg-[#2a2a2a] text-white border border-[#00c600] rounded text-sm">
+                <option value="">Select Client</option>
+                {Object.entries(clients).map(([id, name]) => <option key={id} value={id}>{name}</option>)}
+              </select>
+              <Input type="text" placeholder="e.g. 3 connectors + 1 KG Box" value={newProduction.product} onChange={(e) => setNewProduction({ ...newProduction, product: e.target.value })} className="bg-[#2a2a2a] text-white border-[#00c600]" />
+              <Input type="number" placeholder="Total cost" value={newProduction.total_cost} onChange={(e) => setNewProduction({ ...newProduction, total_cost: e.target.value })} className="bg-[#2a2a2a] text-white border-[#00c600]" />
+              <select value={newProduction.status} onChange={(e) => setNewProduction({ ...newProduction, status: e.target.value })} className="w-full p-2 bg-[#2a2a2a] text-white border border-[#00c600] rounded text-sm">
+                <option value="ordered">Ordered</option>
+                <option value="in_production">In Production</option>
+                <option value="dispatched">Dispatched</option>
+                <option value="in_transit">In Transit</option>
+                <option value="delayed">Delayed</option>
+                <option value="delivered">Delivered</option>
+              </select>
+              <Input type="text" placeholder="FedEx tracking" value={newProduction.tracking_number_inbound} onChange={(e) => setNewProduction({ ...newProduction, tracking_number_inbound: e.target.value })} className="bg-[#2a2a2a] text-white border-[#00c600]" />
+              <Input type="date" placeholder="dd/mm/yyyy" value={newProduction.eta} onChange={(e) => setNewProduction({ ...newProduction, eta: e.target.value })} className="bg-[#2a2a2a] text-white border-[#00c600]" />
+              <textarea placeholder="Any notes" value={newProduction.notes} onChange={(e) => setNewProduction({ ...newProduction, notes: e.target.value })} className="w-full p-2 bg-[#2a2a2a] text-white border border-[#00c600] rounded text-sm" rows="3"></textarea>
               <div className="flex gap-2 pt-2 border-t border-[#00c600]">
-                <Button onClick={() => setShowProductionModal(false)} variant="outline" className="flex-1">Cancel</Button>
+                <Button onClick={() => setShowProductionModal(false)} variant="outline" className="flex-1 border-[#00c600] text-gray-400">Cancel</Button>
                 <Button onClick={saveProduction} className="flex-1 bg-[#00c600] text-white">Save Production</Button>
               </div>
             </div>
@@ -464,22 +432,26 @@ export default function ManagerDashboard() {
 
         {/* Add Client Modal */}
         <Dialog open={showAddClientModal} onOpenChange={setShowAddClientModal}>
-          <DialogContent className="max-w-md bg-[#212121] border border-[#00c600]">
+          <DialogContent className="max-w-[400px] bg-[#212121] border border-[#00c600]">
             <DialogHeader>
               <DialogTitle className="text-white">Add Client</DialogTitle>
             </DialogHeader>
             <div className="space-y-3 max-h-96 overflow-y-auto">
-              <Input placeholder="Name" value={newClient.name} onChange={(e) => setNewClient({ ...newClient, name: e.target.value })} />
-              <Input placeholder="VAT Number" value={newClient.vat_number} onChange={(e) => setNewClient({ ...newClient, vat_number: e.target.value })} />
-              <Input placeholder="Billing Contact" value={newClient.billing_contact} onChange={(e) => setNewClient({ ...newClient, billing_contact: e.target.value })} />
-              <Input placeholder="Delivery Contact" value={newClient.delivery_contact} onChange={(e) => setNewClient({ ...newClient, delivery_contact: e.target.value })} />
-              <Input placeholder="Billing Address" value={newClient.billing_address} onChange={(e) => setNewClient({ ...newClient, billing_address: e.target.value })} />
-              <Input placeholder="Delivery Address" value={newClient.delivery_address} onChange={(e) => setNewClient({ ...newClient, delivery_address: e.target.value })} />
-              <Input placeholder="Email" value={newClient.contact_email} onChange={(e) => setNewClient({ ...newClient, contact_email: e.target.value })} />
-              <Input placeholder="Phone" value={newClient.contact_phone} onChange={(e) => setNewClient({ ...newClient, contact_phone: e.target.value })} />
+              <Input placeholder="e.g. Georg SAS" value={newClient.name} onChange={(e) => setNewClient({ ...newClient, name: e.target.value })} className="bg-[#2a2a2a] text-white border-[#00c600]" />
+              <Input placeholder="e.g. FR123456789" value={newClient.vat_number} onChange={(e) => setNewClient({ ...newClient, vat_number: e.target.value })} className="bg-[#2a2a2a] text-white border-[#00c600]" />
+              <Input placeholder="e.g. contact@georgsas.fr" value={newClient.contact_email} onChange={(e) => setNewClient({ ...newClient, contact_email: e.target.value })} className="bg-[#2a2a2a] text-white border-[#00c600]" />
+              <Input placeholder="e.g. +33123456789" value={newClient.contact_phone} onChange={(e) => setNewClient({ ...newClient, contact_phone: e.target.value })} className="bg-[#2a2a2a] text-white border-[#00c600]" />
+              <Input placeholder="e.g. Jean Dupont" value={newClient.billing_contact} onChange={(e) => setNewClient({ ...newClient, billing_contact: e.target.value })} className="bg-[#2a2a2a] text-white border-[#00c600]" />
+              <Input placeholder="e.g. billing@georgsas.fr" value={newClient.billing_contact_email || ''} onChange={(e) => setNewClient({ ...newClient, billing_contact_email: e.target.value })} className="bg-[#2a2a2a] text-white border-[#00c600]" />
+              <Input placeholder="e.g. +33123456789" value={newClient.billing_contact_phone || ''} onChange={(e) => setNewClient({ ...newClient, billing_contact_phone: e.target.value })} className="bg-[#2a2a2a] text-white border-[#00c600]" />
+              <textarea placeholder="e.g. 37 Av. Paul, 75008 Paris" value={newClient.billing_address} onChange={(e) => setNewClient({ ...newClient, billing_address: e.target.value })} className="w-full p-2 bg-[#2a2a2a] text-white border border-[#00c600] rounded text-sm" rows="2"></textarea>
+              <Input placeholder="e.g. Marie Curie" value={newClient.delivery_contact} onChange={(e) => setNewClient({ ...newClient, delivery_contact: e.target.value })} className="bg-[#2a2a2a] text-white border-[#00c600]" />
+              <Input placeholder="e.g. delivery@georgsas.fr" value={newClient.delivery_contact_email || ''} onChange={(e) => setNewClient({ ...newClient, delivery_contact_email: e.target.value })} className="bg-[#2a2a2a] text-white border-[#00c600]" />
+              <Input placeholder="e.g. +33123456789" value={newClient.delivery_contact_phone || ''} onChange={(e) => setNewClient({ ...newClient, delivery_contact_phone: e.target.value })} className="bg-[#2a2a2a] text-white border-[#00c600]" />
+              <textarea placeholder="e.g. 12 Rue de Marseille, 13001 Marseille" value={newClient.delivery_address} onChange={(e) => setNewClient({ ...newClient, delivery_address: e.target.value })} className="w-full p-2 bg-[#2a2a2a] text-white border border-[#00c600] rounded text-sm" rows="2"></textarea>
               <div className="flex gap-2 pt-2 border-t border-[#00c600]">
-                <Button onClick={() => setShowAddClientModal(false)} variant="outline" className="flex-1">Cancel</Button>
-                <Button onClick={saveClient} className="flex-1 bg-[#00c600] text-white">Save</Button>
+                <Button onClick={() => setShowAddClientModal(false)} variant="outline" className="flex-1 border-[#00c600] text-gray-400">Cancel</Button>
+                <Button onClick={saveClient} className="flex-1 bg-[#00c600] text-white">Save Client</Button>
               </div>
             </div>
           </DialogContent>
@@ -487,22 +459,19 @@ export default function ManagerDashboard() {
 
         {/* Add Supplier Modal */}
         <Dialog open={showAddSupplierModal} onOpenChange={setShowAddSupplierModal}>
-          <DialogContent className="max-w-md bg-[#212121] border border-[#00c600]">
+          <DialogContent className="max-w-[400px] bg-[#212121] border border-[#00c600]">
             <DialogHeader>
               <DialogTitle className="text-white">Add Supplier</DialogTitle>
             </DialogHeader>
             <div className="space-y-3 max-h-96 overflow-y-auto">
-              <Input placeholder="Name" value={newSupplier.name} onChange={(e) => setNewSupplier({ ...newSupplier, name: e.target.value })} />
-              <Input placeholder="VAT Number" value={newSupplier.vat_number} onChange={(e) => setNewSupplier({ ...newSupplier, vat_number: e.target.value })} />
-              <Input placeholder="Billing Contact" value={newSupplier.billing_contact} onChange={(e) => setNewSupplier({ ...newSupplier, billing_contact: e.target.value })} />
-              <Input placeholder="Delivery Contact" value={newSupplier.delivery_contact} onChange={(e) => setNewSupplier({ ...newSupplier, delivery_contact: e.target.value })} />
-              <Input placeholder="Billing Address" value={newSupplier.billing_address} onChange={(e) => setNewSupplier({ ...newSupplier, billing_address: e.target.value })} />
-              <Input placeholder="Delivery Address" value={newSupplier.delivery_address} onChange={(e) => setNewSupplier({ ...newSupplier, delivery_address: e.target.value })} />
-              <Input placeholder="Email" value={newSupplier.contact_email} onChange={(e) => setNewSupplier({ ...newSupplier, contact_email: e.target.value })} />
-              <Input placeholder="Phone" value={newSupplier.contact_phone} onChange={(e) => setNewSupplier({ ...newSupplier, contact_phone: e.target.value })} />
+              <Input placeholder="e.g. King Kong Parts" value={newSupplier.name} onChange={(e) => setNewSupplier({ ...newSupplier, name: e.target.value })} className="bg-[#2a2a2a] text-white border-[#00c600]" />
+              <Input placeholder="e.g. CN123456789" value={newSupplier.vat_number} onChange={(e) => setNewSupplier({ ...newSupplier, vat_number: e.target.value })} className="bg-[#2a2a2a] text-white border-[#00c600]" />
+              <Input placeholder="e.g. contact@kingkong.cn" value={newSupplier.contact_email} onChange={(e) => setNewSupplier({ ...newSupplier, contact_email: e.target.value })} className="bg-[#2a2a2a] text-white border-[#00c600]" />
+              <Input placeholder="e.g. +86123456789" value={newSupplier.contact_phone} onChange={(e) => setNewSupplier({ ...newSupplier, contact_phone: e.target.value })} className="bg-[#2a2a2a] text-white border-[#00c600]" />
+              <textarea placeholder="e.g. Shenzhen, China" value={newSupplier.billing_address} onChange={(e) => setNewSupplier({ ...newSupplier, billing_address: e.target.value })} className="w-full p-2 bg-[#2a2a2a] text-white border border-[#00c600] rounded text-sm" rows="3"></textarea>
               <div className="flex gap-2 pt-2 border-t border-[#00c600]">
-                <Button onClick={() => setShowAddSupplierModal(false)} variant="outline" className="flex-1">Cancel</Button>
-                <Button onClick={saveSupplier} className="flex-1 bg-[#00c600] text-white">Save</Button>
+                <Button onClick={() => setShowAddSupplierModal(false)} variant="outline" className="flex-1 border-[#00c600] text-gray-400">Cancel</Button>
+                <Button onClick={saveSupplier} className="flex-1 bg-[#00c600] text-white">Save Supplier</Button>
               </div>
             </div>
           </DialogContent>
@@ -510,7 +479,7 @@ export default function ManagerDashboard() {
 
         {/* Add Quotation Modal */}
         <Dialog open={showAddQuotationModal} onOpenChange={setShowAddQuotationModal}>
-          <DialogContent className="max-w-md bg-[#212121] border border-[#00c600]">
+          <DialogContent className="max-w-[400px] bg-[#212121] border border-[#00c600]">
             <DialogHeader>
               <DialogTitle className="text-white">Add Quotation</DialogTitle>
             </DialogHeader>
@@ -519,17 +488,23 @@ export default function ManagerDashboard() {
                 <option value="">Select Client</option>
                 {Object.entries(clients).map(([id, name]) => <option key={id} value={id}>{name}</option>)}
               </select>
-              <Input placeholder="Vehicle ID" value={newQuotation.vehicle_id} onChange={(e) => setNewQuotation({ ...newQuotation, vehicle_id: e.target.value })} />
-              <Input placeholder="Price" type="number" value={newQuotation.price} onChange={(e) => setNewQuotation({ ...newQuotation, price: e.target.value })} />
-              <Input placeholder="Date" type="date" value={newQuotation.date} onChange={(e) => setNewQuotation({ ...newQuotation, date: e.target.value })} />
+              <select value={newQuotation.vehicle_id} onChange={(e) => setNewQuotation({ ...newQuotation, vehicle_id: e.target.value })} className="w-full p-2 bg-[#2a2a2a] text-white border border-[#00c600] rounded text-sm">
+                <option value="">Select Vehicle</option>
+              </select>
+              <textarea placeholder="e.g. 3 connectors, 1 KG Box" value={newQuotation.items || ''} onChange={(e) => setNewQuotation({ ...newQuotation, items: e.target.value })} className="w-full p-2 bg-[#2a2a2a] text-white border border-[#00c600] rounded text-sm" rows="2"></textarea>
+              <Input placeholder="Total price" type="number" value={newQuotation.price} onChange={(e) => setNewQuotation({ ...newQuotation, price: e.target.value })} className="bg-[#2a2a2a] text-white border-[#00c600]" />
+              <Input placeholder="VAT amount" type="number" value={newQuotation.tax || ''} onChange={(e) => setNewQuotation({ ...newQuotation, tax: e.target.value })} className="bg-[#2a2a2a] text-white border-[#00c600]" />
+              <Input placeholder="Shipping cost" type="number" value={newQuotation.shipping || ''} onChange={(e) => setNewQuotation({ ...newQuotation, shipping: e.target.value })} className="bg-[#2a2a2a] text-white border-[#00c600]" />
+              <Input placeholder="dd/mm/yyyy" type="date" value={newQuotation.date} onChange={(e) => setNewQuotation({ ...newQuotation, date: e.target.value })} className="bg-[#2a2a2a] text-white border-[#00c600]" />
               <select value={newQuotation.status} onChange={(e) => setNewQuotation({ ...newQuotation, status: e.target.value })} className="w-full p-2 bg-[#2a2a2a] text-white border border-[#00c600] rounded text-sm">
-                <option value="pending">Pending</option>
-                <option value="quoted">Quoted</option>
+                <option value="pending">Draft</option>
+                <option value="quoted">Sent</option>
                 <option value="approved">Approved</option>
+                <option value="rejected">Delayed</option>
               </select>
               <div className="flex gap-2 pt-2 border-t border-[#00c600]">
-                <Button onClick={() => setShowAddQuotationModal(false)} variant="outline" className="flex-1">Cancel</Button>
-                <Button onClick={saveQuotation} className="flex-1 bg-[#00c600] text-white">Save</Button>
+                <Button onClick={() => setShowAddQuotationModal(false)} variant="outline" className="flex-1 border-[#00c600] text-gray-400">Cancel</Button>
+                <Button onClick={saveQuotation} className="flex-1 bg-[#00c600] text-white">Save Quotation</Button>
               </div>
             </div>
           </DialogContent>

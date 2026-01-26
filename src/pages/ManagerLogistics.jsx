@@ -287,105 +287,26 @@ export default function ManagerLogistics() {
           </div>
 
 
-      {/* Add Shipment Modal */}
+      {/* Add Logistic Request Modal */}
       <Dialog open={showAddModal} onOpenChange={setShowAddModal}>
-        <DialogContent className="max-w-md">
+        <DialogContent className="max-w-[400px] bg-[#212121] border border-[#00c600]">
           <DialogHeader>
-            <DialogTitle>Add Shipment</DialogTitle>
+            <DialogTitle className="text-white">Add Logistic Request</DialogTitle>
           </DialogHeader>
-          <div className="space-y-4">
-            <div className="flex items-center gap-2">
-              <label className="flex items-center gap-2 cursor-pointer">
-                <input 
-                  type="checkbox" 
-                  checked={newShipment.manual_po} 
-                  onChange={(e) => setNewShipment({ ...newShipment, manual_po: e.target.checked, po_id: '', manual_po_id: '' })}
-                  className="w-4 h-4"
-                />
-                <span className="text-sm text-gray-600">Add manually (no PO)</span>
-              </label>
-            </div>
-
-            {!newShipment.manual_po ? (
-              <KGSelect
-                label="Purchase Order"
-                value={newShipment.po_id}
-                onChange={(e) => setNewShipment({ ...newShipment, po_id: e.target.value })}
-                options={purchaseOrders.map(po => ({ value: po.po_id, label: po.po_id }))}
-                placeholder="Select PO..."
-              />
-            ) : (
-              <>
-                <KGInput
-                  label="PO ID (optional)"
-                  value={newShipment.manual_po_id}
-                  onChange={(e) => setNewShipment({ ...newShipment, manual_po_id: e.target.value })}
-                  placeholder="e.g. Q-1001-S-042"
-                />
-                {newShipment.type === 'outbound' && (
-                  <KGSelect
-                    label="Client"
-                    value={newShipment.manual_client_id}
-                    onChange={(e) => setNewShipment({ ...newShipment, manual_client_id: e.target.value })}
-                    options={Object.entries(clients).map(([orgId, org]) => ({ value: orgId, label: org.name }))}
-                    placeholder="Select client..."
-                  />
-                )}
-              </>
-            )}
-
-            <KGSelect
-              label="Shipment Type"
-              value={newShipment.type}
-              onChange={(e) => setNewShipment({ ...newShipment, type: e.target.value })}
-              options={[
-                { value: 'inbound', label: 'Inbound (Supplier → KG)' },
-                { value: 'outbound', label: 'Outbound (KG → Client)' }
-              ]}
-            />
-
-            <KGInput
-              label="Tracking Number"
-              value={newShipment.tracking_number}
-              onChange={(e) => setNewShipment({ ...newShipment, tracking_number: e.target.value })}
-              placeholder="FedEx tracking number"
-            />
-
-            <KGInput
-              label="Carrier"
-              value={newShipment.carrier}
-              onChange={(e) => setNewShipment({ ...newShipment, carrier: e.target.value })}
-              placeholder="FedEx"
-            />
-
-            <KGInput
-              label="Origin Address"
-              value={newShipment.origin_address}
-              onChange={(e) => setNewShipment({ ...newShipment, origin_address: e.target.value })}
-              placeholder="Pickup address"
-            />
-
-            <KGInput
-              label="Destination Address"
-              value={newShipment.destination_address}
-              onChange={(e) => setNewShipment({ ...newShipment, destination_address: e.target.value })}
-              placeholder="Delivery address"
-            />
-
-            <KGInput
-              label="ETA"
-              type="date"
-              value={newShipment.eta}
-              onChange={(e) => setNewShipment({ ...newShipment, eta: e.target.value })}
-            />
-
-            <div className="flex gap-3">
-              <KGButton variant="outline" onClick={() => setShowAddModal(false)}>
-                Cancel
-              </KGButton>
-              <KGButton onClick={createShipment} className="flex-1">
-                Create Shipment
-              </KGButton>
+          <div className="space-y-3 max-h-96 overflow-y-auto">
+            <input type="text" placeholder="e.g. PO-KG001-001" value={newShipment.manual_po_id} onChange={(e) => setNewShipment({ ...newShipment, manual_po_id: e.target.value })} className="w-full p-2 bg-[#2a2a2a] border border-[#00c600] rounded text-white text-sm" />
+            <input type="text" placeholder="e.g. Supplier → Client" value={newShipment.origin_address} onChange={(e) => setNewShipment({ ...newShipment, origin_address: e.target.value })} className="w-full p-2 bg-[#2a2a2a] border border-[#00c600] rounded text-white text-sm" />
+            <input type="text" placeholder="FedEx tracking" value={newShipment.tracking_number} onChange={(e) => setNewShipment({ ...newShipment, tracking_number: e.target.value })} className="w-full p-2 bg-[#2a2a2a] border border-[#00c600] rounded text-white text-sm" />
+            <input type="date" placeholder="dd/mm/yyyy" value={newShipment.eta} onChange={(e) => setNewShipment({ ...newShipment, eta: e.target.value })} className="w-full p-2 bg-[#2a2a2a] border border-[#00c600] rounded text-white text-sm" />
+            <select value={newShipment.type} onChange={(e) => setNewShipment({ ...newShipment, type: e.target.value })} className="w-full p-2 bg-[#2a2a2a] text-white border border-[#00c600] rounded text-sm">
+              <option value="inbound">Ordered</option>
+              <option value="in_transit">In Transit</option>
+              <option value="outbound">Delivered</option>
+              <option value="delayed">Delayed</option>
+            </select>
+            <div className="flex gap-2 pt-2 border-t border-[#00c600]">
+              <button onClick={() => setShowAddModal(false)} className="flex-1 p-2 border border-[#00c600] text-gray-400 rounded text-sm hover:opacity-80">Cancel</button>
+              <button onClick={createShipment} className="flex-1 bg-[#00c600] text-white p-2 rounded text-sm hover:opacity-80">Save Request</button>
             </div>
           </div>
         </DialogContent>
