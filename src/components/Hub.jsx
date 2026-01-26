@@ -121,21 +121,32 @@ No "um". No filler. Always please`
     }
 
     const recognition = new webkitSpeechRecognition();
-    recognition.continuous = false;
+    recognition.continuous = true;
     recognition.interimResults = false;
     recognition.lang = 'en-US';
 
     recognition.onstart = () => setListening(true);
-    recognition.onend = () => setListening(false);
     
     recognition.onresult = (event) => {
-      const transcript = event.results[0][0].transcript;
+      const transcript = event.results[event.results.length - 1][0].transcript;
       setInput(transcript);
       sendMessage(transcript);
     };
 
+    recognition.onerror = (event) => {
+      console.error('Speech recognition error:', event.error);
+      setListening(false);
+    };
+
     recognition.start();
     recognitionRef.current = recognition;
+  };
+
+  const stopListening = () => {
+    if (recognitionRef.current) {
+      recognitionRef.current.stop();
+      setListening(false);
+    }
   };
 
   if (!isOpen) return null;
@@ -204,7 +215,7 @@ No "um". No filler. Always please`
             style={{ borderRadius: '6px' }}
           />
           <button
-            onClick={startListening}
+            onClick={listening ? stopListening : startListening}
             className={`p-2 ${listening ? 'bg-red-500' : ''}`}
             style={{ borderRadius: '6px' }}
           >
