@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { base44 } from '@/api/base44Client';
 import { createPageUrl } from '@/utils';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import TableExport from '../components/TableExport';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
@@ -135,10 +135,21 @@ export default function ManagerDashboard() {
   });
   const [selectedQuote, setSelectedQuote] = useState(null);
   const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     loadData();
   }, []);
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const modalParam = params.get('modal');
+    if (modalParam === 'production') {
+      setShowProductionModal(true);
+    } else if (modalParam === 'client') {
+      setShowAddClientModal(true);
+    }
+  }, [location.search]);
 
   const loadData = async () => {
     const user = await base44.auth.me();
