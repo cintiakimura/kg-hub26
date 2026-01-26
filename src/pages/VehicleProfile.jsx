@@ -187,6 +187,7 @@ export default function VehicleProfile() {
                 </div>
               </div>
             </div>
+          </div>
 
           {/* Add New Connector Section */}
           <div>
