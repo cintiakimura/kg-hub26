@@ -269,6 +269,8 @@ export default function ManagerDashboard() {
 
   if (loading) return <div className="flex items-center justify-center h-screen">Loading...</div>;
 
+  const columns = ['ordered', 'in_production', 'dispatched', 'in_transit', 'delayed', 'delivered'];
+
   const menuCards = [
     { 
       icon: '🏭', 
@@ -282,8 +284,7 @@ export default function ManagerDashboard() {
       name: 'Clients', 
       desc: 'View all registered clients', 
       page: 'ManagerClients',
-      color: 'border-[#00c600]',
-      badge: true
+      color: 'border-green-500'
     },
     { 
       icon: '📋', 
@@ -304,53 +305,78 @@ export default function ManagerDashboard() {
       name: 'Purchases', 
       desc: 'Manage supplier orders', 
       page: 'ManagerPurchases',
-      color: 'border-[#00c600]'
+      color: 'border-green-500'
     },
     { 
       icon: '🚚', 
       name: 'Logistics', 
       desc: 'Track deliveries', 
       page: 'ManagerLogistics',
-      color: 'border-[#00c600]'
+      color: 'border-green-500'
     },
     { 
       icon: '📊', 
       name: 'Financials', 
       desc: 'Analyze costs and income', 
       page: 'ManagerFinancials',
-      color: 'border-[#00c600]'
+      color: 'border-green-500'
     }
   ];
 
   return (
     <div className="bg-[#212121] min-h-screen">
-      <div className="p-8">
-        <div className="flex justify-between items-start mb-8">
-          <div>
-            <h1 className="text-3xl text-white mb-2">Manager Dashboard</h1>
-            <p className="text-gray-400 text-sm">Overview of all clients, companies, and fleets.</p>
+      <style>{tableStyles}</style>
+      <div className="p-6">
+         <div className="flex justify-between items-center mb-6">
+          <h1 className="text-2xl text-[#00c600]">Production Control</h1>
+          <div className="flex gap-2">
+            <Button onClick={() => setShowAddClientModal(true)} className="bg-[#00c600] text-white border border-[#00c600]">
+              <Plus size={16} className="mr-1" /> Client
+            </Button>
+            <Button onClick={() => setShowAddSupplierModal(true)} className="bg-[#00c600] text-white border border-[#00c600]">
+              <Plus size={16} className="mr-1" /> Supplier
+            </Button>
+            <Button onClick={() => setShowAddQuotationModal(true)} className="bg-[#00c600] text-white border border-[#00c600]">
+              <Plus size={16} className="mr-1" /> Quotation
+            </Button>
+            <Button onClick={() => setShowProductionModal(true)} className="bg-[#00c600] text-white border border-[#00c600]">
+              <Plus size={16} className="mr-1" /> Production
+            </Button>
+            <Button onClick={() => setShowImportModal(true)} className="bg-[#00c600] text-white border border-[#00c600]">
+              <Upload size={16} className="mr-1" /> Import Supplier
+            </Button>
+            <TableExport data={pos} filename="production_control.csv" />
           </div>
-          <Button onClick={() => alert('Invite user functionality')} className="bg-[#00c600] text-white border border-[#00c600] px-6">
-            <Plus size={16} className="mr-2" /> Invite User
-          </Button>
         </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {menuCards.map((card, idx) => (
-            <div
-              key={idx}
-              onClick={() => navigate(createPageUrl(card.page))}
-              className={`relative bg-[#2a2a2a] rounded-lg p-6 border-2 ${card.color} cursor-pointer hover:bg-[#333] transition-all`}
-            >
-              {card.badge && (
-                <div className="absolute top-3 right-3 w-3 h-3 bg-red-500 rounded-full"></div>
-              )}
-              <div className="text-4xl mb-4">{card.icon}</div>
-              <h3 className="text-white text-lg mb-2">{card.name}</h3>
-              <p className="text-gray-400 text-sm">{card.desc}</p>
-            </div>
-          ))}
-        </div>
+        {loading && <div>Loading...</div>}
+        {!loading && (
+          <table className="excel-table">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Client</th>
+                <th>Product</th>
+                <th>Cost</th>
+                <th>Status</th>
+                <th>Tracking</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {pos.map(po => (
+                <tr key={po.id}>
+                  <td>{po.order_date}</td>
+                  <td>{clients[po.client_org_id]}</td>
+                  <td>{po.items?.[0]?.description || '-'}</td>
+                  <td>${po.total_cost}</td>
+                  <td>{po.status}</td>
+                  <td>{po.tracking_number_inbound || '-'}</td>
+                  <td><button>Edit</button></td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
 
         {/* Add Production Modal */}
         <Dialog open={showProductionModal} onOpenChange={setShowProductionModal}>
