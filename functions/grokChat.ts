@@ -27,7 +27,7 @@ Deno.serve(async (req) => {
         'Authorization': `Bearer ${grokApiKey}`
       },
       body: JSON.stringify({
-        model: 'grok-beta',
+        model: 'grok-4-latest',
         messages: [
           {
             role: 'system',
